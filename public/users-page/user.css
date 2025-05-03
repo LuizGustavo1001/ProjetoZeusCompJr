@@ -57,6 +57,7 @@ section{
 #aside-top{
     display: flex;
     justify-content: space-between;
+    margin-top: 3vh;
     
 }
 
@@ -97,7 +98,8 @@ section{
     display: flex;
     flex-direction: column;
     gap: 2em;
-    margin-top: 1vh;
+    margin-top: 2vh;
+    
 }
 
 .section-header{
@@ -176,7 +178,7 @@ section{
 
 }
 
-#total-employes{
+#total-employes, #total-budget{
     font-size: 2em;
 
 }
