@@ -32,14 +32,22 @@ aside, .section-top, .section-bottom{
 .section-top, .section-bottom{
     padding: 3vh;
     margin-bottom: 2em;
+
+}
+
+.section-header h1{
+    margin-bottom: 2vh;
+    
 }
 
 ul{
     list-style: none;
+
 }
 
 ul svg{
     width: 25px;
+
 }
 
 section{
@@ -121,19 +129,12 @@ section{
 
 .user-data{
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-
-}
-
-#user-photo{
-    display: flex;
     align-items: center;
     gap: 0.5em;
 
 }
 
-#user-photo img{
+.user-data img{
     width: 40px;
 
 }
@@ -205,7 +206,15 @@ section{
     display: flex;
     flex-direction: column;
     gap: 1em;
+
 }
+
+.right-section-forms input, .right-section-forms select{
+    width: 100%;
+    box-sizing: border-box; /* padding e borda sejam incluídos na largura total, evitando que ultrapasse o container */
+
+}
+
 
 form .button-submit button{
     margin-top: 1em;
