@@ -1,0 +1,68 @@
+:root{
+    --dark-mode-button-clr: #dab36c;
+    --dark-mode-bg: #382201;
+    --dark-mode-text: white;
+
+    --users-div-bg: #553301;
+
+    --input-bg: #e4ded5;
+
+    --selected-dark-text-clr: rgb(233, 213, 192);
+    --option-black-bg: rgb(199, 117, 30);
+
+}
+
+.dark-mode{
+    background-color: var(--dark-mode-bg);
+    color: var(--dark-mode-text);
+
+}
+
+.dark-mode a, .dark-mode .highlight-word{
+    color: var(--dark-mode-button-clr);
+
+}
+
+.dark-mode #buttom-submit button{
+    background: var(--dark-mode-button-clr);
+    color:  var(--link-hover-clr);
+    border-color: var(--link-hover-clr);
+
+}
+
+.dark-mode #buttom-submit button:hover{
+    background: var(--link-hover-clr);
+    color: var(--dark-mode-text);
+    border-color: var(--link-hover-clr);
+
+}
+
+.dark-mode a:hover{
+    color: var(--link-hover-clr);
+
+}
+
+.light-mode-icon{
+    color: white;
+
+}
+
+.dark-mode aside, .dark-mode .section-top, .dark-mode .section-bottom{
+    background: var(--users-div-bg);
+
+}
+
+.dark-mode .search-bar input, .dark-mode .filter-bar select{
+    background: var(--input-bg);
+}
+
+.dark-mode .selected{
+    color: var(--selected-dark-text-clr);
+    background: var(--dark-mode-bg);
+    
+}
+
+.dark-mode #options-list li:hover{
+    background: var(--selected-dark-text-clr)
+
+}

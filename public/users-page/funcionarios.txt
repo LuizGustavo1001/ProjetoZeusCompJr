@@ -1,0 +1,10 @@
+idFunc(PK) Nome Telefone Nascimento Ingresso email Área Cargo (Mostrar)
+
+Nome DataNascimento Email Telefone Genero(options) DataIngresso Cargo(options) Habilidades(options) Área(options) (Adicionar)
+
+ 
+
+genero -> Masculino, Feminino e Outros
+cargo -> RecursosHumanos, Operações, GerenteProjetos, SAC, Infraestrutura e Segurança
+habilidades -> ?
+area -> Gerencia, Projetos, R e Comercial

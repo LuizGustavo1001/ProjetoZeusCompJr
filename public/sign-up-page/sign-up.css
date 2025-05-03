@@ -1,0 +1,46 @@
+*{
+    margin: 0;
+    padding: 0;
+
+}
+
+
+.content-bottom-forms svg{
+    width: 25px;
+
+}
+
+label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+button{
+    padding: 1em;
+    border-radius: var(--border-radius);
+    font-size: 1.2em;
+    max-width: 200px;
+    margin: auto 0;
+
+}
+
+
+.button-submit{
+    margin: 0 auto;
+
+}
+
+.forms-item input{
+    padding: 1.5em;
+
+}
+
+@media (min-width: 1024px){
+    .right-content-img{
+        background: url(images/sign-up-bg.png);
+    
+    }
+
+}

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
+    
+        <link rel="stylesheet" href="user.css">
+        <link rel="stylesheet" href="../general-style.css">
+        <link rel="stylesheet" href="../dark-mode.css">
+    
+        <script src="../dark-mode.js" defer></script>
+        <script src="user.js" defer></script>
+    
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+        <title>Projeto Zeus - Área do Usuário</title>
+    
+    </head>
+<body>
+
+    <main>
+        <aside id="left-content"> <!--Left on Desktop > Top on Mobile -->
+            <div id="aside-top">
+                <img src="../general-images/church-symbol.png" alt="church-symbol" id="church-symbol">
+                <button class="theme-switch-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="dark-mode-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="hidden light-mode-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="aside-bottom">
+                <ul id="options-list">
+                    <li id="employe" class="selected">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                        </svg>
+                        Funcionários
+                    </li>
+
+                    <li id="budget">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                        </svg>
+                        Orçamento
+                    </li>
+                    <li id="stock">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.242 5.992h12m-12 6.003H20.24m-12 5.999h12M4.117 7.495v-3.75H2.99m1.125 3.75H2.99m1.125 0H5.24m-1.92 2.577a1.125 1.125 0 1 1 1.591 1.59l-1.83 1.83h2.16M2.99 15.745h1.125a1.125 1.125 0 0 1 0 2.25H3.74m0-.002h.375a1.125 1.125 0 0 1 0 2.25H2.99" />
+                        </svg>
+                        Estoques
+                    </li>
+                    <li id="notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                        </svg>
+                        Notificações
+                    </li>
+                </ul>
+            </div>
+
+        </aside>
+
+    <!--Funcionários-->
+        <section id="right-content">
+            <section class="right-section employe show-div">
+                <nav class="section-header">
+                    <div>
+                        <h1>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                            </svg>
+                            Todos os <span class="highlight-word">Funcionários</span>
+                        </h1>
+
+                        <p>
+                            Visualizar, pesquisar e adicionar novos funcionários
+                        </p>
+                    </div>
+
+                    <div class="user-data">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                        </svg>
+
+                        <div id="user-photo">
+                            <img src="../general-images/user-icon.png" alt="user-img">
+                            <p id="username-display">Farofilson Bananilson</p>
+                        </div>
+                    </div>
+
+                </nav>
+
+                <div class="section-top">
+                    <div class="total">
+                        <p><strong><span id="total-employes">0</span></strong></p>
+                        <p>Total de Funcionários</p>
+                    </div>
+
+                    <div class="search-bar">
+                        <label for="isearch">Pesquisa rápida de um funcionário</label>
+                        <input type="search" name="search" id="isearch" placeholder="Nome do Funcionário">
+                    </div>
+
+                    <div class="filter-bar">
+                        <label for="iselect">Filtrar Funcionários</label>
+                        <select name="select" id="iselect">
+                            <option value="all">Todos</option>
+                            <option value="area">Área de Atuação</option>
+                            <option value="cargo">Cargo</option>
+                        </select>
+                    </div>
+
+                    <div class="button-submit">
+                        <button class="add-employe-button">Adicionar Funcionário</button>
+                    </div>
+                </div>
+
+                <div class="section-bottom">
+                    <h2>Funcionários</h2>
+                    <p>Aqui aparecerá o Banco de Dados relacionado aos funcionários</p>
+                </div>
+
+            </section>
+    <!--Funcionários-->
+
+    <!--Funcionários Adicionar-->
+            <section class="right-section addEmploye hidden-div">
+                <nav class="section-header">
+                    <div>
+                        <h1>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                            </svg>
+                            <span class="highlight-word">Adicionar</span> Novo Funcionário
+                        </h1>
+
+                        <p>
+                            Criar um novo Funcionário dentro do Banco de Dados
+                        </p>
+                    </div>
+
+                    <div class="user-data">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                        </svg>
+
+                        <div id="user-photo">
+                            <img src="../general-images/user-icon.png" alt="user-img">
+                            <p id="username-display">Farofilson Bananilson</p>
+                        </div>
+                    </div>
+
+
+                </nav>
+
+
+                <div class="right-section-back-button">
+                    <a href="user.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+                        <p>Voltar</p>
+                    </a>
+                </div>
+
+
+                <form method="post" autocomplete="on" class="section-bottom" onsubmit="submitFunc(event)">
+                    <header>
+                        <p>Preencha o formulário abaixo para adicionar um novo Funcionário</p>
+                    </header>
+
+                    <div class="right-section-forms">
+                        <div class="forms-item">
+                            <label for="inome">Nome</label>
+                            <input type="text" name="Nome" id="inome" required placeholder="Primeiro e Último Nome">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="inascimento">Data de Nascimento</label>
+                            <input type="date" name="nascimento" id="inascimento" required>
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="iemail">Email</label>
+                            <input type="email" name="email" id="iemail" required placeholder="exemplo@gmail.com">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="inum">Número de Telefone</label>
+                            <input type="text" name="num" id="inum" required placeholder="(XX) X XXXX-XXXX">
+                        </div>
+
+                        <div class="forms-item">
+                           <label for="igenero">Gênero</label>
+                            <select name="genero" id="igenero">
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                                <option value="O">Outros</option>
+                            </select>
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="idate">Data de Ingresso</label>
+                            <input type="date" name="date" id="idate">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="icargo">Cargo</label>
+                            <select name="cargo" id="icargo">
+                                <option value="RH">Recursos Humanos</option>
+                                <option value="O">Operações</option>
+                                <option value="G">Gerente de Projetos</option>
+                                <option value="SAC">SAC</option>
+                                <option value="I">Infraestrutura </option>
+                                <option value="SEG">Segurança </option>
+                            </select>
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="iarea">Área</label>
+                            <select name="area" id="iarea">
+                                <option value="G">Gerencia</option>
+                                <option value="P">Projetos </option>
+                                <option value="RH">RH</option>
+                                <option value="C">Comercial</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="button-submit">
+                        <button>Enviar</button>
+                    </div>
+
+                </form>
+
+            </section>
+    <!--Funcionários Adicionar-->
+
+    <!--Orçamentos-->
+            <section class="right-section budget hidden-div">
+                <nav class="section-header">
+                    <div>
+                        <h1>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span class="highlight-word">Orçamentos</span>
+                        </h1>
+
+                        <p>
+                            Visualize, crie e envie solicitações de orçamentos
+                        </p>
+                    </div>
+
+                    <div class="user-data">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                        </svg>
+
+                        <div id="user-photo">
+                            <img src="../general-images/user-icon.png" alt="user-img">
+                            <p id="username-display">Farofilson Bananilson</p>
+                        </div>
+                    </div>
+
+                </nav>
+
+                <div class="section-top">
+                    <div>
+                        <p><strong><span id="total-budget">0</span></strong></p>
+                        <p>Total de Orçamentos</p>
+                    </div>
+
+                    <div>
+                        <div class="button-submit budgetButton">
+                            <button class="add-budget-button">Adicionar Orçamento</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-bottom">
+                    <h2>Histórico de Orçamentos</h2>
+                    <p>Aqui aparecerá o histórico de Orçamentos</p>
+                </div>
+
+            </section>
+    <!--Orçamentos-->
+
+    <!--Orçamentos - Adicionar-->
+            <section class="right-section addBudget hidden-div">
+                <nav class="section-header">
+                    <div>
+                        <h1>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                              </svg>
+                              
+                            <span class="highlight-word">Adicionar</span> Novo Orçamento
+                        </h1>
+
+                        <p>
+                            Adicione um novo <span class="highlight-word">Orçamento</span> dentro do Banco de Dados
+                        </p>
+                    </div>
+
+                    <div class="user-data">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                        </svg>
+
+                        <div id="user-photo">
+                            <img src="../general-images/user-icon.png" alt="user-img">
+                            <p id="username-display">Farofilson Bananilson</p>
+                        </div>
+                    </div>
+
+                </nav>
+
+                <div class="right-section-back-button back-budget">
+                    <a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+                        <p>Voltar</p>
+                    </a>
+                </div>
+
+                <form action="cadastro.php" method="post" autocomplete="on" class="section-bottom">
+                    <header>
+                        <p>Preencha o formulário abaixo para adicionar um novo Funcionário</p>
+                    </header>
+
+                    <div class="right-section-forms">
+                        <div class="forms-item">
+                            <label for="inome">Número Orçamento</label>
+                            <input type="text" name="numOrc" id="inumOrc" placeholder="Insira o Número do Orçamento Aqui">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="idescProj">Breve Descrição do Projeto</label>
+                            <input type="text" name="descProj" id="idescProj" required placeholder="Insira a Descrição">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="ivalorE">Valor Estimado</label>
+                            <input type="email" name="valorE" id="ivalorE" required placeholder="Valor em R$">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="icusto">Custos Previstos</label>
+                            <input type="text" name="custo" id="icusto" required placeholder="Valor em R$">
+                        </div>
+
+                        <div class="forms-item">
+                           <label for="icliente">Cliente</label>
+                        <input type="text" name="cliente" id="icliente" required placeholder="Nome do Cliente">
+                        </div>
+
+                    </div>
+
+                    <div class="button-submit">
+                        <button>Enviar</button>
+                    </div>
+
+                </form>
+
+            </section>
+    <!--Orçamentos - Adicionar-->
+
+    <!--Estoques-->
+            <section class="right-section stock hidden-div">
+                <nav class="section-header">
+                    <div>
+                        <h1>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8.242 5.992h12m-12 6.003H20.24m-12 5.999h12M4.117 7.495v-3.75H2.99m1.125 3.75H2.99m1.125 0H5.24m-1.92 2.577a1.125 1.125 0 1 1 1.591 1.59l-1.83 1.83h2.16M2.99 15.745h1.125a1.125 1.125 0 0 1 0 2.25H3.74m0-.002h.375a1.125 1.125 0 0 1 0 2.25H2.99" />
+                            </svg>
+                            <span class="highlight-word">Estoques</span>
+                        </h1>
+
+                        <p>
+                            Visualize o estoque de produtos
+                        </p>
+                    </div>
+
+                    <div class="user-data">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                        </svg>
+
+                        <div id="user-photo">
+                            <img src="../general-images/user-icon.png" alt="user-img">
+                            <p id="username-display">Farofilson Bananilson</p>
+                        </div>
+                    </div>
+
+                </nav>
+
+                <div class="section-top">
+
+                </div>
+
+                <div class="section-bottom">
+                    
+                </div>
+
+            </section>
+    <!--Estoques-->
+    
+    <!--Notificações-->
+            <section class="right-section notifications hidden-div">
+                <nav class="section-header">
+                    <div>
+                        <h1>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                            </svg>
+                            <span class="highlight-word">Notificações</span>
+                        </h1>
+
+                        <p>
+                            Visualize suas notificações
+                        </p>
+                    </div>
+
+                    <div class="user-data">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                        </svg>
+
+                        <div id="user-photo">
+                            <img src="../general-images/user-icon.png" alt="user-img">
+                            <p id="username-display">Farofilson Bananilson</p>
+                        </div>
+                    </div>
+
+                </nav>
+
+                <div class="section-top">
+
+                </div>
+
+                <div class="section-bottom">
+                    
+                </div>
+
+            </section>
+
+    <!--Notificações-->
+            
+        </section>
+    </main>
+
+    
+</body>
+</html>
