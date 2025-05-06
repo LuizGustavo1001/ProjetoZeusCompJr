@@ -1,13 +1,15 @@
 :root{
-    --dark-mode-button-clr: #dab36c;
-    --dark-mode-bg: #382201;
-    --dark-mode-text: white;
+    --dark-mode-button-clr: #b9b8b5;
+    --dark-mode-bg: #423f3a;
 
-    --users-div-bg: #553301;
+    --dark-mode-text: #eee3da;
+    --dark-mode-link-hover: #f3701e;
 
-    --input-bg: #e4ded5;
+    --users-div-bg: #363635;
 
-    --selected-dark-text-clr: rgb(233, 213, 192);
+    --input-bg: #dadada;
+
+    --selected-dark-text-clr: rgb(218, 211, 204);
     --option-black-bg: rgb(199, 117, 30);
 
 }
@@ -20,7 +22,17 @@
 
 .dark-mode a, .dark-mode .highlight-word{
     color: var(--dark-mode-button-clr);
+    transition: all var(--transition-time) ease-in-out;
 
+}
+
+.dark-mode a:hover{
+    color: var(--dark-mode-text);
+
+}
+
+.dark-mode button:hover{
+    color: var(--dark-mode-link-hover);
 }
 
 .dark-mode #buttom-submit button{
@@ -31,14 +43,7 @@
 }
 
 .dark-mode #buttom-submit button:hover{
-    background: var(--link-hover-clr);
-    color: var(--dark-mode-text);
-    border-color: var(--link-hover-clr);
-
-}
-
-.dark-mode a:hover{
-    color: var(--link-hover-clr);
+    border-color: var(--dark-mode-link-hover);
 
 }
 
@@ -52,17 +57,33 @@
 
 }
 
-.dark-mode .search-bar input, .dark-mode .filter-bar select{
+.dark-mode input, .dark-mode select{
     background: var(--input-bg);
+
+}
+
+.dark-mode .forms-item input:hover, .dark-mode .forms-item select:hover{
+    box-shadow: 1px 5px 10px rgba(145, 145, 145, 0.486);
+
 }
 
 .dark-mode .selected{
-    color: var(--selected-dark-text-clr);
+    color: var(--dark-mode-link-hover);
     background: var(--dark-mode-bg);
     
 }
 
 .dark-mode #options-list li:hover{
-    background: var(--selected-dark-text-clr)
+    background: var(--selected-dark-text-clr);
+
+}
+
+.dark-mode .right-section-back-button p, .dark-mode .right-section-back-button svg{
+    color: var(--dark-mode-text);
+
+}
+
+.dark-mode .right-section-back-button p:hover, .dark-mode .right-section-back-button svg:hover{
+    color: white;
 
 }

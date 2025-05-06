@@ -42,4 +42,5 @@
      <li>Polir as CSS</li>
      <li>Página de Estoques</li>
      <li>Página de Notificações</li>
+     <li>Permitir acesso completo ao site apenas para usuários logados</li>
  </ul>

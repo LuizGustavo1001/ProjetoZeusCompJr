@@ -107,7 +107,7 @@ a:hover{
 
 .content{
     margin: 5vw;
-    
+
 
 }
 
@@ -132,7 +132,12 @@ a:hover{
     display: flex;
     flex-direction: column;
     gap: 1em;
-    width: 80%;
+
+}
+
+.content-bottom-forms .forms-item{
+    width: 100%;
+    box-sizing: border-box;
 
 }
 
@@ -154,6 +159,13 @@ a:hover{
 .forms-item input, .forms-item select{
     border-radius: var(--border-radius);
     border: 1px solid var(--input-border-clr); 
+
+    transition: all var(--transition-time) ease-in-out;
+
+}
+
+.forms-item input:hover, .forms-item select:hover{
+    box-shadow: 1px 5px 10px rgba(73, 42, 7, 0.486);
 
 }
 
@@ -179,6 +191,7 @@ a:hover{
 #church-symbol:hover, .theme-switch-button:hover{
     transform: scale(1.05);
     cursor: pointer;
+
 }
 
 .right-content-img{
@@ -189,6 +202,7 @@ a:hover{
 .forms-checkbox{ /* Mudar a cor da check box */
     input[type="checkbox"] {
         accent-color: var(--primary-clr);
+        
     }
 
 }
@@ -203,6 +217,7 @@ a:hover{
 @media (min-width: 1024px){
     .content{
         width: 50vw;
+        align-items: baseline;
 
     }
 
