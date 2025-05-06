@@ -1,89 +1,70 @@
 :root{
-    --dark-mode-button-clr: #b9b8b5;
-    --dark-mode-bg: #423f3a;
-
-    --dark-mode-text: #eee3da;
-    --dark-mode-link-hover: #f3701e;
-
-    --users-div-bg: #363635;
-
-    --input-bg: #dadada;
-
-    --selected-dark-text-clr: rgb(218, 211, 204);
-    --option-black-bg: rgb(199, 117, 30);
+    --dm-bg: #2e2e2e;
+    --dm-bg-2: #535353;
+    --dm-primary-clr: #ffffff;
+    --dm-secondary-clr: rgb(224, 199, 152);
+    --dm-tertiary-clr: rgb(185, 134, 39);
 
 }
 
-.dark-mode{
-    background-color: var(--dark-mode-bg);
-    color: var(--dark-mode-text);
+.dark-mode {
+    background: var(--dm-bg);
+    color: var(--dm-primary-clr);
 
 }
 
-.dark-mode a, .dark-mode .highlight-word{
-    color: var(--dark-mode-button-clr);
+.dark-mode .theme-switch-button{
+    color: white;
+    
+}
+
+.dark-mode .highlight-word{
+    color:var(--dm-secondary-clr);
+
+}
+
+.dark-mode a{
+    color: var(--dm-secondary-clr);
     transition: all var(--transition-time) ease-in-out;
 
 }
 
 .dark-mode a:hover{
-    color: var(--dark-mode-text);
-
-}
-
-.dark-mode button:hover{
-    color: var(--dark-mode-link-hover);
-}
-
-.dark-mode #buttom-submit button{
-    background: var(--dark-mode-button-clr);
-    color:  var(--link-hover-clr);
-    border-color: var(--link-hover-clr);
-
-}
-
-.dark-mode #buttom-submit button:hover{
-    border-color: var(--dark-mode-link-hover);
-
-}
-
-.light-mode-icon{
-    color: white;
-
-}
-
-.dark-mode aside, .dark-mode .section-top, .dark-mode .section-bottom{
-    background: var(--users-div-bg);
+    color: var(--dm-primary-clr);
 
 }
 
 .dark-mode input, .dark-mode select{
-    background: var(--input-bg);
+    background: rgb(88, 88, 88);
+    border-color:var(--dm-bg);
 
 }
 
-.dark-mode .forms-item input:hover, .dark-mode .forms-item select:hover{
-    box-shadow: 1px 5px 10px rgba(145, 145, 145, 0.486);
+.dark-mode input::placeholder, .dark-mode select, .dark-mode select option{
+    color: var(--dm-primary-clr);
 
 }
 
-.dark-mode .selected{
-    color: var(--dark-mode-link-hover);
-    background: var(--dark-mode-bg);
+.dark-mode .input-control:focus{
+    outline: none;
+    border: 1px solid var(--dm-tertiary-clr);
+
+}
+
+.dark-mode aside, .dark-mode .section-top, .dark-mode .section-bottom{
+    background: var(--dm-bg-2);
+
+}
+
+.dark-mode .button-submit button:hover{
+    color: var(--dm-primary-clr);
+    border-color: var(--dm-tertiary-clr);
+
+}
+
+.dark-mode .selected, .dark-mode #options-list li:hover{
+    color: var(--dm-secondary-clr);
+    background: var(--dm-bg);
+    border-color: var(--dm-secondary-clr);
     
-}
-
-.dark-mode #options-list li:hover{
-    background: var(--selected-dark-text-clr);
-
-}
-
-.dark-mode .right-section-back-button p, .dark-mode .right-section-back-button svg{
-    color: var(--dark-mode-text);
-
-}
-
-.dark-mode .right-section-back-button p:hover, .dark-mode .right-section-back-button svg:hover{
-    color: white;
-
 }

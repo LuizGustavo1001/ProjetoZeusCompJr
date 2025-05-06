@@ -12,7 +12,8 @@ main{
 }
 
 body{
-    background: var(--body-light-bg)
+    background: var(--body-light-bg);
+
 }
 
 aside{
@@ -184,7 +185,6 @@ section{
 
 }
 
-
 .back-budget{
     color: var(--primary-clr);
 
@@ -215,7 +215,6 @@ section{
 
 }
 
-
 form .button-submit button{
     margin-top: 1em;
     padding-inline: 4em;
@@ -228,12 +227,10 @@ form .button-submit button{
 
 }
 
-
 .hidden-div{
     display: none;
 
 }
-
 
 @media(min-width: 1024px){
     main{
@@ -285,7 +282,6 @@ form .button-submit button{
         align-items: center;
 
     }
-
     
     .right-section-forms{
         display: grid;

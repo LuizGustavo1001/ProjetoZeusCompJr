@@ -1,14 +1,13 @@
 :root{
     --default-font: "Open Sans", sans-serif;
 
+    --bg-clr: white;
     --primary-clr: #a56b00;
-    --secundary-clr: #744e07;
+    --secondary-clr: #744e07;
 
     --submit-button-gradient: linear-gradient(45deg, #a56b00 60%, #dab36c);
 
     --transition-time: 0.3s;
-
-    --default-bg-clr: white;
 
     --border-radius: 10px;
 
@@ -37,6 +36,7 @@ h1{
     flex-direction: row;
     align-items: center;
     gap: 0.3em;
+
 }
 
 button{
@@ -47,7 +47,7 @@ button{
 
     border: 1px solid var(--primary-clr);
     background: var(--submit-button-gradient);
-    color:var(--default-bg-clr);
+    color:var(--bg-clr);
     
     transition: all var(--transition-time) ease-in-out;
 
@@ -78,7 +78,27 @@ a{
 }
 
 a:hover{
-    color: var(--secundary-clr);
+    color: var(--secondary-clr);
+
+}
+
+.highlight-word{
+    color: var(--primary-clr);
+
+}
+
+.hidden{
+    display: none;
+
+}
+
+.right-content-img{
+    display: none;
+
+}
+
+.content{
+    margin: 5vw;
 
 }
 
@@ -87,27 +107,16 @@ a:hover{
 
 }
 
-
 .input-control:focus{
     outline: none;
     border: 1px solid var(--primary-clr);
+    box-shadow: 1px 5px 10px rgba(73, 42, 7, 0.486);
 
 }
 
 ::selection {
     background-color: #f0cea8;
-    color: var(--default-bg-clr);
-
-}
-
-.highlight-word{
-    color: #a56b00;
-
-}
-
-.content{
-    margin: 5vw;
-
+    color: var(--bg-clr);
 
 }
 
@@ -169,11 +178,6 @@ a:hover{
 
 }
 
-.hidden{
-    display: none;
-
-}
-
 .theme-switch-button{
     background: transparent;
     border: none;
@@ -191,11 +195,6 @@ a:hover{
 #church-symbol:hover, .theme-switch-button:hover{
     transform: scale(1.05);
     cursor: pointer;
-
-}
-
-.right-content-img{
-    display: none;
 
 }
 
