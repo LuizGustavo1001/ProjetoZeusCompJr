@@ -1,9 +1,11 @@
 :root{
     --dm-bg: #2e2e2e;
-    --dm-bg-2: #535353;
+    --dm-bg-2: #414040;
     --dm-primary-clr: #ffffff;
-    --dm-secondary-clr: rgb(224, 199, 152);
-    --dm-tertiary-clr: rgb(185, 134, 39);
+    --dm-secondary-clr: #e0c798;
+    --dm-tertiary-clr: #b98627;
+
+    --dm-submit-button-gradient: linear-gradient(45deg,  #d1b683 , #9c6f1c);
 
 }
 
@@ -41,13 +43,14 @@
 }
 
 .dark-mode input::placeholder, .dark-mode select, .dark-mode select option{
-    color: var(--dm-primary-clr);
+    color: rgb(212, 212, 212);
 
 }
 
-.dark-mode .input-control:focus{
+.dark-mode .input-control:focus {
     outline: none;
     border: 1px solid var(--dm-tertiary-clr);
+    color: var(--dm-primary-clr);
 
 }
 
@@ -56,9 +59,16 @@
 
 }
 
+.dark-mode .button-submit button{
+    background-image: var(--dm-submit-button-gradient);
+    color: var(--dm-bg);
+
+}
+
 .dark-mode .button-submit button:hover{
     color: var(--dm-primary-clr);
     border-color: var(--dm-tertiary-clr);
+    background: transparent;
 
 }
 

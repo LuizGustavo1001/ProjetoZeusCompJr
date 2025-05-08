@@ -14,55 +14,68 @@ document.querySelectorAll("#options-list li").forEach((li) => {
 });
 
 /* Entrar na aba de adicionar funcionários*/
-var funcLocal = document.querySelector('.employe');
-var funcButton = document.querySelector('.add-employe-button');
+var emplLocal = document.querySelector('.employee');
+var emplButton = document.querySelector('.add-employee-button');
 
-var funcAddLocal = document.querySelector('.addEmploye');
+var emplAddLocal = document.querySelector('.addEmployee');
 
-funcButton.addEventListener("click", ()=>{
-    funcLocal.classList.remove('show-div');
-    funcLocal.classList.add('hidden-div');
+emplButton.addEventListener("click", ()=>{
+    emplLocal.classList.remove('show-div');
+    emplLocal.classList.add('hidden-div');
 
-    funcAddLocal.classList.remove('hidden-div');
-    funcAddLocal.classList.add('show-div');
-
+    emplAddLocal.classList.remove('hidden-div');
+    emplAddLocal.classList.add('show-div');
     
 });
 /* Entrar na aba de adicionar funcionários*/
 
+
 /* Entrar na aba de adicionar orçamento*/
-var orcLocal = document.querySelector('.budget');
-var orcButton = document.querySelector('.add-budget-button');
+var budgetLocal = document.querySelector('.budget');
+var budgetButton = document.querySelector('.add-budget-button');
 
-var orcAddLocal = document.querySelector('.addBudget');
+var budgetAddLocal = document.querySelector('.addBudget');
 
-orcButton.addEventListener("click", () =>{
-    orcLocal.classList.remove('show-div');
-    orcLocal.classList.add('hidden-div');
+budgetButton.addEventListener("click", () =>{
+    budgetLocal.classList.remove('show-div');
+    budgetLocal.classList.add('hidden-div');
 
-    orcAddLocal.classList.add('show-div');
-    orcAddLocal.classList.remove('hidden-div')
-
+    budgetAddLocal.classList.add('show-div');
+    budgetAddLocal.classList.remove('hidden-div')
 
 });
 /* Entrar na aba de adicionar orçamento*/
 
-/*Botão para voltar para a aba de orçamentos*/
-var voltarOrc = document.querySelector('.back-budget');
 
-voltarOrc.addEventListener("click", () => {
-    orcLocal.classList.remove('hidden-div');
-    orcLocal.classList.add('show-div');
+/*Botão para voltar para a aba de funcionários*/
+var backEmpl = document.querySelector('.back-employee');
 
-    orcAddLocal.classList.add('hidden-div');
-    orcAddLocal.classList.remove('show-div');
+backEmpl.addEventListener("click", () => {
+    emplLocal.classList.remove('hidden-div');
+    emplLocal.classList.add('show-div');
+
+    emplAddLocal.classList.add('hidden-div');
+    emplAddLocal.classList.remove('show-div');
 
 })
 /*Botão para voltar para a aba de orçamentos*/
 
 
+/*Botão para voltar para a aba de orçamentos*/
+var backBudget = document.querySelector('.back-budget');
 
-function submitFunc(event){
+backBudget.addEventListener("click", () => {
+    budgetLocal.classList.remove('hidden-div');
+    budgetLocal.classList.add('show-div');
+
+    budgetAddLocal.classList.add('hidden-div');
+    budgetAddLocal.classList.remove('show-div');
+
+})
+/*Botão para voltar para a aba de orçamentos*/
+
+
+function submitEmpl(event){
     event.preventDefault();
 
     let nomeFunc = document.querySelector("#inome").value;
@@ -97,19 +110,3 @@ function submitFunc(event){
     )
 
 }
-
-/*
-async function atualizarTotalFuncionarios(){
-    try{
-        const res = await fetch('/api/total-funcionarios');
-        const data = await res.json();
-        document.querySelector('#total-funcionarios').innerHTML = `${data.local}`;
-    }catch{
-        console.error('Erro ao buscar o numero total de funcionarios', err);
-    }
-
-}
-
-atualizarTotalFuncionarios();
-
-*/

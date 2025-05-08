@@ -173,10 +173,30 @@ a:hover{
 
 }
 
-.forms-item input:hover, .forms-item select:hover{
-    box-shadow: 1px 5px 10px rgba(73, 42, 7, 0.486);
+.forms-item input:hover, .forms-item select:hover, .search-bar input:hover, .filter-bar select:hover{
+    box-shadow: 1px 5px 10px rgba(73, 42, 7, 0.178);
+    
+}
+
+
+.search-bar, .filter-bar{
+    display: flex;
+    flex-direction: column;
 
 }
+
+.search-bar input, .filter-bar select, .button-submit button, .section-top, .section-bottom{
+    border-radius: var(--border-radius);
+    transition: all var(--transition-time) ease-in-out;
+
+}
+
+.search-bar input, .filter-bar select{
+    padding: 1.2em;
+    border-color: var(--input-border-clr);
+    cursor: pointer;
+
+}   
 
 .theme-switch-button{
     background: transparent;
