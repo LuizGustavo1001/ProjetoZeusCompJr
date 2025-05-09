@@ -1,3 +1,279 @@
+<?php 
+    include("../../dbConnection.php");
+
+
+    function totalList($type){
+        global $mysqli;
+        $sql_code = " SELECT count(*) FROM $type";
+        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+        
+        if($type == "funcionario"){ // employee
+            $totalEmpl = $sql_query->fetch_row()[0];
+            echo "<p><strong><span id=\"total-employes\">$totalEmpl</span></strong></p>";
+        }else{ // budget
+            $totalBudgets = $sql_query->fetch_row()[0];
+            echo "<p><strong><span id=\"total-budget\">$totalBudgets</span></strong></p>";
+        }
+    }
+    function showList($type){ // mostra todos os itens cadastrados de um tabela
+        global $mysqli;
+        if($type == "funcionario"){
+?>
+            <h2><span class="highlight-word">Todos os Funcionários </span></h2>
+<?php
+        }else if($type == "orcamento"){ // exibe todos os orçamentos
+?>
+            <h2> <span class="highlight-word">Todos os Orçamentos</span> </h2>
+<?php
+        }
+        $sql_code = "SELECT * FROM $type";
+        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+
+        if($sql_query->num_rows == 0){
+            if($type == "funcionario"){
+?>
+                <p>Nenhum Funcionário Cadastrado no Momento</p>
+<?php       
+            }else if($type == "orcamento"){
+?>
+                <p>Nenhum Orçamento Cadastrado no Momento</p>
+<?php     
+            }
+        }else{
+?>
+            <table class= "search-result">
+<?php
+            if($type == "funcionario"){
+?>
+            <tr>
+                <th>id</th> 
+                <th>Nome</th>
+                <th>Nascimento</th>
+                <th>Email</th>
+                <th>Gênero</th>
+                <th>Telefone</th>
+                <th>Cargo</th>
+                <th>Ingresso</th>
+                <th>Área</th>
+            </tr>
+<?php
+            }else if($type == "orcamento"){
+?>
+                <tr>
+                    <th>id</th> 
+                    <th>Número</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Custo</th>
+                    <th>Cliente</th>
+                </tr> 
+<?php
+            }
+            if($type == "funcionario"){
+                
+                while($dados = $sql_query->fetch_assoc()){ // adiciona o funcionário ao DB na tabela Funcionario
+                    if($dados["genero"] == "M"){
+                        $dados["genero"] = "Masculino";
+                    }else if($dados["genero"] == "F"){
+                        $dados["genero"] = "Feminino";
+                    }else{
+                        $dados["genero"] = "Outro";
+                    }
+?>
+                    <tr class="func-tr">
+                        <td><?php echo $dados["idFunc"] ?></td>
+                        <td><?php echo $dados["nomeFunc"] ?></td>
+                        <td><?php echo $dados["dataNasc"] ?></td>
+                        <td><?php echo $dados["emailFunc"] ?></td>
+                        <td><?php echo $dados["genero"] ?></td>
+                        <td><?php echo $dados["telefone"] ?></td>
+                        <td><?php echo $dados["cargo"] ?></td>
+                        <td><?php echo $dados["dataI"] ?></td>
+                        <td><?php echo $dados["areaFunc"] ?></td>
+                    </tr>
+<?php
+                }
+            }else if($type == "orcamento"){
+                    while($dados = $sql_query->fetch_assoc()){ // adiciona o orçamento ao DB na Tabela Orçamento
+                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+?>                  
+                    <tr class="func-tr">
+                        <td><?php echo $dados["idOrc"] ?></td>
+                        <td><?php echo $dados["numOrc"] ?></td>
+                        <td><?php echo $dados["descProj"] ?></td>
+                        <td>
+                            <?php 
+                                echo numfmt_format_currency($padrao, $dados["valorOrc"], "BRL")
+                            ?>
+                        </td>
+                        <td>
+                            <?php 
+                                echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL")
+                            ?>
+                        </td>
+                        <td><?php echo $dados["cliente"] ?></td>
+                    </tr>
+<?php
+                }
+            }
+?>
+            </table>
+<?php
+        }
+    }
+    function searchList($type, $filter){ // exibe o resultado da busca
+        global $mysqli;
+        $pesquisa = $mysqli->real_escape_string($_GET["searchEmpl"]);
+        
+        $sql_code = 
+        "
+        SELECT * FROM $type
+        WHERE $filter LIKE '%$pesquisa%'
+        ";
+
+        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+
+        if($sql_query->num_rows == 0){ // nenhum funcionario com o nome desejado foi encontrado
+            if($type == "funcionario"){
+?>
+                <p>Nenhum Funcionário Encontrado com o Nome Digitado</p>
+<?php
+            }else if($type == "orcamento"){
+?>
+                <p>Nenhum Orçamento Encontrado com o Número Digitado</p>
+<?php
+            }
+        }else{ // funcionario(s) encontrados(s)
+            if($type == "funcionario"){
+?>          
+                <p class="highlight-word"><strong>Funcionário(s) Encontrado(s)!</strong></p>
+                <table class="search-result">
+                    <tr>
+                        <th>id</th> 
+                        <th>Nome</th>
+                        <th>Nascimento</th>
+                        <th>Email</th>
+                        <th>Gênero</th>
+                        <th>Telefone</th>
+                        <th>Cargo</th>
+                        <th>Ingresso</th>
+                        <th>Área</th>
+                    </tr>
+<?php
+                while($dados = $sql_query->fetch_assoc()){
+                    if($dados["genero"] == "M"){
+                        $dados["genero"] = "Masculino";
+                    }else if($dados["genero"] == "F"){
+                        $dados["genero"] = "Feminino";
+                    }else{
+                        $dados["genero"] = "Outro";
+                    }
+?>
+                    <tr>
+                        <td><?php echo $dados["idFunc"] ?></td>
+                        <td><?php echo $dados["nomeFunc"] ?></td>
+                        <td><?php echo $dados["dataNasc"] ?></td>
+                        <td><?php echo $dados["emailFunc"] ?></td>
+                        <td><?php echo $dados["genero"] ?></td>
+                        <td><?php echo $dados["telefone"] ?></td>
+                        <td><?php echo $dados["cargo"] ?></td>
+                        <td><?php echo $dados["dataI"] ?></td>
+                        <td><?php echo $dados["areaFunc"] ?></td>
+                    </tr>
+<?php
+                }
+?>
+                </table>
+<?php
+            }else if($type == "orcamento"){
+?>          
+                <p class="highlight-word"><strong>Orçamento(s) Encontrado(s)!</strong></p>
+                <table class="search-result">
+                    <tr>
+                        <th>id</th> 
+                        <th>Número</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Custo</th>
+                        <th>Cliente</th>
+                    </tr> 
+<?php
+                while($dados = $sql_query->fetch_assoc()){
+                $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+?>
+                    <tr class="func-tr">
+                        <td><?php echo $dados["idOrc"] ?></td>
+                        <td><?php echo $dados["numOrc"] ?></td>
+                        <td><?php echo $dados["descProj"] ?></td>
+                        <td><?php  echo  numfmt_format_currency($padrao, $dados["valorOrc"], "BRL")?></td>
+                        <td><?php  echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL")?></td>
+                    </tr>
+<?php
+                }
+?>
+                </table>
+<?php 
+            }
+        }
+    }
+
+    function addToList($type){
+        global $mysqli;
+
+        if($type == "funcionario"){
+            $stmt = $mysqli->prepare("
+                INSERT INTO funcionario (nomeFunc, dataNasc, emailFunc, genero, telefone, cargo, dataI, areaFunc) VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+
+            $stmt->bind_param("ssssssss", // quantidade e tipo de dados escritos
+                $_POST["eName"],
+                $_POST["eBDay"],
+                $_POST["eEmail"],
+                $_POST["eGender"],
+                $_POST["eNum"],
+                $_POST["position"],
+                $_POST["joinDate"],
+                $_POST["eArea"]
+            );
+
+        }else if($type == "orcamento"){
+
+            $stmt = $mysqli->prepare("
+                INSERT INTO orcamento (numOrc, descProj, valorOrc, custoOrc, cliente) VALUES
+                (?, ?, ?, ?, ?)
+            ");
+
+            $stmt->bind_param("ssdds",
+                $_POST["bNum"],
+                $_POST["bDesc"],
+                $_POST["bValue"],
+                $_POST["bCost"],
+                $_POST["bClient"]
+            );
+
+        }
+        if($stmt->execute()){
+            header("Location: user.php?success=1");
+        }else{
+            echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
+        }
+
+        if ($stmt) {
+            $stmt->close();
+        }
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST["bNum"], $_POST["bDesc"], $_POST["bValue"], $_POST["bCost"], $_POST["bClient"])) {
+            addToList("orcamento");
+        }
+        if (isset($_POST["eName"], $_POST["eBDay"], $_POST["eEmail"], $_POST["eGender"], $_POST["position"], $_POST["joinDate"], $_POST["eArea"])) {
+            addToList("funcionario");
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -6,7 +282,7 @@
     
         <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
     
-        <link rel="stylesheet" href="user.css">
+        <link rel="stylesheet" href="user-style.css">
         <link rel="stylesheet" href="../general-style.css">
         <link rel="stylesheet" href="../dark-mode.css">
     
@@ -21,7 +297,6 @@
     
     </head>
 <body>
-
     <main>
         <aside id="left-content"> <!--Left on Desktop > Top on Mobile -->
             <div id="aside-top">
@@ -107,14 +382,21 @@
 
                 <div class="section-top">
                     <div class="total">
-                        <p><strong><span id="total-employes">0</span></strong></p>
+                        <?php 
+                            $type = "funcionario";
+                            totalList($type);
+                        ?>
+
                         <p>Total de Funcionários</p>
                     </div>
 
-                    <div class="search-bar">
-                        <label for="isearch">Pesquisa rápida de um funcionário</label>
-                        <input type="search" name="search" id="isearch" class="input-control" placeholder="Nome do Funcionário">
-                    </div>
+                    <form action="" method="get">
+                        <div class="search-bar">
+                            <label for="isearch">Pesquisa rápida de um funcionário</label>
+                            <input type="search" name="searchEmpl" id="isearch" class="input-control" placeholder="Nome do Funcionário">
+                        </div>
+                    </form>
+                    
 
                     <div class="filter-bar">
                         <label for="iselect">Filtrar Funcionários</label>
@@ -131,8 +413,17 @@
                 </div>
 
                 <div class="section-bottom">
-                    <h2>Funcionários</h2>
-                    <p>Aqui aparecerá o Banco de Dados relacionado aos funcionários</p>
+                    <?php 
+                        $type = "funcionario";
+                        if(! isset($_GET["searchEmpl"])){ // exibe todos os Funcionários
+
+                        showList($type);
+
+                        }else{
+                            $filter = "nomeFunc";
+                            searchList($type, $filter);
+                        }
+                    ?>
                 </div>
 
             </section>
@@ -169,35 +460,35 @@
                     <p>Voltar</p>
                 </div>
 
-                <form method="post" autocomplete="on" class="section-bottom" onsubmit="submitFunc(event)">
+                <form action="" method="post" autocomplete="on" class="section-bottom">
                     <header>
-                        <p>Preencha o formulário abaixo para adicionar um novo Funcionário</p>
+                        <p>Preencha o formulário abaixo para adicionar um <span class="highlight-word">Novo Funcionário</span></p>
                     </header>
 
                     <div class="right-section-forms">
                         <div class="forms-item">
-                            <label for="inome">Nome</label>
-                            <input type="text" name="Nome" id="inome" class="input-control" required placeholder="Primeiro e Último Nome">
+                            <label for="iEName">Nome</label>
+                            <input type="text" name="eName" id="iEName" class="input-control" required placeholder="Primeiro e Último Nome">
                         </div>
 
                         <div class="forms-item">
-                            <label for="inascimento">Data de Nascimento</label>
-                            <input type="date" name="nascimento" id="inascimento" class="input-control" required>
+                            <label for="iEBday">Data de Nascimento</label>
+                            <input type="date" name="eBDay" id="iEBday" class="input-control" required>
                         </div>
 
                         <div class="forms-item">
-                            <label for="iemail">Email</label>
-                            <input type="email" name="email" id="iemail" class="input-control" required placeholder="exemplo@gmail.com">
+                            <label for="ieEmail">Email</label>
+                            <input type="email" name="eEmail" id="ieEmail" class="input-control" required placeholder="exemplo@gmail.com">
                         </div>
 
                         <div class="forms-item">
                             <label for="inum">Número de Telefone</label>
-                            <input type="text" name="num" id="inum" class="input-control" required placeholder="(XX) X XXXX-XXXX">
+                            <input type="text" name="eNum" id="iENum" class="input-control" required placeholder="(XX) X XXXX-XXXX">
                         </div>
 
                         <div class="forms-item">
-                           <label for="igenero">Gênero</label>
-                            <select name="genero" id="igenero" class="input-control">
+                           <label for="iEGender">Gênero</label>
+                            <select name="eGender" id="iEGender" class="input-control">
                                 <option value="M">Masculino</option>
                                 <option value="F">Feminino</option>
                                 <option value="O">Outros</option>
@@ -205,29 +496,29 @@
                         </div>
 
                         <div class="forms-item">
-                            <label for="idate">Data de Ingresso</label>
-                            <input type="date" name="date" id="idate" class="input-control">
+                            <label for="iJoinDate">Data de Ingresso</label>
+                            <input type="date" name="joinDate" id="iJoinDate" class="input-control">
                         </div>
 
                         <div class="forms-item">
-                            <label for="icargo">Cargo</label>
-                            <select name="cargo" id="icargo" class="input-control">
+                            <label for="iPos">Cargo</label>
+                            <select name="position" id="iPos" class="input-control">
                                 <option value="RH">Recursos Humanos</option>
-                                <option value="O">Operações</option>
-                                <option value="G">Gerente de Projetos</option>
+                                <option value="Operações">Operações</option>
+                                <option value="Gerente Projetos">Gerente de Projetos</option>
                                 <option value="SAC">SAC</option>
-                                <option value="I">Infraestrutura </option>
-                                <option value="SEG">Segurança </option>
+                                <option value="Infraestrutura">Infraestrutura </option>
+                                <option value="Segurança">Segurança </option>
                             </select>
                         </div>
 
                         <div class="forms-item">
                             <label for="iarea">Área</label>
-                            <select name="area" id="iarea" class="input-control">
-                                <option value="G">Gerencia</option>
-                                <option value="P">Projetos </option>
+                            <select name="eArea" id="iarea" class="input-control">
+                                <option value="Gerencia">Gerencia</option>
+                                <option value="Projetos">Projetos </option>
                                 <option value="RH">RH</option>
-                                <option value="C">Comercial</option>
+                                <option value="Comercial">Comercial</option>
                             </select>
                         </div>
                         
@@ -236,6 +527,22 @@
                     <div class="button-submit">
                         <button>Enviar</button>
                     </div>
+
+                    <?php 
+                        if(
+                            isset($_POST["EName"]) and 
+                            isset($_POST["EBday"]) and
+                            isset($_POST["eEmail"]) and
+                            isset($_POST["ENum"]) and
+                            isset($_POST["EGender"]) and
+                            isset($_POST["joinDate"]) and
+                            isset($_POST["position"]) and
+                            isset($_POST["eArea"])
+                        ){
+                            $type = "funcionario";
+                            addToList($type);
+                        }
+                    ?>
 
                 </form>
 
@@ -267,8 +574,27 @@
 
                 <div class="section-top">
                     <div class="total">
-                        <p><strong><span id="total-budget">0</span></strong></p>
+                        <?php 
+                            $type = "orcamento";
+                            totalList($type);
+                        ?>
                         <p>Total de Orçamentos</p>
+                    </div>
+
+                    <form action="" method="get">
+                        <div class="search-bar">
+                            <label for="isearch">Pesquisa rápida de um Orçamento</label>
+                            <input type="search" name="searchBudget" id="isearch" class="input-control" placeholder="Número do Orçamento">
+                        </div>
+                    </form>
+
+                    <div class="filter-bar">
+                        <label for="iselect">Filtrar Orçamentos</label>
+                        <select name="select" id="iselect" class="input-control">
+                            <option value="all">Todos</option>
+                            <option value="area">Valor(Crescente)</option>
+                            <option value="cargo">Custo(Crescente)</option>
+                        </select>
                     </div>
 
                     <div>
@@ -277,10 +603,19 @@
                         </div>
                     </div>
                 </div>
-
+                    
                 <div class="section-bottom">
-                    <h2>Histórico de Orçamentos</h2>
-                    <p>Aqui aparecerá o histórico de Orçamentos</p>
+                    <?php 
+                        $type = "orcamento";
+                        if(! isset($_GET["searchBudget"])){ // exibe todos os Funcionários
+
+                        showList($type);
+
+                        }else{
+                            $filter = "numOrc";
+                            searchList($type, $filter);
+                        }
+                    ?>
                 </div>
 
             </section>
@@ -317,35 +652,35 @@
                     <p>Voltar</p>
                 </div>
 
-                <form action="cadastro.php" method="post" autocomplete="on" class="section-bottom">
+                <form action="" method="post" autocomplete="on" class="section-bottom">
                     <header>
-                        <p>Preencha o formulário abaixo para adicionar um novo Funcionário</p>
+                        <p>Preencha o formulário abaixo para adicionar um <span class="highlight-word">Novo Orçamento</span></p>
                     </header>
 
                     <div class="right-section-forms">
                         <div class="forms-item">
-                            <label for="inome">Número Orçamento</label>
-                            <input type="text" name="numOrc" id="inumOrc" class="input-control" placeholder="Insira o Número do Orçamento Aqui">
+                            <label for="iBNum">Número Orçamento</label>
+                            <input type="text" name="bNum" id="iBNum" class="input-control" placeholder="Insira o Número do Orçamento Aqui">
                         </div>
 
                         <div class="forms-item">
-                            <label for="idescProj">Breve Descrição do Projeto</label>
-                            <input type="text" name="descProj" id="idescProj" class="input-control" required placeholder="Insira a Descrição">
+                            <label for="iBdesc">Breve Descrição do Projeto</label>
+                            <input type="text" name="bDesc" id="iBdesc" class="input-control" required placeholder="Insira a Descrição" maxlength="50">
                         </div>
 
                         <div class="forms-item">
-                            <label for="ivalorE">Valor Estimado</label>
-                            <input type="email" name="valorE" id="ivalorE" class="input-control" required placeholder="Valor em R$">
+                            <label for="iBValue">Valor Estimado</label>
+                            <input type="number" name="bValue"id="iBValue" class="input-control" required placeholder="Valor em R$" step="0.01">
                         </div>
 
                         <div class="forms-item">
-                            <label for="icusto">Custos Previstos</label>
-                            <input type="text" name="custo" id="icusto" class="input-control" required placeholder="Valor em R$">
+                            <label for="iBCost">Custos Previstos</label>
+                            <input type="number" name="bCost" id="iBCost" class="input-control" required placeholder="Valor em R$" step="0.001">
                         </div>
 
                         <div class="forms-item">
-                           <label for="icliente">Cliente</label>
-                        <input type="text" name="cliente" id="icliente" class="input-control" required placeholder="Nome do Cliente">
+                           <label for="iBClient">Cliente</label>
+                        <input type="text" name="bClient" id="iBClient" class="input-control" required placeholder="Nome do Cliente">
                         </div>
 
                     </div>
@@ -353,6 +688,19 @@
                     <div class="button-submit">
                         <button>Enviar</button>
                     </div>
+
+                    <?php 
+                        if(
+                            isset($_POST["bNum"]) and 
+                            isset($_POST["bDesc"]) and
+                            isset($_POST["bValue"]) and
+                            isset($_POST["bCost"]) and
+                            isset($_POST["bClient"])
+                        ){
+                            $type = "orcamento";
+                            addToList($type);
+                        }
+                    ?>
 
                 </form>
 

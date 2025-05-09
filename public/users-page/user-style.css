@@ -228,16 +228,13 @@ form .button-submit button{
 
 }
 
-.search-result li{
-    border: 1px solid black;
-    
-}
-
 @media(min-width: 1024px){
     main{
         flex-direction: row;
-
-    }
+        gap: 0;
+        
+        
+    }   
 
     #aside-top{
         justify-content: space-around;
@@ -289,5 +286,21 @@ form .button-submit button{
         grid-template-columns: repeat(2, 1fr);
         
     }
+
+    .search-result{
+        border-collapse: collapse;
+        width: 100%;
+        text-align: left;
+        
+    }
+
+    .search-result td, .search-result th{
+        padding: 1em;
+        border-bottom: 1px solid var(--input-border-clr);
+        font-size: 0.9em;
+        
+    }
+
+
 
 }

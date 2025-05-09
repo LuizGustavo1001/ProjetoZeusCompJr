@@ -1,16 +1,25 @@
 # ProjetoZeusCompJr
- <h2>Projeto de um site conectado a um Banco de Dados em MySQL utilizando Node.Js</h2>
+ <h2>Projeto de um site conectado a um Banco de Dados em MySQL utilizando PHP</h2>
  
- <p>- Teste de Sistema backend de Banco de Dados para <strong>Gerenciar Funcionários e orçamentos</strong> de uma <strong>Empresa</strong>, inicialmente</p>
+ <p>- Teste de Sistema backend de Banco de Dados para <strong>Gerenciar Funcionários e orçamentos</strong> de uma <strong>Empresa</strong></p>
  <p>- <strong>FrontEnd</strong>: <strong>HTML5</strong> com as <strong>CSS</strong> + <strong>JavaScript</strong></p>
  
  <h3>📟 API </h3>
  <p>- <em>Ainda em produção</em></p>
- <p>- Inicialmente, projetada utilizando <strong>Node.Js</strong> e seus <strong>Frameworks</strong>, como Express</p>
+ <p>
+    - Inicialmente, projetada utilizando <strong>PHP</strong> para conectar o <strong>Banco de Dados</strong>(BackEnd) com o <strong>HTML</strong>(FrontEnd)
+ </p>
  <p>- Gerenciar Funcionários, Orçamentos e Estoques</p>
  <ol>
-     <li>👤 <strong>Funcionários</strong></li>
-     <p>- <strong>Mostrar na tela</strong> todos os Funcionários Cadastrados, <strong>realizar Buscas</strong> por nome e <strong>Filtrar</strong> por Área de Atuação ou Cargo</p>
+    <li>👤 <strong>Funcionários</strong></li>
+    <p>- Mostrar na tela 
+        <ul>
+            <li><strong>Total de Funcionários</strong></li>
+            <li><strong>Todos os Funcionários Cadastrados</strong></li>
+            <li><strong>Realizar Buscas</strong> por nome</li>
+            <li><strong>Filtra</strong> por Área de Atuação ou Cargo (ainda em produção)</li>
+        </ul>
+    </p>
      <ul>
          <li>Nome</li>
          <li>Data de Nascimento</li>
@@ -22,7 +31,14 @@
          <li>Área</li>
      </ul>
      <li>💰 <strong>Orçamentos</strong></li>
-     <p><strong>Total de Orçamentos</strong></p>
+     <p>- Mostra na tela
+        <ul>
+            <li><strong>Total de Orçamentos</strong></li>
+            <li><strong>Todos os Orçamentos Cadastrados</strong></li>
+            <li><strong>Realizar Buscas</strong> por Número do Orçamento</li>
+            <li><strong>Filtra</strong> por Valor Estimado(crescente) e por Custo Previsto(crescente)(ainda em produção)</li>
+        </ul>
+     </p>
      <ul>
          <li>Número do Orçamento</li>
          <li>Descrição</li>
@@ -30,17 +46,47 @@
          <li>Custos Previstos</li>
          <li>Cliente Relacionado</li>
      </ul>
-     <li>📝 <strong>Estoques</strong> </li>
+     <li>📝 <strong>Estoques</strong>(Em Desenvolvimento) </li>
  </ol>
 
- <h3>📂 Esquema de Pastas</h3>
+ <p>🌑 Possui suporte para <strong>Modo Escuro</strong> </p>
+ <p>🗺️ Navegação entre as sessões (user-page) utilizando <strong>JavaScript</strong> </p>
 
+ <h3>📂 Esquema de Pastas</h3>
+    |
+    |-- public (Interface Visual)
+    |   |-- general-images (imagens utilizadas em todas as páginas)
+    |   |-- icon (ícone/favicon das páginas)
+    |   |-- login-page (página de login)
+    |   |-- sign-up-page (página de cadastro)
+    |   |-- users-page (página do usuário já logado)
+    |   |-- dark-mode.css (estilos do Modo Escuro)
+    |   |-- dark-mode.js (scripts do Modo Escuro)
+    |   |-- general-style.js (estilos utilizados em todas as páginas)
+    |
+    |-- dbConnection.php (Conectar o Banco de Dados com o FrontEnd)
+    |
+    |--DumpEmpresaPZ.sql (Clone do Banco de Dados)
 
  <h3>📋 Para fazer: </h3>
+
+<h3>🖥️ Rodar o projeto</h3>
+<ol>
+    <li>Baixe o XAMPP <a href="https://www.youtube.com/watch?v=0Y9OZ0vc1SU&t=213s">link</a></li>
+    <li>Baixe o MySQLWorkBenc <a href="https://www.youtube.com/watch?v=a5ul8o76Hqw&t=13s">link</a></li>
+    <li>Clone o Banco de Dados (Dump)</li>
+    <li>Adicione o Banco de Dados ao seu Servidor Local</li>
+    <li>
+        Digite no Navegador "localhost/'pasta'/ProjetoZeusCompJr/public/users-page/user.php"<img src="local.png" alt=""></img>
+        <br> Ou
+        <br> 
+        Digite no Navegador "localhost/'pasta'/ProjetoZeusCompJr/public/" e navegue pela pasta que quiser
+    </li>
+</ol>
+
  <ul>
-     <li>API</li>
-     <li>Polir as CSS</li>
-     <li>Página de Estoques</li>
-     <li>Página de Notificações</li>
-     <li>Permitir acesso completo ao site apenas para usuários logados</li>
+    <li>Página de Estoques</li>
+    <li>Página de Notificações</li>
+    <li>Permitir acesso completo ao site apenas para usuários logados</li>
+    <li>Linkar página de login com página do usuário já logado</li>
  </ul>
