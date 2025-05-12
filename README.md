@@ -53,6 +53,7 @@
  <p>🗺️ Navegação entre as sessões (user-page) utilizando <strong>JavaScript</strong> </p>
 
  <h3>📂 Esquema de Pastas</h3>
+ 
     |
     |-- public (Interface Visual)
     |   |-- general-images (imagens utilizadas em todas as páginas)
