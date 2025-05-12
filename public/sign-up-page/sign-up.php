@@ -1,3 +1,41 @@
+
+<?php 
+    include '../../dbConnection.php';
+
+    if(isset($_POST["nome"])){ // verificar se algo está escrito no input de nome
+        $username = $mysqli->real_escape_string($_POST["nome"]);
+        $email = $mysqli->real_escape_string($_POST["email"]);
+        $senha = $mysqli->real_escape_string($_POST["senha"]);
+
+        $sql_code1 = "
+            SELECT * FROM usuario WHERE userEmail = '$email'
+        ";
+
+        $sql_query1 = $mysqli->query($sql_code1) or die($mysqli->error);
+
+        if($sql_query1->num_rows != 0){ // já existe um usuário com o email digitado
+            $emailExistente = true;
+            echo "$sql_query1->num_rows";
+        }else{ // registrar novo usuário
+
+            $statement = $mysqli->prepare("INSERT INTO usuario (username, userEmail, userPassword) VALUES (?,?,?)");
+
+            $statement->bind_param("sss",
+                $_POST["nome"],
+                $_POST["email"],
+                $_POST["senha"]
+            );
+            if($statement->execute()){ // usuário cadastrado com sucesso
+                header("location:../login-page/login.php");
+                session_start();
+                $_SESSION['success_message'] = "Usuário cadastrado com sucesso!";
+
+            }
+        }
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -87,7 +125,7 @@
                                 </svg>
                                 Senha:
                             </label>
-                            <input type="password" name="senha" id="isenha" class="input-control" required placeholder="• • • • • • •">
+                            <input type="password" name="senha" id="isenha" class="input-control"  placeholder="• • • • • • •" maxlength="30" required >
                         </div>
 
                         <div class="button-submit">
@@ -98,7 +136,15 @@
                                 Enviar
                             </button>
                         </div>
-
+                        <?php 
+                        if(isset($emailExistente)){
+                            echo "
+                                <span class=\"error-text\">
+                                    <p>Erro: Email Inserido <strong>já está cadastrado</strong></p>
+                                </span>
+                            ";
+                        }
+                        ?>
                     </form>
                 </div>
             </div>

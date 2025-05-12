@@ -3,12 +3,11 @@
     if(isset($_POST["userEmail"])){ // se algo for escrito nos campos a função será executada
         $email = $mysqli->real_escape_string($_POST["userEmail"]);
         $password = $mysqli->real_escape_string($_POST["userPassword"]);
-        $username = $mysqli->real_escape_string($_POST["username"]);
 
         $sql_code = 
         "
-        SELECT * FROM funcionario 
-        WHERE emailFunc = '$email' AND senha = '$password' AND nomeFunc = '$username'
+        SELECT * FROM usuario 
+        WHERE userEmail = '$email' AND userPassword = '$password'
         ";
         $sql_query = $mysqli->query($sql_code) or die($mysqli->error); // executa o código sql
 
@@ -16,20 +15,19 @@
             //criar sessão
             session_start();
             $user = $sql_query->fetch_assoc(); // pegar todos os dados do usuário do BD e armazenar em $usuario
-            $_SESSION['username'] = $user['nomeFunc'];
-            $_SESSION['email'] = $user['emailFunc'];
-            $_SESSION['bday'] = $user['dataNasc'];
-            $_SESSION['number'] = $user['telefone'];
-            $_SESSION['gender'] = $user['genero'];
-            $_SESSION['position'] = $user['cargo'];
-            $_SESSION['entry'] = $user['dataI'];
-            $_SESSION['area'] = $user['areaFunc'];
-
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['userEmail'];
             header("location: ../users-page/user.php");
             exit;
         }else{ // nenhum usuário cadastrado com os dados enviados
             $erroLogin = true;
         }                 
+    }else{
+        session_start();
+        if(isset($_SESSION['success_message'])){
+            $cadastrado = true;
+            $_SESSION['success_message'] = null; // limpa a mensagem de sucesso
+        }
     }
 
 ?>
@@ -94,10 +92,6 @@
 
                     <form action="" method="post" autocomplete="on">
                         <div class="forms-item">
-                            <label for="username">Nome</label>
-                            <input type="text" name="username" id="iUsername" maxlength="30" required placeholder="Primeiro e Último Nome">
-                        </div>
-                        <div class="forms-item">
                             <label for="iemail">Email</label>
                             <input type="email" name="userEmail" id="iUserEmail" class="input-control" required
                                 placeholder="Seu Email Institucional" maxlength="40">
@@ -133,11 +127,19 @@
                                     <p>Clique no Botão Abaixo para<strong> Cadastrar-se</strong></p>
                                 </span>
                                 ";
-                            }   
+                            }
+                            if(isset($cadastrado)){
+                                echo "
+                                <span class=\"sucess-text\">
+                                    <p>Usuário cadastrado com sucesso</p>
+                                    <p>Insira novamente seus dados acima para Entrar na Área do Usuário</p>
+                                </span>
+                               ";
+                            }
 ?>  
                         </div>
                     </form>
-                    <div id="create-account">
+                    <div id="create-account" style="padding-top: 2em; text-align: center;"  >
                             <a href="../sign-up-page/sign-up.php">Não está cadastrado ainda? Cadastre-se Aqui!</a>
                     </div>
                 </div>

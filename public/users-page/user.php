@@ -1,317 +1,62 @@
-<?php 
-    include "../../dbConnection.php";
+<?php
+include "../../dbConnection.php";
 
-    if(! isset($_SESSION)){
-        session_start(); // iniciar a sessão 
-    }
-    
-    if (! isset($_SESSION["email"])) { // tentando acessar a página do usuário sem estar logado
-        header("Location: error.php");
-    }
+if (! isset($_SESSION)) {
+    session_start(); // iniciar a sessão 
+}
 
-    function totalList($type){
-        global $mysqli;
-        $sql_code = " SELECT count(*) FROM $type";
-        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
-        
-        if($type == "funcionario"){ // employee
-            $totalEmpl = $sql_query->fetch_row()[0];
-            echo "<p><strong><span id=\"total-employes\">$totalEmpl</span></strong></p>";
-        }else{ // budget
-            $totalBudgets = $sql_query->fetch_row()[0];
-            echo "<p><strong><span id=\"total-budget\">$totalBudgets</span></strong></p>";
+if (! isset($_SESSION["email"])) { // tentando acessar a página do usuário sem estar logado
+    header("Location: error.php");
+}
+
+function totalList($type)
+{
+    global $mysqli;
+    $sql_code = " SELECT count(*) FROM $type";
+    $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+
+    if ($type == "funcionario") { // employee
+        $totalEmpl = $sql_query->fetch_row()[0];
+        echo "<p><strong><span id=\"total-employes\">$totalEmpl</span></strong></p>";
+    } else { // budget
+        $totalBudgets = $sql_query->fetch_row()[0];
+        echo "<p><strong><span id=\"total-budget\">$totalBudgets</span></strong></p>";
+    }
+}
+
+function showList($type)
+{ // mostra todos os itens cadastrados de um tabela
+    global $mysqli;
+    if ($type == "funcionario") {
+?>
+        <h2><span class="highlight-word">Todos os Funcionários </span></h2>
+    <?php
+    } else if ($type == "orcamento") { // exibe todos os orçamentos
+    ?>
+        <h2> <span class="highlight-word">Todos os Orçamentos</span> </h2>
+        <?php
+    }
+    $sql_code = "SELECT * FROM $type";
+    $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+
+    if ($sql_query->num_rows == 0) {
+        if ($type == "funcionario") {
+        ?>
+            <p>Nenhum Funcionário Cadastrado no Momento</p>
+        <?php
+        } else if ($type == "orcamento") {
+        ?>
+            <p>Nenhum Orçamento Cadastrado no Momento</p>
+        <?php
         }
-    }
-    
-    function showList($type){ // mostra todos os itens cadastrados de um tabela
-        global $mysqli;
-        if($type == "funcionario"){
-?>
-            <h2><span class="highlight-word">Todos os Funcionários </span></h2>
-<?php
-        }else if($type == "orcamento"){ // exibe todos os orçamentos
-?>
-            <h2> <span class="highlight-word">Todos os Orçamentos</span> </h2>
-<?php
-        }
-        $sql_code = "SELECT * FROM $type";
-        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
-
-        if($sql_query->num_rows == 0){
-            if($type == "funcionario"){
-?>
-                <p>Nenhum Funcionário Cadastrado no Momento</p>
-<?php       
-            }else if($type == "orcamento"){
-?>
-                <p>Nenhum Orçamento Cadastrado no Momento</p>
-<?php     
-            }
-        }else{
-?>
-            <table class= "search-result">
-<?php
-            if($type == "funcionario"){
-?>
-            <tr>
-                <th>id</th> 
-                <th>Nome</th>
-                <th>Nascimento</th>
-                <th>Email</th>
-                <th>Gênero</th>
-                <th>Telefone</th>
-                <th>Cargo</th>
-                <th>Ingresso</th>
-                <th>Área</th>
-            </tr>
-<?php
-            }else if($type == "orcamento"){
-?>
+    } else {
+        ?>
+        <table class="search-result">
+            <?php
+            if ($type == "funcionario") {
+            ?>
                 <tr>
-                    <th>id</th> 
-                    <th>Número</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Custo</th>
-                    <th>Cliente</th>
-                </tr> 
-<?php
-            }
-            if($type == "funcionario"){
-                
-                while($dados = $sql_query->fetch_assoc()){ // adiciona o funcionário ao DB na tabela Funcionario
-                    if($dados["genero"] == "M"){
-                        $dados["genero"] = "Masculino";
-                    }else if($dados["genero"] == "F"){
-                        $dados["genero"] = "Feminino";
-                    }else{
-                        $dados["genero"] = "Outro";
-                    }
-?>
-                    <tr class="func-tr">
-                        <td><?php echo $dados["idFunc"] ?></td>
-                        <td><?php echo $dados["nomeFunc"] ?></td>
-                        <td><?php echo $dados["dataNasc"] ?></td>
-                        <td><?php echo $dados["emailFunc"] ?></td>
-                        <td><?php echo $dados["genero"] ?></td>
-                        <td><?php echo $dados["telefone"] ?></td>
-                        <td><?php echo $dados["cargo"] ?></td>
-                        <td><?php echo $dados["dataI"] ?></td>
-                        <td><?php echo $dados["areaFunc"] ?></td>
-                    </tr>
-<?php
-                }
-            }else if($type == "orcamento"){
-                    while($dados = $sql_query->fetch_assoc()){ // adiciona o orçamento ao DB na Tabela Orçamento
-                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
-?>                  
-                    <tr class="func-tr">
-                        <td><?php echo $dados["idOrc"] ?></td>
-                        <td><?php echo $dados["numOrc"] ?></td>
-                        <td><?php echo $dados["descProj"] ?></td>
-                        <td>
-                            <?php 
-                                echo numfmt_format_currency($padrao, $dados["valorOrc"], "BRL")
-                            ?>
-                        </td>
-                        <td>
-                            <?php 
-                                echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL")
-                            ?>
-                        </td>
-                        <td><?php echo $dados["cliente"] ?></td>
-                    </tr>
-<?php
-                }
-            }
-?>
-            </table>
-<?php
-        }
-    }
-    function searchList($type, $filter){ // exibe o resultado da busca
-        global $mysqli;
-        if($type == "funcionario"){
-            $pesquisa = $mysqli->real_escape_string($_GET["searchEmpl"]);
-        }else if($type = "orcamento"){
-            $pesquisa = $mysqli->real_escape_string($_GET["searchBudget"]);
-        }
-        $sql_code = 
-        "
-        SELECT * FROM $type
-        WHERE $filter LIKE '%$pesquisa%'
-        ";
-
-        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
-
-        if($sql_query->num_rows == 0){ // nenhum funcionario com o nome desejado foi encontrado
-            if($type == "funcionario"){
-?>
-                <p>Nenhum Funcionário Encontrado com o Nome: <strong>"<?php echo $pesquisa?>"</strong></p>
-<?php
-            }else if($type == "orcamento"){
-?>
-                <p>Nenhum Orçamento Encontrado com o Número: <strong> "<?php echo $pesquisa?>"</strong></p>
-<?php
-            }
-        }else{ // funcionario(s) encontrados(s)
-            if($type == "funcionario"){
-?>          
-                <p>
-                    <strong>
-                        <span class="highlight-word">
-                            Funcionário(s) Encontrado(s) com o filtro: 
-                        </span>"<?php echo $pesquisa?>"
-                    </strong> 
-                </p>
-
-                <table class="search-result">
-                    <tr>
-                        <th>id</th> 
-                        <th>Nome</th>
-                        <th>Nascimento</th>
-                        <th>Email</th>
-                        <th>Gênero</th>
-                        <th>Telefone</th>
-                        <th>Cargo</th>
-                        <th>Ingresso</th>
-                        <th>Área</th>
-                    </tr>
-<?php
-                while($dados = $sql_query->fetch_assoc()){
-                    if($dados["genero"] == "M"){
-                        $dados["genero"] = "Masculino";
-                    }else if($dados["genero"] == "F"){
-                        $dados["genero"] = "Feminino";
-                    }else{
-                        $dados["genero"] = "Outro";
-                    }
-?>
-                    <tr>
-                        <td><?php echo $dados["idFunc"] ?></td>
-                        <td><?php echo $dados["nomeFunc"] ?></td>
-                        <td><?php echo $dados["dataNasc"] ?></td>
-                        <td><?php echo $dados["emailFunc"] ?></td>
-                        <td><?php echo $dados["genero"] ?></td>
-                        <td><?php echo $dados["telefone"] ?></td>
-                        <td><?php echo $dados["cargo"] ?></td>
-                        <td><?php echo $dados["dataI"] ?></td>
-                        <td><?php echo $dados["areaFunc"] ?></td>
-                    </tr>
-<?php
-                }
-?>
-                </table>
-<?php
-            }else if($type == "orcamento"){
-?>          
-                <p class="highlight-word"><strong>Orçamento(s) Encontrado(s)!</strong></p>
-                <table class="search-result">
-                    <tr>
-                        <th>id</th> 
-                        <th>Número</th>
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Custo</th>
-                        <th>Cliente</th>
-                    </tr> 
-<?php
-                while($dados = $sql_query->fetch_assoc()){
-                $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
-?>
-                    <tr class="func-tr">
-                        <td><?php echo $dados["idOrc"] ?></td>
-                        <td><?php echo $dados["numOrc"] ?></td>
-                        <td><?php echo $dados["descProj"] ?></td>
-                        <td><?php  echo  numfmt_format_currency($padrao, $dados["valorOrc"], "BRL")?></td>
-                        <td><?php  echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL")?></td>
-                    </tr>
-<?php
-                }
-?>
-                </table>
-<?php 
-            }
-        }
-    }
-
-    function addToList($type){
-        global $mysqli;
-
-        if($type == "funcionario"){
-            $stmt = $mysqli->prepare("
-                INSERT INTO funcionario (nomeFunc, dataNasc, emailFunc, genero, telefone, cargo, dataI, areaFunc) VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-
-            $stmt->bind_param("ssssssss", // quantidade e tipo de dados escritos
-                $_POST["eName"],
-                $_POST["eBDay"],
-                $_POST["eEmail"],
-                $_POST["eGender"],
-                $_POST["eNum"],
-                $_POST["position"],
-                $_POST["joinDate"],
-                $_POST["eArea"]
-            );
-
-        }else if($type == "orcamento"){
-
-            $stmt = $mysqli->prepare("
-                INSERT INTO orcamento (numOrc, descProj, valorOrc, custoOrc, cliente) VALUES
-                (?, ?, ?, ?, ?)
-            ");
-
-            $stmt->bind_param("ssdds",
-                $_POST["bNum"],
-                $_POST["bDesc"],
-                $_POST["bValue"],
-                $_POST["bCost"],
-                $_POST["bClient"]
-            );
-
-        }
-        if($stmt->execute()){
-            header("Location: user.php?success=1");
-        }else{
-            echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
-        }
-
-        if ($stmt) {
-            $stmt->close();
-        }
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST["bNum"], $_POST["bDesc"], $_POST["bValue"], $_POST["bCost"], $_POST["bClient"])) {
-            addToList("orcamento");
-        }
-        if (isset($_POST["eName"], $_POST["eBDay"], $_POST["eEmail"], $_POST["eGender"], $_POST["position"], $_POST["joinDate"], $_POST["eArea"])) {
-            addToList("funcionario");
-        }
-    }
-    function filterList($type){
-        global $mysqli;
-        if($type == "funcionario"){
-             $filter = $mysqli->real_escape_string($_GET["selectFilterEmpl"]);
-        }else if($type == "orcamento"){
-             $filter = $mysqli->real_escape_string($_GET["selectFilterBudget"]);
-        }
-
-        $sql_code = 
-        "
-        SELECT * FROM $type
-        ORDER BY $filter asc
-        ";
-
-        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
-
-        if($type == "funcionario"){
-?>          
-            <p class="highlight-word"><strong>Funcionários Filtrados por <?php echo $filter?></strong></p>
-            <table class="search-result">
-                <tr>
-                    <th>id</th> 
+                    <th>id</th>
                     <th>Nome</th>
                     <th>Nascimento</th>
                     <th>Email</th>
@@ -321,16 +66,350 @@
                     <th>Ingresso</th>
                     <th>Área</th>
                 </tr>
-<?php
-            while($dados = $sql_query->fetch_assoc()){
-                if($dados["genero"] == "M"){
+            <?php
+            } else if ($type == "orcamento") {
+            ?>
+                <tr>
+                    <th>id</th>
+                    <th>Número</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Custo</th>
+                    <th>Cliente</th>
+                </tr>
+                <?php
+            }
+            if ($type == "funcionario") {
+
+                while ($dados = $sql_query->fetch_assoc()) { // adiciona o funcionário ao DB na tabela Funcionario
+                    if ($dados["genero"] == "M") {
+                        $dados["genero"] = "Masculino";
+                    } else if ($dados["genero"] == "F") {
+                        $dados["genero"] = "Feminino";
+                    } else {
+                        $dados["genero"] = "Outro";
+                    }
+                ?>
+                    <tr class="func-tr">
+                        <td><?php echo $dados["idFunc"] ?></td>
+                        <td><?php echo $dados["nomeFunc"] ?></td>
+                        <td><?php echo $dados["dataNasc"] ?></td>
+                        <td><?php echo $dados["emailFunc"] ?></td>
+                        <td><?php echo $dados["genero"] ?></td>
+                        <td><?php echo $dados["telefone"] ?></td>
+                        <td><?php echo $dados["cargo"] ?></td>
+                        <td><?php echo $dados["dataI"] ?></td>
+                        <td><?php echo $dados["areaFunc"] ?></td>
+                    </tr>
+                <?php
+                }
+            }else if ($type == "orcamento"){
+                while ($dados = $sql_query->fetch_assoc()) { // adiciona o orçamento ao DB na Tabela Orçamento
+                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+                ?>
+                    <tr class="func-tr">
+                        <td><?php echo $dados["idOrc"] ?></td>
+                        <td><?php echo $dados["numOrc"] ?></td>
+                        <td><?php echo $dados["descProj"] ?></td>
+                        <td>
+                            <?php
+                            echo numfmt_format_currency($padrao, $dados["valorOrc"], "BRL")
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL")
+                            ?>
+                        </td>
+                        <td><?php echo $dados["cliente"] ?></td>
+                    </tr>
+            <?php
+                }
+            }
+            ?>
+        </table>
+        <?php
+    }
+}
+function searchList($type, $filter)
+{ // exibe o resultado da busca
+    global $mysqli;
+
+    if($type == "funcionario"){
+        $pesquisa = $_GET["searchEmpl"];
+    }else if ($type == "orcamento"){
+        $pesquisa = $_GET["searchBudget"];
+    }
+
+    $sql_code = "SELECT * FROM $type WHERE $filter LIKE ?";
+    $stmt = $mysqli->prepare($sql_code); // evita melhor SQL injection que "real_escape_string"
+    $searchTerm = '%' . $pesquisa . '%'; // permite pesquisas sem o nome inteiro
+    $stmt->bind_param("s", $searchTerm);
+
+    $stmt->execute();
+    $sql_query = $stmt->get_result();
+
+    if($sql_query->num_rows == 0){ // nenhum funcionario com o nome desejado foi encontrado
+        if($type == "funcionario"){
+        ?>
+            <p>Nenhum Funcionário Encontrado com o Nome: <strong>"<?php echo $pesquisa ?>"</strong></p>
+        <?php
+        }else if($type == "orcamento"){
+        ?>
+            <p>Nenhum Orçamento Encontrado com o Número: <strong> "<?php echo $pesquisa ?>"</strong></p>
+        <?php
+        }
+    }else{ // funcionario(s) encontrados(s)
+        if($type == "funcionario"){
+        ?>
+            <p>
+                <strong>
+                    <span class="highlight-word">
+                        Funcionário(s) Encontrado(s) com o filtro:
+                    </span>"<?php echo $pesquisa ?>"
+                </strong>
+            </p>
+
+            <table class="search-result">
+                <tr>
+                    <th>id</th>
+                    <th>Nome</th>
+                    <th>Nascimento</th>
+                    <th>Email</th>
+                    <th>Gênero</th>
+                    <th>Telefone</th>
+                    <th>Cargo</th>
+                    <th>Ingresso</th>
+                    <th>Área</th>
+                </tr>
+                <?php
+                while ($dados = $sql_query->fetch_assoc()) { // retornando os valores encontrados na query
+                    if ($dados["genero"] == "M") {
+                        $dados["genero"] = "Masculino";
+                    } else if ($dados["genero"] == "F") {
+                        $dados["genero"] = "Feminino";
+                    } else {
+                        $dados["genero"] = "Outro";
+                    }
+                ?>
+                    <tr>
+                        <td><?php echo $dados["idFunc"] ?></td>
+                        <td><?php echo $dados["nomeFunc"] ?></td>
+                        <td><?php echo $dados["dataNasc"] ?></td>
+                        <td><?php echo $dados["emailFunc"] ?></td>
+                        <td><?php echo $dados["genero"] ?></td>
+                        <td><?php echo $dados["telefone"] ?></td>
+                        <td><?php echo $dados["cargo"] ?></td>
+                        <td><?php echo $dados["dataI"] ?></td>
+                        <td><?php echo $dados["areaFunc"] ?></td>
+                    </tr>
+                <?php
+                }
+                ?>
+            </table>
+        <?php
+        }else if($type == "orcamento"){ // orçamentos(s) encontrados(s)
+        ?>
+            <p class="highlight-word"><strong>Orçamento(s) Encontrado(s)!</strong></p>
+            <table class="search-result">
+                <tr>
+                    <th>id</th>
+                    <th>Número</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Custo</th>
+                    <th>Cliente</th>
+                </tr>
+                <?php
+                while($dados = $sql_query->fetch_assoc()){ // retornando os valores encontrados na query
+                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+                ?>
+                    <tr class="func-tr">
+                        <td><?php echo $dados["idOrc"] ?></td>
+                        <td><?php echo $dados["numOrc"] ?></td>
+                        <td><?php echo $dados["descProj"] ?></td>
+                        <td>
+                            <?php echo  numfmt_format_currency($padrao, $dados["valorOrc"], "BRL") ?>
+                        </td>
+                        <td>
+                            <?php echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL") ?>
+                        </td>
+                    </tr>
+                <?php
+                }
+                ?>
+            </table>
+        <?php
+        }
+    }
+}
+
+function addToList($type)
+{
+    global $mysqli;
+    $sql_code = "
+        SELECT * FROM $type
+        WHERE ? = ?
+    ";
+    $stmt = $mysqli->prepare($sql_code); // evita melhor SQL injection que "real_escape_string"
+    if($type == "funcionario"){
+        $stmt->bind_param("ss",$_POST["emailFunc"], $_POST['eEmail']);
+    }else if($type == "orcamento"){
+        $stmt->bind_param("si",$_POST["numOrc"], $_POST['bNum']);
+    }
+    $stmt->execute(); // executa o código sql
+    $sql_query = $stmt->get_result(); // executa o código sql
+
+    if($sql_query->num_rows){ // já existe um item existente com o dado inserido
+        if($type == "funcionario"){
+            global $funcionarioExiste;
+            $funcionarioExiste = true;
+        }else if($type == "orcamento"){
+            global $orcamentoExiste;
+            $orcamentoExiste = true;
+        }
+
+    }else{ // não existe um item existente com o dado inserido -> inserindo no banco de dados
+        if($type == "funcionario"){
+            $dataHoje = date("Y-m-d");
+            $minBirthDate = date("Y-m-d", strtotime("-16 years"));
+
+            if($_POST["eBDay"] >= $minBirthDate){ // Data de nascimento inválida
+                global $nascimentoInvalido;
+                $nascimentoInvalido = true;
+            }else if ($_POST["joinDate"] > $dataHoje){ // Data de ingresso inválida
+                global $ingressoInvalido;
+                $ingressoInvalido = true;
+            }else{ // nada anormal
+                $stmt = $mysqli->prepare("
+                        INSERT INTO $type (nomeFunc, dataNasc, emailFunc, genero, telefone, cargo, dataI, areaFunc) VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?)
+                    ");
+
+                $stmt->bind_param(
+                    "ssssssss",
+                    $_POST["eName"],
+                    $_POST["eBDay"],
+                    $_POST["eEmail"],
+                    $_POST["eGender"],
+                    $_POST["eNum"],
+                    $_POST["position"],
+                    $_POST["joinDate"],
+                    $_POST["eArea"]
+                );
+                global $inserido;
+                if ($stmt->execute()) {// dado inserido no Banco de Dados
+                    $inserido = true;
+                    header("location: user.php");
+
+                } else {
+                    echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
+                }
+
+                $stmt->close();
+            }
+        }else if($type == "orcamento"){
+            $stmt = $mysqli->prepare("
+                    INSERT INTO $type (numOrc, descProj, valorOrc, custoOrc, cliente) VALUES
+                    (?, ?, ?, ?, ?)
+            ");
+
+            $stmt->bind_param(
+                "isdds",
+                $_POST["bNum"],
+                $_POST["bDesc"],
+                $_POST["bValue"],
+                $_POST["bCost"],
+                $_POST["bClient"]
+            );
+            if($stmt->execute()){ // dado inserido no Banco de Dados
+                $inserido = true;
+                header("location: user.php");
+
+            }else{
+                 echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
+            }
+            $stmt->close();
+        }
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") { // verifica se algo foi escrito nos inputs da função acima
+    if (isset($_POST["bNum"])) {
+        addToList("orcamento");
+    }
+    if (isset($_POST["eName"])) {
+        addToList("funcionario");
+    }
+}
+
+// Exibição de mensagens de erro
+if (isset($funcionarioExiste)) {
+    echo "
+            <span class=\"error-text\">\n        
+                <p>Erro: <strong>Endereço de Email já Existente</strong></p>\n        
+                <p>Funcionário não inserido</p>\n    
+            </span>
+            ";
+}
+if (isset($ingressoInvalido)) {
+    echo "
+            <span class=\"error-text\">\n        
+                <p>Erro: <strong>Data de Ingresso</strong>. Precisa ser menor ou igual à data atual</p>\n 
+                <p>Funcionário não inserido</p>\n   
+            </span>
+            ";
+}
+if (isset($nascimentoInvalido)) {
+    echo "
+            <span class=\"error-text\">\n
+               <p>Erro: <strong>Data de Nascimento</strong>. Precisa ser menor que a data atual e maior de 16 anos</p>\n        <p>Funcionário não inserido</p>\n   
+            </span>
+            ";
+}
+
+function filterList($type)
+{
+    global $mysqli;
+    if ($type == "funcionario") {
+        $filter = $mysqli->real_escape_string($_GET["selectFilterEmpl"]);
+    } else if ($type == "orcamento") {
+        $filter = $mysqli->real_escape_string($_GET["selectFilterBudget"]);
+    }
+
+    $sql_code =
+        "
+        SELECT * FROM $type
+        ORDER BY $filter asc
+        ";
+
+    $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+
+    if ($type == "funcionario") {
+        ?>
+        <p class="highlight-word"><strong>Funcionários Filtrados por <?php echo $filter ?></strong></p>
+        <table class="search-result">
+            <tr>
+                <th>id</th>
+                <th>Nome</th>
+                <th>Nascimento</th>
+                <th>Email</th>
+                <th>Gênero</th>
+                <th>Telefone</th>
+                <th>Cargo</th>
+                <th>Ingresso</th>
+                <th>Área</th>
+            </tr>
+            <?php
+            while ($dados = $sql_query->fetch_assoc()) {
+                if ($dados["genero"] == "M") {
                     $dados["genero"] = "Masculino";
-                }else if($dados["genero"] == "F"){
+                } else if ($dados["genero"] == "F") {
                     $dados["genero"] = "Feminino";
-                }else{
+                } else {
                     $dados["genero"] = "Outro";
                 }
-?>
+            ?>
                 <tr>
                     <td><?php echo $dados["idFunc"] ?></td>
                     <td><?php echo $dados["nomeFunc"] ?></td>
@@ -342,68 +421,70 @@
                     <td><?php echo $dados["dataI"] ?></td>
                     <td><?php echo $dados["areaFunc"] ?></td>
                 </tr>
-<?php
+            <?php
             }
-?>
-            </table>
-<?php
-        }else if($type == "orcamento"){
-?>          
-            <p class="highlight-word"><strong>Orçamento(s) Filtrados por <?php echo $filter?> </strong></p>
-            <table class="search-result">
-                <tr>
-                    <th>id</th> 
-                    <th>Número</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Custo</th>
-                    <th>Cliente</th>
-                </tr> 
-<?php
-            while($dados = $sql_query->fetch_assoc()){
-            $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
-?>
+            ?>
+        </table>
+    <?php
+    } else if ($type == "orcamento") {
+    ?>
+        <p class="highlight-word"><strong>Orçamento(s) Filtrados por <?php echo $filter ?> </strong></p>
+        <table class="search-result">
+            <tr>
+                <th>id</th>
+                <th>Número</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Custo</th>
+                <th>Cliente</th>
+            </tr>
+            <?php
+            while ($dados = $sql_query->fetch_assoc()) {
+                $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+            ?>
                 <tr class="func-tr">
                     <td><?php echo $dados["idOrc"] ?></td>
                     <td><?php echo $dados["numOrc"] ?></td>
                     <td><?php echo $dados["descProj"] ?></td>
-                    <td><?php  echo  numfmt_format_currency($padrao, $dados["valorOrc"], "BRL")?></td>
-                    <td><?php  echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL")?></td>
+                    <td><?php echo  numfmt_format_currency($padrao, $dados["valorOrc"], "BRL") ?></td>
+                    <td><?php echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL") ?></td>
                 </tr>
-<?php
+            <?php
             }
-?>
-            </table>
-<?php 
+            ?>
+        </table>
+<?php
 
-        }
     }
+}
 ?>
 
 
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-        <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
-    
-        <link rel="stylesheet" href="users-style.css">
-        <link rel="stylesheet" href="../general-styles.css">
-        <link rel="stylesheet" href="../dark-mode.css">
 
-        <script src="../dark-mode.js" defer></script>
-        
-        <script src="user.js" defer></script>
-    
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    
-        <title>Projeto Zeus - Área do Usuário</title>
-    
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="users-style.css">
+    <link rel="stylesheet" href="../general-styles.css">
+    <link rel="stylesheet" href="../dark-mode.css">
+
+    <script src="../dark-mode.js" defer></script>
+
+    <script src="user.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <title>Projeto Zeus - Área do Usuário</title>
+
+</head>
+
 <body>
     <main>
         <aside id="left-content"> <!--Left on Desktop > Top on Mobile -->
@@ -467,16 +548,16 @@
 
         </aside>
 
-    <!--Funcionários-->
+        <!--Funcionários-->
         <section id="right-content">
             <section class="right-section employee show-div">
                 <nav class="section-header">
                     <div>
                         <h1>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                             </svg>
                             Todos os <span class="highlight-word">Funcionários</span>
                         </h1>
@@ -486,16 +567,16 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                        <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
                 </nav>
 
                 <div class="section-top">
                     <div class="total">
-                        <?php 
-                            $type = "funcionario";
-                            totalList($type);
+                        <?php
+                        $type = "funcionario";
+                        totalList($type);
                         ?>
 
                         <p>Total de Funcionários</p>
@@ -507,22 +588,22 @@
                             <input type="search" name="searchEmpl" id="isearch" class="input-control" placeholder="Pressione Enter para Pesquisar">
                         </div>
                     </form>
-                    
 
-                    <div class="filter-bar" >
-                            <form action="" method="get" >
-                                <label for="iselect">Filtrar Funcionários</label>
-                                <select name="selectFilterEmpl" id="iselect" class="input-control">
-                                    <optgroup label="Crescente">
-                                        <option value="idFunc">Id</option>
-                                        <option value="nomeFunc">Nome</option>
-                                        <option value="areaFunc">Área de Atuação</option>
-                                        <option value="cargo">Cargo</option>
-                                    </optgroup>
-                                    
-                                </select>
-                                <button class="filter-button">Filtrar</button>
-                            </form>
+
+                    <div class="filter-bar">
+                        <form action="" method="get">
+                            <label for="iselect">Filtrar Funcionários</label>
+                            <select name="selectFilterEmpl" id="iselect" class="input-control">
+                                <optgroup label="Crescente">
+                                    <option value="idFunc">Id</option>
+                                    <option value="nomeFunc">Nome</option>
+                                    <option value="areaFunc">Área de Atuação</option>
+                                    <option value="cargo">Cargo</option>
+                                </optgroup>
+
+                            </select>
+                            <button class="filter-button">Filtrar</button>
+                        </form>
                     </div>
 
                     <div class="button-submit">
@@ -531,23 +612,23 @@
                 </div>
 
                 <div class="section-bottom">
-                    <?php 
-                        $type = "funcionario";
-                        if(isset($_GET["selectFilterEmpl"])){ // filtra os Orçamentos
-                            filterList($type);
-                        }
-                        if(isset($_GET["searchEmpl"])){ // // exibe todos os Orçamentos com o nome digitado
-                            $filter = "nomeFunc";
-                            searchList($type, $filter);
-                        }
-                        showList($type);
+                    <?php
+                    $type = "funcionario";
+                    if (isset($_GET["selectFilterEmpl"])) { // filtra os Orçamentos
+                        filterList($type);
+                    }
+                    if (isset($_GET["searchEmpl"])) { // // exibe todos os Orçamentos com o nome digitado
+                        $filter = "nomeFunc";
+                        searchList($type, $filter);
+                    }
+                    showList($type);
                     ?>
                 </div>
 
             </section>
-    <!--Funcionários-->
+            <!--Funcionários-->
 
-    <!--Funcionários Adicionar-->
+            <!--Funcionários Adicionar-->
             <section class="right-section addEmployee hidden-div">
                 <nav class="section-header">
                     <div>
@@ -565,7 +646,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                        <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
 
@@ -573,7 +654,7 @@
 
                 <div class="right-section-back-button back-employee">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
                     <p>Voltar</p>
                 </div>
@@ -605,7 +686,7 @@
                         </div>
 
                         <div class="forms-item">
-                           <label for="iEGender">Gênero</label>
+                            <label for="iEGender">Gênero</label>
                             <select name="eGender" id="iEGender" class="input-control">
                                 <option value="M">Masculino</option>
                                 <option value="F">Feminino</option>
@@ -639,35 +720,61 @@
                                 <option value="Comercial">Comercial</option>
                             </select>
                         </div>
-                        
+
                     </div>
+
+                    <?php 
+                        if(isset($inserido)){
+                            echo "<span class=\"sucess-text\"><p>Funcionário com email <strong>\"{$_POST["eEmail"]}\"</strong> inserido no Banco de Dados com sucesso</p></span>";
+                            $inserido = null; // reseta a variável para não exibir mais de uma vez
+                        }
+                    ?>
 
                     <div class="button-submit">
                         <button>Enviar</button>
                     </div>
 
-                    <?php 
-                        if(
-                            isset($_POST["EName"]) and 
-                            isset($_POST["EBday"]) and
-                            isset($_POST["eEmail"]) and
-                            isset($_POST["ENum"]) and
-                            isset($_POST["EGender"]) and
-                            isset($_POST["joinDate"]) and
-                            isset($_POST["position"]) and
-                            isset($_POST["eArea"])
-                        ){
-                            $type = "funcionario";
-                            addToList($type);
+                    <?php
+                    if (isset($_POST["EName"])) {
+                        $type = "funcionario";
+                        addToList($type);
+
+                        if (isset($funcionarioExiste)) {
+                            echo "
+                                <span class=\"error-text\">
+                                    <p>Erro: <strong>Endereço de Email já Existente</strong></p>
+                                    <p>Funcionário não inserido</p>
+                                </span>
+                            ";
                         }
+                        if (isset($ingressoInvalido)) {
+                            echo "
+                                    <span class=\"error-text\">
+                                        <p>Erro: <strong>Data de Ingresso</strong>. Precisa ser menor que a data atual</p>
+                                        <p>Funcionário não inserido</p>
+                                    </span>
+                                ";
+                        }
+                        if (isset($nascimetoInvalido)) {
+                            echo "
+                                    <span class=\"error-text\">
+                                        <p>
+                                            Erro: <strong>Data de Nascimento</strong>. Precisa ser menor que a data atual e maior de 16 anos
+                                        </p>
+                                        <p>Funcionário não inserido</p>
+                                    </span>
+                                ";
+                        }
+                    }
+
                     ?>
 
                 </form>
 
             </section>
-    <!--Funcionários Adicionar-->
+            <!--Funcionários Adicionar-->
 
-    <!--Orçamentos-->
+            <!--Orçamentos-->
             <section class="right-section budget hidden-div">
                 <nav class="section-header">
                     <div>
@@ -685,16 +792,16 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                        <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
                 </nav>
 
                 <div class="section-top">
                     <div class="total">
-                        <?php 
-                            $type = "orcamento";
-                            totalList($type);
+                        <?php
+                        $type = "orcamento";
+                        totalList($type);
                         ?>
                         <p>Total de Orçamentos</p>
                     </div>
@@ -724,35 +831,34 @@
                         </div>
                     </div>
                 </div>
-                    
-                <div class="section-bottom">
-                    <?php 
-                        $type = "orcamento";
-                        if(isset($_GET["selectFilterBudget"])){ // filtra os funcionarios
-                            filterList($type);
-                        }
-                        if(isset($_GET["searchBudget"])){ // exibe todos os Funcionários se nada for escrito
-                            $filter = "numOrc";
-                            searchList($type, $filter);
 
-                        }
-                        showList($type);
-                        
+                <div class="section-bottom">
+                    <?php
+                    $type = "orcamento";
+                    if (isset($_GET["selectFilterBudget"])) { // filtra os funcionarios
+                        filterList($type);
+                    }
+                    if (isset($_GET["searchBudget"])) { // exibe todos os Funcionários se nada for escrito
+                        $filter = "numOrc";
+                        searchList($type, $filter);
+                    }
+                    showList($type);
+
                     ?>
                 </div>
 
             </section>
-    <!--Orçamentos-->
+            <!--Orçamentos-->
 
-    <!--Orçamentos - Adicionar-->
+            <!--Orçamentos - Adicionar-->
             <section class="right-section addBudget hidden-div">
                 <nav class="section-header">
                     <div>
                         <h1>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                              </svg>
-                              
+                            </svg>
+
                             <span class="highlight-word">Adicionar</span> Novo Orçamento
                         </h1>
 
@@ -763,14 +869,14 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                        <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
                 </nav>
 
                 <div class="right-section-back-button back-budget">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
                     <p>Voltar</p>
                 </div>
@@ -783,54 +889,53 @@
                     <div class="right-section-forms">
                         <div class="forms-item">
                             <label for="iBNum">Número Orçamento</label>
-                            <input type="text" name="bNum" id="iBNum" class="input-control" placeholder="Insira o Número do Orçamento Aqui">
+                            <input type="text" name="bNum" id="iBNum" class="input-control" placeholder="Insira o Número do Orçamento Aqui" required max="11">
                         </div>
 
                         <div class="forms-item">
                             <label for="iBdesc">Breve Descrição do Projeto</label>
-                            <input type="text" name="bDesc" id="iBdesc" class="input-control" required placeholder="Insira a Descrição" maxlength="50">
+                            <input type="text" name="bDesc" id="iBdesc" class="input-control" placeholder="Insira a Descrição" maxlength="50" required>
                         </div>
 
                         <div class="forms-item">
                             <label for="iBValue">Valor Estimado</label>
-                            <input type="number" name="bValue"id="iBValue" class="input-control" required placeholder="Valor em R$" step="0.01">
+                            <input type="number" name="bValue" id="iBValue" class="input-control" placeholder="Valor em R$" step="0.01" required>
                         </div>
 
                         <div class="forms-item">
                             <label for="iBCost">Custos Previstos</label>
-                            <input type="number" name="bCost" id="iBCost" class="input-control" required placeholder="Valor em R$" step="0.001">
+                            <input type="number" name="bCost" id="iBCost" class="input-control" placeholder="Valor em R$" step="0.001" required>
                         </div>
 
                         <div class="forms-item">
-                           <label for="iBClient">Cliente</label>
-                        <input type="text" name="bClient" id="iBClient" class="input-control" required placeholder="Nome do Cliente">
+                            <label for="iBClient">Cliente</label>
+                            <input type="text" name="bClient" id="iBClient" class="input-control" placeholder="Nome do Cliente" required>
                         </div>
 
                     </div>
-
+                    <?php 
+                        if(isset($inserido)){
+                            echo "<span class=\"sucess-text\"><p>Orçamento de número <strong>\" {$_POST["bNum"]}\"</strong> inserido no Banco de Dados com sucesso</p></span>";
+                            $inserido = null; // reseta a variável para não exibir mais de uma vez
+                        }
+                    ?>
                     <div class="button-submit">
                         <button>Enviar</button>
                     </div>
 
-                    <?php 
-                        if(
-                            isset($_POST["bNum"]) and 
-                            isset($_POST["bDesc"]) and
-                            isset($_POST["bValue"]) and
-                            isset($_POST["bCost"]) and
-                            isset($_POST["bClient"])
-                        ){
-                            $type = "orcamento";
-                            addToList($type);
-                        }
+                    <?php
+                    if (isset($_POST["bNum"])) {
+                        $type = "orcamento";
+                        addToList($type);
+                    }
                     ?>
 
                 </form>
 
             </section>
-    <!--Orçamentos - Adicionar-->
+            <!--Orçamentos - Adicionar-->
 
-    <!--Estoques-->
+            <!--Estoques-->
             <section class="right-section stock hidden-div">
                 <nav class="section-header">
                     <div>
@@ -848,7 +953,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display"> <?php echo $_SESSION["username"]?></p>
+                        <p id="username-display"> <?php echo $_SESSION["username"] ?></p>
                     </div>
 
                 </nav>
@@ -858,21 +963,21 @@
                 </div>
 
                 <div class="section-bottom">
-                    
+
                 </div>
 
             </section>
-    <!--Estoques-->
-    
-    <!--Notificações-->
+            <!--Estoques-->
+
+            <!--Notificações-->
             <section class="right-section notifications hidden-div">
                 <nav class="section-header">
                     <div>
                         <h1>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                             </svg>
                             <span class="highlight-word">Notificações</span>
                         </h1>
@@ -884,7 +989,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                        <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
                 </nav>
@@ -894,16 +999,17 @@
                 </div>
 
                 <div class="section-bottom">
-                    
+
                 </div>
 
             </section>
 
-    <!--Notificações-->
-            
+            <!--Notificações-->
+
         </section>
     </main>
 
-    
+
 </body>
+
 </html>

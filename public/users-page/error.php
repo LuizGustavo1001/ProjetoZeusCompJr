@@ -49,7 +49,7 @@
         <!--Logo and Dark/light mode Switch-->
             <div class="content">
                 <div class="content-header">
-                    <a href="login.html">
+                    <a href="../login-page/login.php">
                         <img src="../general-images/church-symbol.png" alt="church-symbol" id="church-symbol">
                     </a>
                     <button class="theme-switch-button">

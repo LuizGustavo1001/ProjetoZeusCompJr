@@ -118,7 +118,7 @@ a:hover{
 }
 
 ::selection {
-    background-color: #f0cea8;
+    background-color: #f0cea883;
     color: var(--bg-clr);
 
 }
@@ -208,14 +208,18 @@ a:hover{
 .search-bar input, .filter-bar select, .button-submit button, .section-top, .section-bottom, .filter-button{
     border-radius: var(--border-radius);
     transition: all var(--transition-time) ease-in-out;
+    
+    
+}
+
+.search-bar input, .filter-bar select{
+     border-color: var(--input-border-clr);
 }
 
 .search-bar input, .filter-bar select, .filter-bar button{
     padding: 1.2em;
-    border-color: var(--input-border-clr);
     cursor: pointer;
     width: 100%;
-
 
 }
 
@@ -264,7 +268,7 @@ a:hover{
 
 }
 
-.error-text{
+.error-text, .sucess-text{
     text-align: center;
 }
 

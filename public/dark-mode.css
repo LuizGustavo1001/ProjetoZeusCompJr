@@ -3,9 +3,9 @@
     --dm-bg-2: #414040;
     --dm-primary-clr: #ffffff;
     --dm-secondary-clr: #e0c798;
-    --dm-tertiary-clr: #b98627;
+    --dm-border-clr: #6e4802;
 
-    --dm-submit-button-gradient: linear-gradient(45deg,  #d1b683 , #9c6f1c);
+    --dm-submit-button-gradient:linear-gradient(45deg, #825605 10%, #b68a3a);
 
 }
 
@@ -49,7 +49,7 @@
 
 .dark-mode .input-control:focus {
     outline: none;
-    border: 1px solid var(--dm-tertiary-clr);
+    border: 1px solid var(--dm-secondary-clr);
     color: var(--dm-primary-clr);
 
 }
@@ -61,13 +61,14 @@
 
 .dark-mode .button-submit button{
     background-image: var(--dm-submit-button-gradient);
-    color: var(--dm-bg);
-
+    color: var(--dm-primary-clr);
+    border-color: var(--dm-border-clr);
+    
 }
 
 .dark-mode .button-submit button:hover{
-    color: var(--dm-primary-clr);
-    border-color: var(--dm-tertiary-clr);
+    color: var(--dm-secondary-clr);
+    border-color: var(--dm-secondary-clr);
     background: transparent;
 
 }
@@ -78,3 +79,13 @@
     border-color: var(--dm-secondary-clr);
     
 }
+
+.dark-mode .error-text p {
+    color: rgb(151, 1, 1);
+
+}
+
+.sucess-text p {
+    color: rgb(1, 151, 1);
+    
+}   
