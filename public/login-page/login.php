@@ -63,7 +63,7 @@
         <!--Logo and Dark/light mode Switch-->
         <div class="content">
             <div class="content-header">
-                <a href="login.html">
+                <a href="login.php">
                     <img src="../general-images/church-symbol.png" alt="church-symbol" id="church-symbol">
                 </a>
 
@@ -138,7 +138,7 @@
                         </div>
                     </form>
                     <div id="create-account">
-                            <a href="../sign-up-page/sign-up.html">Não está cadastrado ainda? Cadastre-se Aqui!</a>
+                            <a href="../sign-up-page/sign-up.php">Não está cadastrado ainda? Cadastre-se Aqui!</a>
                     </div>
                 </div>
             </div>

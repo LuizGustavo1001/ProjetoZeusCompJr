@@ -53,22 +53,22 @@
  <p>🗺️ Navegação entre as sessões (user-page) utilizando <strong>JavaScript</strong> </p>
 
  <h3>📂 Esquema de Pastas</h3>
- 
-    |
-    |-- public (Interface Visual)
-    |   |-- general-images (imagens utilizadas em todas as páginas)
-    |   |-- icon (ícone/favicon das páginas)
-    |   |-- login-page (página de login)
-    |   |-- sign-up-page (página de cadastro)
-    |   |-- users-page (página do usuário já logado)
-    |   |-- dark-mode.css (estilos do Modo Escuro)
-    |   |-- dark-mode.js (scripts do Modo Escuro)
-    |   |-- general-style.js (estilos utilizados em todas as páginas)
-    |
-    |-- dbConnection.php (Conectar o Banco de Dados com o FrontEnd)
-    |
-    |--DumpEmpresaPZ.sql (Clone do Banco de Dados)
-
+    <pre>
+        |
+        |-- public (Interface Visual)
+        |   |-- general-images (imagens utilizadas em todas as páginas)
+        |   |-- icon (ícone/favicon das páginas)
+        |   |-- login-page (página de login)
+        |   |-- sign-up-page (página de cadastro)
+        |   |-- users-page (página do usuário já logado)
+        |   |-- dark-mode.css (estilos do Modo Escuro)
+        |   |-- dark-mode.js (scripts do Modo Escuro)
+        |   |-- general-style.js (estilos utilizados em todas as páginas)
+        |
+        |-- dbConnection.php (Conectar o Banco de Dados com o FrontEnd)
+        |
+        |--DumpEmpresaPZ.sql (Clone do Banco de Dados)
+    </pre>
 <hr>
 
 <h3>🖥️ Rodar o projeto</h3>

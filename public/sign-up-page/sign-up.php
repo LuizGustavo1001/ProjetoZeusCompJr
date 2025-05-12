@@ -26,7 +26,7 @@
     <!--Logo and Dark/light mode Switch-->
         <div class="content">
             <div class="content-header">
-                <a href="../login-page/login.html">
+                <a href="../login-page/login.php">
                     <img src="../general-images/church-symbol.png" alt="church-symbol" id="church-symbol">
                 </a>
 
@@ -53,7 +53,7 @@
                 </div>
                 
                 <div class="content-bottom-forms">
-                    <form action="cadastro.php" method="post" autocomplete="on">
+                    <form action="" method="post" autocomplete="on">
                         <div class="forms-item">
                             <label for="inome">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
