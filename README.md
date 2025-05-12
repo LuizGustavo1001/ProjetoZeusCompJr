@@ -1,15 +1,17 @@
 # ProjetoZeusCompJr
  <h2>Projeto de um site conectado a um Banco de Dados em MySQL utilizando PHP</h2>
+ <p>Baseado no <a href="https://github.com/torrescf/Projeto-Zeus">Repositório</a> e Projeto <a href="https://compjunior.com.br/">COMP JUNIOR 2025</a></p>
  
  <p>- Teste de Sistema backend de Banco de Dados para <strong>Gerenciar Funcionários e orçamentos</strong> de uma <strong>Empresa</strong></p>
  <p>- <strong>FrontEnd</strong>: <strong>HTML5</strong> com as <strong>CSS</strong> + <strong>JavaScript</strong></p>
- 
+ <hr>
  <h3>📟 API </h3>
  <p>- <em>Ainda em produção</em></p>
  <p>
     - Inicialmente, projetada utilizando <strong>PHP</strong> para conectar o <strong>Banco de Dados</strong>(BackEnd) com o <strong>HTML</strong>(FrontEnd)
  </p>
  <p>- Gerenciar Funcionários, Orçamentos e Estoques</p>
+ <hr>
  <ol>
     <li>👤 <strong>Funcionários</strong></li>
     <p>- Mostrar na tela 
@@ -20,6 +22,7 @@
             <li><strong>Filtra</strong> por Área de Atuação ou Cargo (ainda em produção)</li>
         </ul>
     </p>
+  <p>Campos: </p>
      <ul>
          <li>Nome</li>
          <li>Data de Nascimento</li>
@@ -30,6 +33,7 @@
          <li>Cargo</li>
          <li>Área</li>
      </ul>
+  <hr>
      <li>💰 <strong>Orçamentos</strong></li>
      <p>- Mostra na tela
         <ul>
@@ -39,6 +43,7 @@
             <li><strong>Filtra</strong> por Valor Estimado(crescente) e por Custo Previsto(crescente)(ainda em produção)</li>
         </ul>
      </p>
+     <p>Campos: </p>
      <ul>
          <li>Número do Orçamento</li>
          <li>Descrição</li>
@@ -46,13 +51,18 @@
          <li>Custos Previstos</li>
          <li>Cliente Relacionado</li>
      </ul>
+     <hr>
      <li>📝 <strong>Estoques</strong>(Em Desenvolvimento) </li>
+     <hr>
  </ol>
+ 
 
  <p>🌑 Possui suporte para <strong>Modo Escuro</strong> </p>
  <p>🗺️ Navegação entre as sessões (user-page) utilizando <strong>JavaScript</strong> </p>
 
+ <hr>
  <h3>📂 Esquema de Pastas</h3>
+ <pre>
     |
     |-- public (Interface Visual)
     |   |-- general-images (imagens utilizadas em todas as páginas)
@@ -67,7 +77,8 @@
     |-- dbConnection.php (Conectar o Banco de Dados com o FrontEnd)
     |
     |--DumpEmpresaPZ.sql (Clone do Banco de Dados)
-
+ </pre>
+ <hr>
  <h3>📋 Para fazer: </h3>
 
 <h3>🖥️ Rodar o projeto</h3>
