@@ -73,8 +73,6 @@
         |-- dbConnection.php (Conectar o Banco de Dados com o FrontEnd)
         |
         |-- DumpEmpresaPZ.sql (Cópia do Banco de Dados)
-        |
-        |--DumpEmpresaPZ.sql (Clone do Banco de Dados)
     </pre>
 
 <hr>
