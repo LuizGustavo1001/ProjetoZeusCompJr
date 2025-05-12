@@ -31,7 +31,7 @@ body {
 
 }
 
-h1{
+h1:not(.content-bottom){
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -39,10 +39,12 @@ h1{
 
 }
 
+
 button{
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 0.5em;
 
     border: 1px solid var(--primary-clr);
@@ -99,6 +101,7 @@ a:hover{
 
 .content{
     margin: 5vw;
+    margin-block: 2.3vw;
 
 }
 
@@ -182,21 +185,49 @@ a:hover{
 .search-bar, .filter-bar{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    
 
 }
 
-.search-bar input, .filter-bar select, .button-submit button, .section-top, .section-bottom{
+.button-submit{
+    display:flex;
+    align-items: center;
+    gap: 1em;
+
+}
+
+.section-bottom{
+    display:flex;
+    flex-direction: column;
+    gap: 3em;
+    
+}
+
+.search-bar input, .filter-bar select, .button-submit button, .section-top, .section-bottom, .filter-button{
     border-radius: var(--border-radius);
     transition: all var(--transition-time) ease-in-out;
-
 }
 
-.search-bar input, .filter-bar select{
+.search-bar input, .filter-bar select, .filter-bar button{
     padding: 1.2em;
     border-color: var(--input-border-clr);
     cursor: pointer;
+    width: 100%;
 
-}   
+
+}
+
+.filter-bar button{
+    padding: 0.6em;
+    
+}
+
+.filter-button{
+    font-size: 1.1em;
+
+}
 
 .theme-switch-button{
     background: transparent;
@@ -226,12 +257,22 @@ a:hover{
 
 }
 
-.button-submit button:hover{
+.button-submit button:hover, .filter-button:hover{
     background: transparent;
     color: var(--primary-clr);
     border: 1px solid var(--primary-clr);
 
 }
+
+.error-text{
+    text-align: center;
+}
+
+.error-text p {
+    color: red;
+
+}
+
 
 @media (min-width: 1024px){
     .content{
@@ -257,5 +298,7 @@ a:hover{
         font-size: 1.2em;
 
     }
+
+    
 
 }

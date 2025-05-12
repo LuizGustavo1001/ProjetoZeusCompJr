@@ -53,7 +53,6 @@ ul svg{
 
 section{
     padding-inline: 3vh;
-    max-width: 50vw;
 }
 
 .selected{
@@ -193,7 +192,6 @@ section{
     cursor: pointer;
 }
 
-
 .section-bottom header{
     margin-bottom: 1em;
 
@@ -229,9 +227,27 @@ form .button-submit button{
 
 }
 
-.search-result li{
-    border: 1px solid black;
+.search-result{
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+
+}   
     
+.search-result th, .search-result td{
+    padding: 0.5em;
+    text-align: left;
+
+}
+
+.search-result td{
+    font-size: 0.9em;
+    border-bottom: 1px solid var(--input-border-clr);
+
+}
+
+.filter-bar button{
+    margin-top: 0.5em;
 }
 
 @media(min-width: 1024px){
@@ -240,15 +256,20 @@ form .button-submit button{
 
     }
 
-    #aside-top{
-        justify-content: space-around;
-        margin-top: 1em;
-
-    }
-
     aside{
         padding-inline:0;
         height: 96vh;
+
+    }
+
+    section{
+        max-width: 70vw;
+
+    }
+
+    #aside-top{
+        justify-content: space-around;
+        margin-top: 1em;
 
     }
         
@@ -291,7 +312,31 @@ form .button-submit button{
         
     }
 
-   
+     .filter-bar{
+        width: 20%;
+        margin: 0 auto;
+    }
 
-    
+}
+
+@media(max-width: 1024px){
+    .search-result tr{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 1.5em;
+    }
+
+    .search-result th, .search-result td{
+        padding: 0.5em;
+        text-align: left;
+
+    }
+
+    .search-result td{
+        font-size: 0.9em;
+        border-bottom: 1px solid var(--input-border-clr);
+
+    }
+
+
 }

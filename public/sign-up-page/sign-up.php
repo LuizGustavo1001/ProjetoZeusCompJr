@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="sign-up.css">
-    <link rel="stylesheet" href="../general-style.css">
+    <link rel="stylesheet" href="../general-styles.css">
     <link rel="stylesheet" href="../dark-mode.css">
 
     <script src="../dark-mode.js" defer></script>

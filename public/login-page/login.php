@@ -1,3 +1,39 @@
+<?php 
+    include "../../dbConnection.php";
+    if(isset($_POST["userEmail"])){ // se algo for escrito nos campos a função será executada
+        $email = $mysqli->real_escape_string($_POST["userEmail"]);
+        $password = $mysqli->real_escape_string($_POST["userPassword"]);
+        $username = $mysqli->real_escape_string($_POST["username"]);
+
+        $sql_code = 
+        "
+        SELECT * FROM funcionario 
+        WHERE emailFunc = '$email' AND senha = '$password' AND nomeFunc = '$username'
+        ";
+        $sql_query = $mysqli->query($sql_code) or die($mysqli->error); // executa o código sql
+
+        if($sql_query->num_rows != 0){ // há algum usuário cadastrado com os dados enviados
+            //criar sessão
+            session_start();
+            $user = $sql_query->fetch_assoc(); // pegar todos os dados do usuário do BD e armazenar em $usuario
+            $_SESSION['username'] = $user['nomeFunc'];
+            $_SESSION['email'] = $user['emailFunc'];
+            $_SESSION['bday'] = $user['dataNasc'];
+            $_SESSION['number'] = $user['telefone'];
+            $_SESSION['gender'] = $user['genero'];
+            $_SESSION['position'] = $user['cargo'];
+            $_SESSION['entry'] = $user['dataI'];
+            $_SESSION['area'] = $user['areaFunc'];
+
+            header("location: ../users-page/user.php");
+            exit;
+        }else{ // nenhum usuário cadastrado com os dados enviados
+            $erroLogin = true;
+        }                 
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -8,7 +44,7 @@
     <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="../general-style.css">
+    <link rel="stylesheet" href="../general-styles.css">
     <link rel="stylesheet" href="../dark-mode.css">
 
     <script src="../dark-mode.js" defer></script>
@@ -56,16 +92,20 @@
                 </div>
                 <div class="content-bottom-forms">
 
-                    <form action="cadastro.php" method="post" autocomplete="on">
+                    <form action="" method="post" autocomplete="on">
+                        <div class="forms-item">
+                            <label for="username">Nome</label>
+                            <input type="text" name="username" id="iUsername" maxlength="30" required placeholder="Primeiro e Último Nome">
+                        </div>
                         <div class="forms-item">
                             <label for="iemail">Email</label>
-                            <input type="email" name="email" id="iemail" class="input-control" required
-                                placeholder="Seu Email Institucional">
+                            <input type="email" name="userEmail" id="iUserEmail" class="input-control" required
+                                placeholder="Seu Email Institucional" maxlength="40">
                         </div>
                         <div class="forms-item">
                             <label for="isenha">Senha</label>
-                            <input type="password" name="senha" id="isenha" class="input-control" required
-                                placeholder="• • • • • • •">
+                            <input type="password" name="userPassword" id="iUserPassword" class="input-control" required
+                                placeholder="• • • • • • •" maxlength="30">
                         </div>
 
                         <div id="forms-bottom">
@@ -85,13 +125,21 @@
                                 </svg>
                                 Entrar
                             </button>
+<?php 
+                            if(isset($erroLogin)){
+                                echo "
+                                <span class=\"error-text\">
+                                    <p>Erro: Credencias Inseridas <strong>não estão cadastradas</strong></p>
+                                    <p>Clique no Botão Abaixo para<strong> Cadastrar-se</strong></p>
+                                </span>
+                                ";
+                            }   
+?>  
                         </div>
-
-                        <div id="create-account">
-                            <a href="../sign-up-page/sign-up.html">Não está cadastrado ainda? Cadastre-se Aqui!</a>
-                        </div>
-
                     </form>
+                    <div id="create-account">
+                            <a href="../sign-up-page/sign-up.html">Não está cadastrado ainda? Cadastre-se Aqui!</a>
+                    </div>
                 </div>
             </div>
         </div>

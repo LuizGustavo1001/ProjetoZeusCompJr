@@ -1,6 +1,13 @@
 <?php 
-    include("../../dbConnection.php");
+    include "../../dbConnection.php";
 
+    if(! isset($_SESSION)){
+        session_start(); // iniciar a sessão 
+    }
+    
+    if (! isset($_SESSION["email"])) { // tentando acessar a página do usuário sem estar logado
+        header("Location: error.php");
+    }
 
     function totalList($type){
         global $mysqli;
@@ -15,6 +22,7 @@
             echo "<p><strong><span id=\"total-budget\">$totalBudgets</span></strong></p>";
         }
     }
+    
     function showList($type){ // mostra todos os itens cadastrados de um tabela
         global $mysqli;
         if($type == "funcionario"){
@@ -123,8 +131,11 @@
     }
     function searchList($type, $filter){ // exibe o resultado da busca
         global $mysqli;
-        $pesquisa = $mysqli->real_escape_string($_GET["searchEmpl"]);
-        
+        if($type == "funcionario"){
+            $pesquisa = $mysqli->real_escape_string($_GET["searchEmpl"]);
+        }else if($type = "orcamento"){
+            $pesquisa = $mysqli->real_escape_string($_GET["searchBudget"]);
+        }
         $sql_code = 
         "
         SELECT * FROM $type
@@ -136,17 +147,24 @@
         if($sql_query->num_rows == 0){ // nenhum funcionario com o nome desejado foi encontrado
             if($type == "funcionario"){
 ?>
-                <p>Nenhum Funcionário Encontrado com o Nome Digitado</p>
+                <p>Nenhum Funcionário Encontrado com o Nome: <strong>"<?php echo $pesquisa?>"</strong></p>
 <?php
             }else if($type == "orcamento"){
 ?>
-                <p>Nenhum Orçamento Encontrado com o Número Digitado</p>
+                <p>Nenhum Orçamento Encontrado com o Número: <strong> "<?php echo $pesquisa?>"</strong></p>
 <?php
             }
         }else{ // funcionario(s) encontrados(s)
             if($type == "funcionario"){
 ?>          
-                <p class="highlight-word"><strong>Funcionário(s) Encontrado(s)!</strong></p>
+                <p>
+                    <strong>
+                        <span class="highlight-word">
+                            Funcionário(s) Encontrado(s) com o filtro: 
+                        </span>"<?php echo $pesquisa?>"
+                    </strong> 
+                </p>
+
                 <table class="search-result">
                     <tr>
                         <th>id</th> 
@@ -272,7 +290,96 @@
             addToList("funcionario");
         }
     }
+    function filterList($type){
+        global $mysqli;
+        if($type == "funcionario"){
+             $filter = $mysqli->real_escape_string($_GET["selectFilterEmpl"]);
+        }else if($type == "orcamento"){
+             $filter = $mysqli->real_escape_string($_GET["selectFilterBudget"]);
+        }
+
+        $sql_code = 
+        "
+        SELECT * FROM $type
+        ORDER BY $filter asc
+        ";
+
+        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+
+        if($type == "funcionario"){
+?>          
+            <p class="highlight-word"><strong>Funcionários Filtrados por <?php echo $filter?></strong></p>
+            <table class="search-result">
+                <tr>
+                    <th>id</th> 
+                    <th>Nome</th>
+                    <th>Nascimento</th>
+                    <th>Email</th>
+                    <th>Gênero</th>
+                    <th>Telefone</th>
+                    <th>Cargo</th>
+                    <th>Ingresso</th>
+                    <th>Área</th>
+                </tr>
+<?php
+            while($dados = $sql_query->fetch_assoc()){
+                if($dados["genero"] == "M"){
+                    $dados["genero"] = "Masculino";
+                }else if($dados["genero"] == "F"){
+                    $dados["genero"] = "Feminino";
+                }else{
+                    $dados["genero"] = "Outro";
+                }
 ?>
+                <tr>
+                    <td><?php echo $dados["idFunc"] ?></td>
+                    <td><?php echo $dados["nomeFunc"] ?></td>
+                    <td><?php echo $dados["dataNasc"] ?></td>
+                    <td><?php echo $dados["emailFunc"] ?></td>
+                    <td><?php echo $dados["genero"] ?></td>
+                    <td><?php echo $dados["telefone"] ?></td>
+                    <td><?php echo $dados["cargo"] ?></td>
+                    <td><?php echo $dados["dataI"] ?></td>
+                    <td><?php echo $dados["areaFunc"] ?></td>
+                </tr>
+<?php
+            }
+?>
+            </table>
+<?php
+        }else if($type == "orcamento"){
+?>          
+            <p class="highlight-word"><strong>Orçamento(s) Filtrados por <?php echo $filter?> </strong></p>
+            <table class="search-result">
+                <tr>
+                    <th>id</th> 
+                    <th>Número</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Custo</th>
+                    <th>Cliente</th>
+                </tr> 
+<?php
+            while($dados = $sql_query->fetch_assoc()){
+            $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+?>
+                <tr class="func-tr">
+                    <td><?php echo $dados["idOrc"] ?></td>
+                    <td><?php echo $dados["numOrc"] ?></td>
+                    <td><?php echo $dados["descProj"] ?></td>
+                    <td><?php  echo  numfmt_format_currency($padrao, $dados["valorOrc"], "BRL")?></td>
+                    <td><?php  echo  numfmt_format_currency($padrao, $dados["custoOrc"], "BRL")?></td>
+                </tr>
+<?php
+            }
+?>
+            </table>
+<?php 
+
+        }
+    }
+?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -282,11 +389,12 @@
     
         <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
     
-        <link rel="stylesheet" href="user-style.css">
-        <link rel="stylesheet" href="../general-style.css">
+        <link rel="stylesheet" href="users-style.css">
+        <link rel="stylesheet" href="../general-styles.css">
         <link rel="stylesheet" href="../dark-mode.css">
-    
+
         <script src="../dark-mode.js" defer></script>
+        
         <script src="user.js" defer></script>
     
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -351,6 +459,9 @@
                         </svg>
                         Notificações
                     </li>
+                    <li>
+                        <a href="../login-page/logout.php" class="button-submit"><button>Sair</button></a>
+                    </li>
                 </ul>
             </div>
 
@@ -375,7 +486,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display">Farofilson Bananilson</p>
+                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
                     </div>
 
                 </nav>
@@ -392,19 +503,26 @@
 
                     <form action="" method="get">
                         <div class="search-bar">
-                            <label for="isearch">Pesquisa rápida de um funcionário</label>
-                            <input type="search" name="searchEmpl" id="isearch" class="input-control" placeholder="Nome do Funcionário">
+                            <label for="isearch">Pesquisar Funcionário pelo Nome</label>
+                            <input type="search" name="searchEmpl" id="isearch" class="input-control" placeholder="Pressione Enter para Pesquisar">
                         </div>
                     </form>
                     
 
-                    <div class="filter-bar">
-                        <label for="iselect">Filtrar Funcionários</label>
-                        <select name="select" id="iselect" class="input-control">
-                            <option value="all">Todos</option>
-                            <option value="area">Área de Atuação</option>
-                            <option value="cargo">Cargo</option>
-                        </select>
+                    <div class="filter-bar" >
+                            <form action="" method="get" >
+                                <label for="iselect">Filtrar Funcionários</label>
+                                <select name="selectFilterEmpl" id="iselect" class="input-control">
+                                    <optgroup label="Crescente">
+                                        <option value="idFunc">Id</option>
+                                        <option value="nomeFunc">Nome</option>
+                                        <option value="areaFunc">Área de Atuação</option>
+                                        <option value="cargo">Cargo</option>
+                                    </optgroup>
+                                    
+                                </select>
+                                <button class="filter-button">Filtrar</button>
+                            </form>
                     </div>
 
                     <div class="button-submit">
@@ -415,14 +533,14 @@
                 <div class="section-bottom">
                     <?php 
                         $type = "funcionario";
-                        if(! isset($_GET["searchEmpl"])){ // exibe todos os Funcionários
-
-                        showList($type);
-
-                        }else{
+                        if(isset($_GET["selectFilterEmpl"])){ // filtra os Orçamentos
+                            filterList($type);
+                        }
+                        if(isset($_GET["searchEmpl"])){ // // exibe todos os Orçamentos com o nome digitado
                             $filter = "nomeFunc";
                             searchList($type, $filter);
                         }
+                        showList($type);
                     ?>
                 </div>
 
@@ -447,7 +565,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display">Farofilson Bananilson</p>
+                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
                     </div>
 
 
@@ -567,7 +685,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display">Farofilson Bananilson</p>
+                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
                     </div>
 
                 </nav>
@@ -589,12 +707,15 @@
                     </form>
 
                     <div class="filter-bar">
-                        <label for="iselect">Filtrar Orçamentos</label>
-                        <select name="select" id="iselect" class="input-control">
-                            <option value="all">Todos</option>
-                            <option value="area">Valor(Crescente)</option>
-                            <option value="cargo">Custo(Crescente)</option>
-                        </select>
+                        <form action="" method="get">
+                            <label for="iselect">Filtrar Orçamentos</label>
+                            <select name="select" id="iselect" class="input-control">
+                                <option value="idOrc">Id</option>
+                                <option value="valorOrc">Valor(Crescente)</option>
+                                <option value="custoOrc">Custo(Crescente)</option>
+                            </select>
+                            <button class="filter-button">Filtrar</button>
+                        </form>
                     </div>
 
                     <div>
@@ -607,14 +728,16 @@
                 <div class="section-bottom">
                     <?php 
                         $type = "orcamento";
-                        if(! isset($_GET["searchBudget"])){ // exibe todos os Funcionários
-
-                        showList($type);
-
-                        }else{
+                        if(isset($_GET["selectFilterBudget"])){ // filtra os funcionarios
+                            filterList($type);
+                        }
+                        if(isset($_GET["searchBudget"])){ // exibe todos os Funcionários se nada for escrito
                             $filter = "numOrc";
                             searchList($type, $filter);
+
                         }
+                        showList($type);
+                        
                     ?>
                 </div>
 
@@ -640,7 +763,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display">Farofilson Bananilson</p>
+                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
                     </div>
 
                 </nav>
@@ -725,7 +848,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display">Farofilson Bananilson</p>
+                        <p id="username-display"> <?php echo $_SESSION["username"]?></p>
                     </div>
 
                 </nav>
@@ -761,7 +884,7 @@
 
                     <div class="user-data">
                         <img src="../general-images/user-icon.png" alt="user-img">
-                        <p id="username-display">Farofilson Bananilson</p>
+                        <p id="username-display"><?php echo $_SESSION["username"]?></p>
                     </div>
 
                 </nav>

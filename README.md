@@ -73,9 +73,11 @@
 <h3>🖥️ Rodar o projeto</h3>
 <ol>
     <li>Baixe o XAMPP <a href="https://www.youtube.com/watch?v=0Y9OZ0vc1SU&t=213s">link</a></li>
+    <li>Ative os módulos <strong>Apache</strong> e <strong>MySQL</strong></li>
     <li>Baixe o MySQLWorkBenc <a href="https://www.youtube.com/watch?v=a5ul8o76Hqw&t=13s">link</a></li>
     <li>Clone o Banco de Dados (Dump)</li>
     <li>Adicione o Banco de Dados ao seu Servidor Local</li>
+    <li>Adicione a Pasta do projeto a pasta "htdocs" dentro de xampp (C:\xampp\htdocs)</li>
     <li>
         Digite no Navegador "localhost/'pasta'/ProjetoZeusCompJr/public/users-page/user.php"<img src="local.png" alt=""></img>
         <br> Ou
@@ -84,9 +86,10 @@
     </li>
 </ol>
 
- <ul>
+<ul>
     <li>Página de Estoques</li>
     <li>Página de Notificações</li>
     <li>Permitir acesso completo ao site apenas para usuários logados</li>
     <li>Linkar página de login com página do usuário já logado</li>
- </ul>
+    <li>Segurança de Senhas</li>
+</ul>
