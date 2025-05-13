@@ -1,7 +1,7 @@
 # ProjetoZeusCompJr
  <h2>Projeto de um site conectado a um Banco de Dados em MySQL utilizando PHP</h2>
 
- <img src="preview.png"></img>
+ <a href="preview.png">Preview do Site</a>
  
  <p>- Teste de Sistema backend de Banco de Dados para <strong>Gerenciar Funcionários e orçamentos</strong> de uma <strong>Empresa</strong></p>
  <p>- <strong>FrontEnd</strong>: <strong>HTML5</strong> com as <strong>CSS</strong> + <strong>JavaScript</strong></p>
@@ -77,7 +77,7 @@
 <ol>
     <li>Baixe o XAMPP <a href="https://www.youtube.com/watch?v=0Y9OZ0vc1SU&t=213s">link</a></li>
     <li>Ative os módulos <strong>Apache</strong> e <strong>MySQL</strong></li>
-    <li>Baixe o MySQLWorkBenc <a href="https://www.youtube.com/watch?v=a5ul8o76Hqw&t=13s">link</a></li>
+    <li>Baixe o MySQLWorkBench <a href="https://www.youtube.com/watch?v=a5ul8o76Hqw&t=13s">link</a></li>
     <li>Clone o Banco de Dados (Dump)</li>
     <li>
         Adicione o Banco de Dados ao seu Servidor Local clicando no símbolo demonstrado abaixo <br> <img src="dump.png" alt=""></img>
