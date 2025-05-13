@@ -14,7 +14,7 @@
         if($sql_query->num_rows != 0){ // há algum usuário cadastrado com os dados enviados
             //criar sessão
             session_start();
-            $user = $sql_query->fetch_assoc(); // pegar todos os dados do usuário do BD e armazenar em $usuario
+            $user = $sql_query->fetch_assoc(); // pegar todos os dados adquiridos do BD e armazenar em $usuario
             $_SESSION['username'] = $user['username'];
             $_SESSION['email'] = $user['userEmail'];
             header("location: ../users-page/user.php");
@@ -58,8 +58,8 @@
 
 <body>
     <main>
-        <!--Logo and Dark/light mode Switch-->
         <div class="content">
+        <!--Logo and Dark/light mode Switch-->
             <div class="content-header">
                 <a href="login.php">
                     <img src="../general-images/church-symbol.png" alt="church-symbol" id="church-symbol">
@@ -125,6 +125,7 @@
                                 <span class=\"error-text\">
                                     <p>Erro: Credencias Inseridas <strong>não estão cadastradas</strong></p>
                                     <p>Clique no Botão Abaixo para<strong> Cadastrar-se</strong></p>
+                                    <p>ou Tente Novamente</p>
                                 </span>
                                 ";
                             }

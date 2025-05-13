@@ -541,7 +541,11 @@ function filterList($type)
                         Notificações
                     </li>
                     <li>
-                        <a href="../login-page/logout.php" class="button-submit"><button>Sair</button></a>
+                        <a href="../login-page/logout.php" class="button-submit" style="margin: 0 auto;">
+                            <button style="width: 150px;">
+                                Sair
+                            </button>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -566,7 +570,7 @@ function filterList($type)
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user-icon.png" alt="user-img">
+                        <img src="../general-images/user.png" alt="User Profile Picture">
                         <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
@@ -575,8 +579,7 @@ function filterList($type)
                 <div class="section-top">
                     <div class="total">
                         <?php
-                        $type = "funcionario";
-                        totalList($type);
+                        totalList("funcionario"); // exibe o total de funcionários
                         ?>
 
                         <p>Total de Funcionários</p>
@@ -613,15 +616,13 @@ function filterList($type)
 
                 <div class="section-bottom">
                     <?php
-                    $type = "funcionario";
-                    if (isset($_GET["selectFilterEmpl"])) { // filtra os Orçamentos
-                        filterList($type);
+                    if (isset($_GET["selectFilterEmpl"])) { // filtra os Funcionários
+                        filterList(type: "funcionario"); // exibe todos os Funcionários filtrados
                     }
-                    if (isset($_GET["searchEmpl"])) { // // exibe todos os Orçamentos com o nome digitado
-                        $filter = "nomeFunc";
-                        searchList($type, $filter);
+                    if (isset($_GET["searchEmpl"])) { // // exibe todos os Funcionários com o nome digitado
+                        searchList(type: "funcionario", filter: "nomeFunc");
                     }
-                    showList($type);
+                    showList(type: "funcionario"); // exibe todos os Funcionários
                     ?>
                 </div>
 
@@ -645,7 +646,7 @@ function filterList($type)
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user-icon.png" alt="user-img">
+                        <img src="../general-images/user.png" alt="User Profile Picture">
                         <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
@@ -735,17 +736,17 @@ function filterList($type)
                     </div>
 
                     <?php
-                    if (isset($_POST["EName"])) {
-                        $type = "funcionario";
-                        addToList($type);
+                    if(isset($_POST["eName"])){ //  se algo estiver digitado no input "eName"
+                        addToList("funcionario");
 
-                        if (isset($funcionarioExiste)) {
+                        if(isset($funcionarioExiste)){
                             echo "
                                 <span class=\"error-text\">
                                     <p>Erro: <strong>Endereço de Email já Existente</strong></p>
                                     <p>Funcionário não inserido</p>
                                 </span>
                             ";
+                            $funcionarioExiste = null; // reseta a variável para não exibir mais de uma vez
                         }
                         if (isset($ingressoInvalido)) {
                             echo "
@@ -754,6 +755,7 @@ function filterList($type)
                                         <p>Funcionário não inserido</p>
                                     </span>
                                 ";
+                            $ingressoInvalido = null; // reseta a variável para não exibir mais de uma vez
                         }
                         if (isset($nascimetoInvalido)) {
                             echo "
@@ -764,9 +766,9 @@ function filterList($type)
                                         <p>Funcionário não inserido</p>
                                     </span>
                                 ";
+                            $nascimetoInvalido = null; // reseta a variável para não exibir mais de uma vez
                         }
                     }
-
                     ?>
 
                 </form>
@@ -791,7 +793,7 @@ function filterList($type)
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user-icon.png" alt="user-img">
+                        <img src="../general-images/user.png" alt="User Profile Picture">
                         <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
@@ -800,8 +802,7 @@ function filterList($type)
                 <div class="section-top">
                     <div class="total">
                         <?php
-                        $type = "orcamento";
-                        totalList($type);
+                        totalList(type: "orcamento");
                         ?>
                         <p>Total de Orçamentos</p>
                     </div>
@@ -834,15 +835,15 @@ function filterList($type)
 
                 <div class="section-bottom">
                     <?php
-                    $type = "orcamento";
-                    if (isset($_GET["selectFilterBudget"])) { // filtra os funcionarios
-                        filterList($type);
+                    if (isset($_GET["selectFilterBudget"])) { // filtra os Orçamentos
+                        filterList(type: "orcamento");
                     }
-                    if (isset($_GET["searchBudget"])) { // exibe todos os Funcionários se nada for escrito
-                        $filter = "numOrc";
-                        searchList($type, $filter);
+
+                    if (isset($_GET["searchBudget"])) { // exibe os Orçamentos com o número digitado no input
+                        searchList(type: "orcamento", filter: "numOrc");
                     }
-                    showList($type);
+
+                    showList(type: "orcamento"); // exibe todos os Orçamentos se nada for escrito
 
                     ?>
                 </div>
@@ -868,7 +869,7 @@ function filterList($type)
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user-icon.png" alt="user-img">
+                        <img src="../general-images/user.png" alt="User Profile Picture">
                         <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 
@@ -952,7 +953,7 @@ function filterList($type)
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user-icon.png" alt="user-img">
+                        <img src="../general-images/user.png" alt="user-img">
                         <p id="username-display"> <?php echo $_SESSION["username"] ?></p>
                     </div>
 
@@ -988,7 +989,7 @@ function filterList($type)
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user-icon.png" alt="user-img">
+                        <img src="../general-images/user.png" alt="user-img">
                         <p id="username-display"><?php echo $_SESSION["username"] ?></p>
                     </div>
 

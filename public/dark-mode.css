@@ -4,9 +4,6 @@
     --dm-primary-clr: #ffffff;
     --dm-secondary-clr: #e0c798;
     --dm-border-clr: #6e4802;
-
-    --dm-submit-button-gradient:linear-gradient(45deg, #825605 10%, #b68a3a);
-
 }
 
 .dark-mode {
@@ -42,6 +39,10 @@
 
 }
 
+.dark-mode input[type="date"] {
+   color: rgb(212, 212, 212);
+}
+
 .dark-mode input::placeholder, .dark-mode select, .dark-mode select option{
     color: rgb(212, 212, 212);
 
@@ -60,13 +61,12 @@
 }
 
 .dark-mode .button-submit button{
-    background-image: var(--dm-submit-button-gradient);
     color: var(--dm-primary-clr);
     border-color: var(--dm-border-clr);
     
 }
 
-.dark-mode .button-submit button:hover{
+.dark-mode .button-submit button:hover,.dark-mode .filter-bar button:hover{
     color: var(--dm-secondary-clr);
     border-color: var(--dm-secondary-clr);
     background: transparent;

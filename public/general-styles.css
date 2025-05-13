@@ -39,7 +39,6 @@ h1{
 
 }
 
-
 button{
     display: flex;
     flex-direction: row;
@@ -82,6 +81,14 @@ a{
 a:hover{
     color: var(--secondary-clr);
 
+}
+
+input, select{
+    color: #636363;
+}
+
+input[type="date"] {
+    appearance: none; /* ou -webkit-appearance: none para WebKit */
 }
 
 .highlight-word{
@@ -173,6 +180,10 @@ a:hover{
     border: 1px solid var(--input-border-clr); 
 
     transition: all var(--transition-time) ease-in-out;
+}
+
+.forms-item select option {
+    color: var(--input-border-clr);
 
 }
 
@@ -181,13 +192,11 @@ a:hover{
     
 }
 
-
 .search-bar, .filter-bar{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5em;
-    
 
 }
 
@@ -286,7 +295,6 @@ a:hover{
     margin: 0 auto;
 }
 
-
 @media (min-width: 1024px){
     .content{
         width: 50vw;
@@ -311,7 +319,5 @@ a:hover{
         font-size: 1.2em;
 
     }
-
-    
 
 }
