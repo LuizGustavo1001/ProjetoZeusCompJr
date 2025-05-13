@@ -1,7 +1,7 @@
 # ProjetoZeusCompJr
  <h2>Projeto de um site conectado a um Banco de Dados em MySQL utilizando PHP</h2>
 
- <img src="preview.png"></img>
+ <a href="preview.png">Preview do Site</a>
  
  <p>- Teste de Sistema backend de Banco de Dados para <strong>Gerenciar Funcionários e orçamentos</strong> de uma <strong>Empresa</strong></p>
  <p>- <strong>FrontEnd</strong>: <strong>HTML5</strong> com as <strong>CSS</strong> + <strong>JavaScript</strong></p>
