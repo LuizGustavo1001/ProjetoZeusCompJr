@@ -1,0 +1,183 @@
+:root{
+    --primary-font: "Open Sans", sans-serif;
+
+    --bg-clr: white;
+    --primary-clr: #a56b00;
+    --secondary-clr: #744e07;
+
+    --submit-button-gradient: linear-gradient(45deg, #a56b00 60%, #dab36c);
+
+    --transition-time: 0.3s;
+
+    --border-radius: 10px;
+
+    --input-border-clr: darkgrey;
+
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: var(--primary-font);
+
+}
+
+a{
+    color: var(--primary-clr);
+    text-decoration: none;
+}
+
+a:hover{
+    color: var(--secondary-clr);
+}
+
+button{
+    cursor: pointer;
+
+}
+
+input, select{
+    border-radius: var(--border-radius);
+    border: 1px solid var(--input-border-clr);
+    color: rgb(95, 95, 95);
+
+}
+
+input[type="date"] {
+    appearance: none; /* ou -webkit-appearance: none para WebKit */
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+#church-symbol{
+    width: 75px;
+    cursor: pointer;
+
+}
+
+#church-symbol:hover, .theme-switch-button:hover{
+    transition: all var(--transition-time);
+}
+
+#church-symbol:hover, .theme-switch-button:hover{
+    transform: scale(1.05);
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+.button-submit button, .button-submit a{
+    font-size: 1.3em;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-block: 0.7em;
+
+    border-radius: var(--border-radius);
+
+    background: var(--submit-button-gradient);
+    color: white;
+    border: 1px solid var(--primary-clr);
+
+    transition: all var(--transition-time);
+
+}
+
+.button-submit a{
+    color: white;
+    width: 50%;
+    margin: 0 auto;
+  
+}
+
+.button-submit button:hover, .button-submit a:hover{
+    background: transparent;
+    color: var(--primary-clr);
+
+}
+
+.button-submit svg{
+    width: 25px;
+
+}
+
+.highlight-word{
+    color: var(--primary-clr);
+
+}
+
+.theme-switch-button{
+    background: none;
+    border: none;
+    width: 45px;
+}
+
+.theme-switch-button .hidden{
+    display: none;
+}
+
+.forms-checkbox{ /* Mudar a cor da checkbox */
+    input[type="checkbox"] {
+        accent-color: var(--primary-clr);
+        
+    }
+
+}
+
+.error-text, .sucess-text{
+    text-align: center;
+}
+
+.error-text p {
+    color: red;
+
+}
+
+.sucess-text p {
+    color: green;
+}
+
+input, select{
+    transition: all var(--transition-time);
+
+}
+
+input:focus, select:focus, input:hover, select:hover{
+    outline: none;
+    border: 1px solid var(--primary-clr);
+    box-shadow: 1px 5px 10px rgba(73, 42, 7, 0.219);
+
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+@media(min-width: 1024px){
+    .right-content-img{
+        display: block;
+        width: 45%;
+        height: 100vh;
+
+
+    }
+
+}
+

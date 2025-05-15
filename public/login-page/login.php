@@ -6,18 +6,22 @@
 
         $sql_code = 
         "
-        SELECT * FROM usuario 
-        WHERE userEmail = '$email' AND userPassword = '$password'
+        SELECT * FROM employee 
+        WHERE emailEmpl = '$email' AND emplPassword = '$password'
         ";
+
         $sql_query = $mysqli->query($sql_code) or die($mysqli->error); // executa o código sql
 
         if($sql_query->num_rows != 0){ // há algum usuário cadastrado com os dados enviados
             //criar sessão
             session_start();
             $user = $sql_query->fetch_assoc(); // pegar todos os dados adquiridos do BD e armazenar em $usuario
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['email'] = $user['userEmail'];
-            header("location: ../users-page/user.php");
+            $_SESSION['username'] = $user['nameEmpl'];
+            $_SESSION['email'] = $user['emailEmpl'];
+            $_SESSION['cargo'] = $user['emplPos'];
+            $_SESSION['area'] = $user['areaEmpl'];
+            $_SESSION['id'] = $user['idEmpl'];
+            header(header: "location: ../users-page/user.php");
             exit;
         }else{ // nenhum usuário cadastrado com os dados enviados
             $erroLogin = true;
@@ -41,16 +45,27 @@
 
     <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
 
-    <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="../general-styles.css">
-    <link rel="stylesheet" href="../dark-mode.css">
+    <link rel="stylesheet" href="../styles/other-pages.css">
+    <link rel="stylesheet" href="../styles/general.css">
+    <link rel="stylesheet" href="../styles/dark-mode.css">
+
 
     <script src="../dark-mode.js" defer></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <style>
+        @media(min-width: 1024px){
+            .right-content-img{
+                display: block;
+                background: url(images/login-bg.png) center center;
+
+            }
+        }
+        
+    </style>
 
     <title>Projeto Zeus - Login</title>
 
@@ -128,6 +143,7 @@
                                     <p>ou Tente Novamente</p>
                                 </span>
                                 ";
+                                $erroLogin = null; // limpa a mensagem de erro
                             }
                             if(isset($cadastrado)){
                                 echo "
@@ -136,6 +152,7 @@
                                     <p>Insira novamente seus dados acima para Entrar na Área do Usuário</p>
                                 </span>
                                ";
+                                $cadastrado = null; // limpa a mensagem de erro
                             }
 ?>  
                         </div>

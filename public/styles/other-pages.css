@@ -1,0 +1,78 @@
+/*  login-page, sign-up-page and password */
+
+form{
+    margin-bottom: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8em;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+
+    gap: 5vh;
+
+    padding-inline: 5vw;
+    padding-block: 3vw;
+
+}
+
+.content-header{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.right-content-img{
+    display: none;
+
+}
+
+.content-bottom-text{
+    margin-bottom: 2em;
+
+}
+
+.forms-item{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    
+}
+
+.forms-item input, .forms-item select{
+    padding: 1.5em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.forms-item label{
+    font-weight: bold;
+
+}
+
+.forms-item svg{
+    width: 30px;
+}
+
+#forms-bottom {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+@media(min-width: 1024px){
+    main{
+        display: flex;
+
+    }
+
+    .content{
+         width: 45vw;
+
+    }
+
+    
+
+}

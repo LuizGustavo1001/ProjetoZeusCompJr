@@ -1,3 +1,0 @@
-idOrcamento(unique) numOrcamento DescriçãoProjeto valorEstimado(R$) custoPrevisto(R$) cliente status (MOSTRAR)
-
-numOrcamento(PK) DescriçãoProjeto valorEstimado CustoPrevisto Cliente MembroResponsável (ADICIONAR)

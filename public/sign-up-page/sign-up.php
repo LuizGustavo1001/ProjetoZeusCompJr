@@ -2,34 +2,45 @@
 <?php 
     include '../../dbConnection.php';
 
-    if(isset($_POST["nome"])){ // verificar se algo está escrito no input de nome
-        $username = $mysqli->real_escape_string($_POST["nome"]);
-        $email = $mysqli->real_escape_string($_POST["email"]);
-        $senha = $mysqli->real_escape_string($_POST["senha"]);
+    if(isset($_POST["eName"])){ // verificar se algo está escrito no input de nome
+        $username = $mysqli->real_escape_string($_POST["eName"]);
+        $email = $mysqli->real_escape_string($_POST["eEmail"]);
+        $senha = password_hash($mysqli->real_escape_string($_POST["senha"]), PASSWORD_DEFAULT);
+        $bday = $mysqli->real_escape_string($_POST["eBDay"]);
+        $gender = $mysqli->real_escape_string($_POST["eGender"]);
+        $number = $mysqli->real_escape_string($_POST["eNum"]);
+        $position = $mysqli->real_escape_string($_POST["position"]);
+        $entryDate = $mysqli->real_escape_string($_POST["joinDate"]);
+        $area = $mysqli->real_escape_string($_POST["eArea"]);
 
         $sql_code1 = "
-            SELECT * FROM usuario WHERE userEmail = '$email'
+            SELECT * FROM employee WHERE emailEmpl = '$email'
         ";
 
         $sql_query1 = $mysqli->query($sql_code1) or die($mysqli->error);
 
         if($sql_query1->num_rows != 0){ // já existe um usuário com o email digitado
             $emailExistente = true;
-            echo "$sql_query1->num_rows";
+            // echo "$sql_query1->num_rows"; // Remova ou comente esta linha para não exibir número de linhas
         }else{ // registrar novo usuário
 
-            $statement = $mysqli->prepare("INSERT INTO usuario (username, userEmail, userPassword) VALUES (?,?,?)");
+            $statement = $mysqli->prepare("INSERT INTO employee (nameEmpl, bDayEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl, emplPassword) VALUES (?,?,?,?,?,?,?,?)");
 
-            $statement->bind_param("sss",
-                $_POST["nome"],
-                $_POST["email"],
-                $_POST["senha"]
+            $statement->bind_param("ssssssss",
+                $username,
+                $bday,
+                $gender,
+                $number,
+                $position,
+                $entryDate,
+                $area,
+                $senha
             );
             if($statement->execute()){ // usuário cadastrado com sucesso
-                header("location:../login-page/login.php");
                 session_start();
                 $_SESSION['success_message'] = "Usuário cadastrado com sucesso!";
-
+                header("location:../login-page/login.php");
+                exit();
             }
         }
     }
@@ -43,9 +54,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="sign-up.css">
-    <link rel="stylesheet" href="../general-styles.css">
-    <link rel="stylesheet" href="../dark-mode.css">
+    <link rel="stylesheet" href="../styles/other-pages.css">
+    <link rel="stylesheet" href="../styles/general.css">
+    <link rel="stylesheet" href="../styles/dark-mode.css">
 
     <script src="../dark-mode.js" defer></script>
 
@@ -54,6 +65,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <style>
+        
+        .content{
+            padding-bottom: 0;
+            padding-top: 3vw;
+
+        }
+
+        @media(min-width: 1024px){
+            .right-content-img{
+                display: block;
+                background: url(images/sign-up-bg.png) center center;
+                height: 115vh;
+
+            }
+
+            form {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.8em;
+                align-items: end;
+            }
+        }
+    </style>
 
     <title>Projeto Zeus - Registrar</title>
 
@@ -93,27 +129,59 @@
                 <div class="content-bottom-forms">
                     <form action="" method="post" autocomplete="on">
                         <div class="forms-item">
-                            <label for="inome">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                                    stroke="currentColor" className="size-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round"
-                                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                </svg>
-                                Nome:
-                            </label>
-                            <input type="text" name="nome" id="inome" class="input-control" required placeholder="Nome Completo">
+                            <label for="iEName">Nome</label>
+                            <input type="text" name="eName" id="iEName" class="input-control" required placeholder="Primeiro e Último Nome" maxlength="30">
                         </div>
 
                         <div class="forms-item">
-                            <label for="iemail">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                                </svg>
-                                Email:
-                            </label>
-                            <input type="email" name="email" id="iemail" class="input-control" required placeholder="exemplo@estudante.ufla.br">
+                            <label for="iEBday">Data de Nascimento</label>
+                            <input type="date" name="eBDay" id="iEBday" class="input-control" required>
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="ieEmail">Email</label>
+                            <input type="email" name="eEmail" id="ieEmail" class="input-control" required placeholder="exemplo@gmail.com">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="inum">Número de Telefone</label>
+                            <input type="text" name="eNum" id="iENum" class="input-control" required placeholder="(XX) X XXXX-XXXX">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="iEGender">Gênero</label>
+                            <select name="eGender" id="iEGender" class="input-control">
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                                <option value="O">Outros</option>
+                            </select>
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="iJoinDate">Data de Ingresso</label>
+                            <input type="date" name="joinDate" id="iJoinDate" class="input-control">
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="iPos">Cargo</label>
+                            <select name="position" id="iPos" class="input-control">
+                                <option value="RH">Recursos Humanos</option>
+                                <option value="Operações">Operações</option>
+                                <option value="Gerente Projetos">Gerente de Projetos</option>
+                                <option value="SAC">SAC</option>
+                                <option value="Infraestrutura">Infraestrutura </option>
+                                <option value="Segurança">Segurança </option>
+                            </select>
+                        </div>
+
+                        <div class="forms-item">
+                            <label for="iarea">Área</label>
+                            <select name="eArea" id="iarea" class="input-control">
+                                <option value="Gerencia">Gerencia</option>
+                                <option value="Projetos">Projetos </option>
+                                <option value="RH">RH</option>
+                                <option value="Comercial">Comercial</option>
+                            </select>
                         </div>
 
                         <div class="forms-item">
@@ -143,6 +211,7 @@
                                     <p>Erro: Email Inserido <strong>já está cadastrado</strong></p>
                                 </span>
                             ";
+                            $emailExistente = false; // resetar a variável para não mostrar a mensagem de erro novamente
                         }
                         ?>
                     </form>
@@ -150,11 +219,7 @@
             </div>
         </div>
     <!--Forms-->
-
         <div class="right-content-img"></div>
-
     </main>
-
 </body>
-
 </html>

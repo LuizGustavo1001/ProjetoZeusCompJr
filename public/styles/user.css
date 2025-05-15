@@ -1,0 +1,344 @@
+:root{
+    --body-light-bg: #f8f3ed;
+    --div-light-bg: white;
+
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+body{
+    background: var(--body-light-bg);
+}
+
+svg{
+    width: 30px;
+
+}
+
+.theme-switch-button svg{
+    width: 35px;
+
+}
+
+ul{
+    list-style-type: none;
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+#left-content{
+    display: flex;
+    flex-direction: column;
+    padding-inline: 5vw;
+    padding-block: 3vw;
+    gap: 2em;
+
+    background: var(--div-light-bg);
+
+
+
+}
+
+#aside-top{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+#aside-bottom{
+    margin: 0 auto;
+
+}
+
+#options-list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2em;
+
+}
+
+#options-list li{
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em 1.5em;
+
+    transition: all var(--transition-time);
+
+}
+
+#options-list li:hover{
+    background: var(--body-light-bg);
+    color: var(--primary-clr);
+    cursor: pointer;
+
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+.right-section{
+    padding: 6vw;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+
+}
+
+.section-header{
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1em;
+    
+}
+
+.section-header h1{
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    font-size: 1.5em;
+
+    margin-bottom: 0.5em;
+}
+
+.user-data{
+    display: flex;
+    gap: 1em;
+    align-items: center;
+
+}
+
+.user-data img{
+    width: 45px;
+
+}
+
+.user-data-text{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    text-align: center;
+
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+.search-result{
+    display: table;
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+
+}   
+    
+.search-result th, .search-result td{
+    padding: 0.5em;
+    text-align: left;
+
+}
+
+.search-result td{
+    font-size: 0.9em;
+    border-bottom: 1px solid var(--input-border-clr);
+
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+.section-top, .section-bottom{
+    background: var(--div-light-bg);
+    padding: 1em;
+    border-radius: var(--border-radius);
+
+}
+
+.section-top{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    text-align: center;
+
+}
+.section-top input, .section-top select{
+    padding: 1.5em;
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+#total-employes, #total-budgets{
+    font-size: 2em;
+    font-weight: bold;
+
+}
+
+.button-submit .add-employee-button{
+    width: 60%;
+    margin: 0 auto;
+    
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+.right-section-back-button{
+    display: flex;
+    align-items: center;
+    color: var(--primary-clr);
+    
+}
+
+.right-section-back-button svg, .right-section-back-button p{
+    cursor: pointer;
+}
+
+.section-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+}
+
+.right-section-forms{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.right-section-forms .forms-item{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.right-section-forms .forms-item label{
+    font-weight: bold;
+}
+
+.right-section-forms .forms-item input, .right-section-forms .forms-item select{
+    padding: 1.5em;
+}
+
+.right-section-forms input , .right-section-forms select{
+        width: 100%;
+        box-sizing: border-box;
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+.hidden-div{
+    display: none;
+}
+
+
+.selected{
+    background: var(--body-light-bg);
+    color: var(--primary-clr);
+    border-left: 3px solid var(--primary-clr);
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+@media(min-width: 1024px){
+    main{
+        display: flex;
+    }
+
+    #aside-top{
+        margin-top: 2em;
+        margin-inline: 1.5em;
+
+    }
+
+    
+    #left-content{
+        padding: 0;
+        min-height: 100vh;
+    }
+        
+    #aside-bottom ul{
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    #aside-bottom li{
+        padding-inline: 2.5em;
+    }
+
+    .right-section{ /* centralizar o bloco na horizontal */
+        margin: -4em auto;
+
+    }
+
+    .section-header{
+        flex-direction: row;
+        justify-content: space-between;
+
+    }
+
+    .section-header, .section-top, .section-bottom{
+        width: 68vw;
+    }
+
+    .section-top{
+        flex-direction: row;
+        align-items: center;
+        gap: 2em;
+
+    }
+
+    .section-top .button-submit .add-employee-button, .section-top .button-submit .add-budget-button{
+        width: 90%;
+        
+    }
+
+     .search-bar, .filter-bar{
+        width:17vw;
+        margin: 0 auto;
+        
+     }
+
+    .right-section-forms{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+    
+
+}
+
+@media(max-width: 1200px){
+    .search-result tr{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 1.5em;
+    }
+
+    .search-result th, .search-result td{
+        padding: 0.5em;
+        text-align: left;
+
+    }
+
+    .search-result td{
+        font-size: 0.9em;
+        border-bottom: 1px solid var(--input-border-clr);
+
+    }
+
+}
