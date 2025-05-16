@@ -1,39 +1,39 @@
 <?php 
-    include "../../dbConnection.php";
-    if(isset($_POST["userEmail"])){ // se algo for escrito nos campos a função será executada
-        $email = $mysqli->real_escape_string($_POST["userEmail"]);
-        $password = $mysqli->real_escape_string($_POST["userPassword"]);
+include "../../dbConnection.php";
 
-        $sql_code = 
-        "
-        SELECT * FROM employee 
-        WHERE emailEmpl = '$email' AND emplPassword = '$password'
-        ";
+if (isset($_POST['userEmail'], $_POST['userPassword'])) {
+    $stmt = $mysqli->prepare('SELECT idEmpl, nameEmpl, emailEmpl, emplPos, areaEmpl, emplPassword FROM employee WHERE emailEmpl = ?');
+    $stmt->bind_param('s', $_POST['userEmail']);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        $sql_query = $mysqli->query($sql_code) or die($mysqli->error); // executa o código sql
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $storedPassword = $row['emplPassword'];
 
-        if($sql_query->num_rows != 0){ // há algum usuário cadastrado com os dados enviados
-            //criar sessão
+        if ($_POST['userPassword'] === $storedPassword) {
             session_start();
-            $user = $sql_query->fetch_assoc(); // pegar todos os dados adquiridos do BD e armazenar em $usuario
-            $_SESSION['username'] = $user['nameEmpl'];
-            $_SESSION['email'] = $user['emailEmpl'];
-            $_SESSION['cargo'] = $user['emplPos'];
-            $_SESSION['area'] = $user['areaEmpl'];
-            $_SESSION['id'] = $user['idEmpl'];
-            header(header: "location: ../users-page/user.php");
-            exit;
-        }else{ // nenhum usuário cadastrado com os dados enviados
-            $erroLogin = true;
-        }                 
-    }else{
-        session_start();
-        if(isset($_SESSION['success_message'])){
-            $cadastrado = true;
-            $_SESSION['success_message'] = null; // limpa a mensagem de sucesso
-        }
-    }
+            // Login com senha em texto puro -> migrar para hash
+            $newHash = password_hash($_POST['userPassword'], PASSWORD_DEFAULT);
+            $updateStmt = $mysqli->prepare('UPDATE employee SET emplPassword = ? WHERE emailEmpl = ?');
+            $updateStmt->bind_param('ss', $newHash, $_POST['userEmail']);
+            $updateStmt->execute();
+            $updateStmt->close();
+        }else{
+            session_start();
+            $_SESSION['username'] = $row['nameEmpl'];
+            $_SESSION['email']    = $row['emailEmpl'];
+            $_SESSION['cargo']    = $row['emplPos'];
+            $_SESSION['id']       = $row['idEmpl'];
+            $_SESSION['area']     = $row['areaEmpl'];
 
+            header("Location: ../users-page/user.php");
+        }
+    } else {
+        $erroLogin = true;
+    }
+    $stmt->close(); // Fecha a declaração
+}
 ?>
 
 <!DOCTYPE html>

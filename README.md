@@ -5,11 +5,14 @@
  <p>- <strong>FrontEnd</strong>: <strong>HTML5</strong> com as <strong>CSS</strong> + <strong>JavaScript</strong></p>
  
  <h3>📟 API </h3>
- <p>- <em>Ainda em produção</em></p>
  <p>
-    - Inicialmente, projetada utilizando <strong>PHP</strong> para conectar o <strong>Banco de Dados</strong>(BackEnd) com o <strong>HTML</strong>(FrontEnd)
+    - Inicialmente, projetada utilizando a linguagem <strong>PHP</strong> para conectar um <strong>Banco de Dados</strong>(BackEnd) com uma <strong>Página Web</strong>(FrontEnd)
  </p>
- <p>- Gerenciar Funcionários, Orçamentos e Estoques</p>
+ <p>- Gerenciar Funcionários, Orçamentos e Estoques, adicionando e pesquisando</p>
+ <p>🔐 Senhas protegidas com <strong>Sistema Hash</strong> imbutido no banco de dados: senhas são armazenadas em chaves</p>
+ <p>- Validação de filtros escolhidos por meio de vetores indicando quais os possíveis valores válidos (evitar SQL injection)</p>
+ <p>- Uso de<strong>$stmt</strong> e seus derivados para evitar SQL injection</p>
+ <p>- Possui soluções para usuários que tentarem acessar a páginas bloqueadas</p>
  <ol>
     <li>👤 <strong>Funcionários</strong></li>
     <p>- Mostrar na tela 
@@ -17,7 +20,7 @@
             <li><strong>Total de Funcionários</strong></li>
             <li><strong>Todos os Funcionários Cadastrados</strong></li>
             <li><strong>Realizar Buscas</strong> por nome</li>
-            <li><strong>Filtra</strong> por Área de Atuação ou Cargo (ainda em produção)</li>
+            <li><strong>Filtra</strong> por Nome, por Área de Atuação, por Cargo e por Idade (Ordem Crescente)</li>
         </ul>
     </p>
      <ul>
@@ -36,7 +39,9 @@
             <li><strong>Total de Orçamentos</strong></li>
             <li><strong>Todos os Orçamentos Cadastrados</strong></li>
             <li><strong>Realizar Buscas</strong> por Número do Orçamento</li>
-            <li><strong>Filtra</strong> por Valor Estimado(crescente) e por Custo Previsto(crescente)(ainda em produção)</li>
+            <li>
+                <strong>Filtra</strong> por Númerom, Valor Estimado(crescente), por Custo Previsto(crescente) e por Nome do Cliente (Ordem Crescente)
+            </li>
         </ul>
      </p>
      <ul>
@@ -51,6 +56,7 @@
 
  <p>🌑 Possui suporte para <strong>Modo Escuro</strong> </p>
  <p>🗺️ Navegação entre as sessões (user-page) utilizando <strong>JavaScript</strong> </p>
+ <p>📱  Possui suporte à responsividade em dispositivos portáteis</p>
 
  <h3>📂 Esquema de Pastas</h3>
     <pre>
@@ -98,7 +104,8 @@
     <li>✅ Permitir acesso completo ao site apenas para usuários logados </li>
     <li>✅ Linkar página de login com página do usuário já logado</li>
     <li>✅ Linkar página de cadastrar novo usuário com o Banco de Dados</li>
-    <li>Melhorar CSS</li>
+    <li>✅ Melhorar CSS</li>
     <li>Mandar código de recuperação de senha pelo email</li>
-    <li>Segurança de Senhas</li>
+    <li>✅ Segurança de Senhas</li>
+    <li>Botão de Lembrar Usuário</li>
 </ul>

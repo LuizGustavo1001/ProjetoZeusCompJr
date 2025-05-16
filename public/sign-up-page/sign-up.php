@@ -3,48 +3,55 @@
     include '../../dbConnection.php';
 
     if(isset($_POST["eName"])){ // verificar se algo está escrito no input de nome
-        $username = $mysqli->real_escape_string($_POST["eName"]);
         $email = $mysqli->real_escape_string($_POST["eEmail"]);
-        $senha = password_hash($mysqli->real_escape_string($_POST["senha"]), PASSWORD_DEFAULT);
-        $bday = $mysqli->real_escape_string($_POST["eBDay"]);
-        $gender = $mysqli->real_escape_string($_POST["eGender"]);
-        $number = $mysqli->real_escape_string($_POST["eNum"]);
-        $position = $mysqli->real_escape_string($_POST["position"]);
-        $entryDate = $mysqli->real_escape_string($_POST["joinDate"]);
-        $area = $mysqli->real_escape_string($_POST["eArea"]);
 
-        $sql_code1 = "
-            SELECT * FROM employee WHERE emailEmpl = '$email'
-        ";
+        $stmt = $mysqli->prepare('SELECT * FROM employee WHERE emailEmpl = ?');
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        $sql_query1 = $mysqli->query($sql_code1) or die($mysqli->error);
-
-        if($sql_query1->num_rows != 0){ // já existe um usuário com o email digitado
+        if($result and $result->num_rows > 0){ // existe um usuário com o email digitado anteriormente
             $emailExistente = true;
-            // echo "$sql_query1->num_rows"; // Remova ou comente esta linha para não exibir número de linhas
-        }else{ // registrar novo usuário
+        }else{ // cadastrar novo usuário
+            $username     =     $mysqli->real_escape_string($_POST["eName"]);
+            $bday         =     $mysqli->real_escape_string($_POST["eBDay"]);
+            $gender       =     $mysqli->real_escape_string($_POST["eGender"]);
+            $number       =     $mysqli->real_escape_string($_POST["eNum"]);
+            $position     =     $mysqli->real_escape_string($_POST["position"]);
+            $entryDate    =     $mysqli->real_escape_string($_POST["joinDate"]);
+            $area         =     $mysqli->real_escape_string($_POST["eArea"]);
+            // criar um hash para a senha ser armazenada no BD
+            $passwordHash =     password_hash($_POST['senha'], PASSWORD_DEFAULT);
 
-            $statement = $mysqli->prepare("INSERT INTO employee (nameEmpl, bDayEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl, emplPassword) VALUES (?,?,?,?,?,?,?,?)");
+            $currentDate = date("Y-m-d");
+            $minBDate = date("Y-m-d", strtotime("-16 years"));
 
-            $statement->bind_param("ssssssss",
-                $username,
-                $bday,
-                $gender,
-                $number,
-                $position,
-                $entryDate,
-                $area,
-                $senha
-            );
-            if($statement->execute()){ // usuário cadastrado com sucesso
-                session_start();
-                $_SESSION['success_message'] = "Usuário cadastrado com sucesso!";
-                header("location:../login-page/login.php");
-                exit();
-            }
-        }
+            if($bday >= $minBDate){ // data de nascimento invalida (precisa ser maior de 16 anos)
+                global $invalidBDay;
+                $invalidBDay = true;
+            }else if($joinDate > $currentDate){ //  data de entrada na empresa invalida
+                global $invalidJoinD;
+                $invalidJoinD = true;
+            }else{ // nada de anormal com as datas
+                $stmt2 = $mysqli->prepare('
+                    INSERT INTO employee 
+                    (nameEmpl, emailEmpl, bDayEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl, emplPassword) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+                );
+
+                $stmt2->bind_param('sssssssss', $username, $email, $bday, $gender, $number, $position, $entryDate, $area, $passwordHash);
+
+                if($stmt2->execute()){
+                    session_start();
+                    $_SESSION['registrado'] = true;
+                    header("location:../login-page/login.php");
+                    exit();
+                }
+                $stmt2->close();  // Fecha a declaração
+                }
+        }      
+        $stmt->close();  // Fecha a declaração
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -186,11 +193,6 @@
 
                         <div class="forms-item">
                             <label for="isenha">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
-                                </svg>
                                 Senha:
                             </label>
                             <input type="password" name="senha" id="isenha" class="input-control"  placeholder="• • • • • • •" maxlength="30" required >
@@ -212,6 +214,22 @@
                                 </span>
                             ";
                             $emailExistente = false; // resetar a variável para não mostrar a mensagem de erro novamente
+                        }else if(isset($invalidBDay)){
+                            echo "
+                                <span class=\"error-text\">
+                                    <p>Erro: Data de Nascimento Inserida <strong>Invalida</strong></p>
+                                    <p>Usuário precisa ser maior de 16 anos</>
+                                </span>
+                            ";
+                            $nascimentoInvalido = false; // resetar a variável para não mostrar a mensagem de erro novamente
+                        }else if(isset($invalidJoinD)){
+                            echo "
+                                <span class=\"error-text\">
+                                    <p>Erro: Data de Entrada na Empresa Inserida <strong>Invalida</strong></p>
+                                    <p>Usuário precisa ter entrado em um dia anterior a hoje</>
+                                </span>
+                            ";
+                            $entradaInvalida = false; // resetar a variável para não mostrar a mensagem de erro novamente
                         }
                         ?>
                     </form>

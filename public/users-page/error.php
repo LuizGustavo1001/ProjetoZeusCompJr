@@ -18,10 +18,9 @@
 
     <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
 
-    <link rel="stylesheet" href="../login-page/login.css">
-    <link rel="stylesheet" href="../general-styles.css">
-    <link rel="stylesheet" href="../dark-mode.js">
-    <link rel="stylesheet" href="../dark-mode.css">
+    <link rel="stylesheet" href="../styles/other-pages.css">
+    <link rel="stylesheet" href="../styles/general.css">
+    <link rel="stylesheet" href="../styles/dark-mode.css">
 
     <script src="../dark-mode.js" defer></script>
     
@@ -37,6 +36,10 @@
     <style>
         .right-content-img{
             background:url(images/error-bg.jpg) bottom left;
+        }
+
+        svg{
+            width: 40px;
         }
 
     </style>

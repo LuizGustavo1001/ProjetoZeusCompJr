@@ -80,6 +80,10 @@
     
 }
 
+.dark-mode .right-section-back-button{
+    color: var(--dm-secondary-clr);
+}
+
 .dark-mode .error-text p {
     color: rgb(151, 1, 1);
 

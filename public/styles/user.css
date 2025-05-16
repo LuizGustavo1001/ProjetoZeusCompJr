@@ -6,6 +6,9 @@
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
 body{
     background: var(--body-light-bg);
 }
@@ -37,8 +40,6 @@ ul{
     gap: 2em;
 
     background: var(--div-light-bg);
-
-
 
 }
 
@@ -129,7 +130,10 @@ ul{
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-.search-result{
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+table{
     display: table;
     width: 90%;
     margin: 0 auto;
@@ -137,17 +141,20 @@ ul{
 
 }   
     
-.search-result th, .search-result td{
-    padding: 0.5em;
+th, td, tr{
+    font-size: 1vw;
+    padding: 1vw;
     text-align: left;
 
 }
 
-.search-result td{
+td{
     font-size: 0.9em;
     border-bottom: 1px solid var(--input-border-clr);
 
 }
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
@@ -155,7 +162,6 @@ ul{
     background: var(--div-light-bg);
     padding: 1em;
     border-radius: var(--border-radius);
-
 }
 
 .section-top{
@@ -165,6 +171,7 @@ ul{
     text-align: center;
 
 }
+
 .section-top input, .section-top select{
     padding: 1.5em;
     width: 100%;
@@ -210,25 +217,30 @@ ul{
     display: flex;
     flex-direction: column;
     gap: 1em;
+
 }
 
 .right-section-forms .forms-item{
     display: flex;
     flex-direction: column;
     gap: 0.3em;
+
 }
 
 .right-section-forms .forms-item label{
     font-weight: bold;
+
 }
 
 .right-section-forms .forms-item input, .right-section-forms .forms-item select{
     padding: 1.5em;
+
 }
 
 .right-section-forms input , .right-section-forms select{
-        width: 100%;
-        box-sizing: border-box;
+    width: 100%;
+    box-sizing: border-box;
+
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -238,6 +250,7 @@ ul{
 
 .hidden-div{
     display: none;
+
 }
 
 
@@ -245,6 +258,7 @@ ul{
     background: var(--body-light-bg);
     color: var(--primary-clr);
     border-left: 3px solid var(--primary-clr);
+
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -292,6 +306,7 @@ ul{
 
     .section-header, .section-top, .section-bottom{
         width: 68vw;
+
     }
 
     .section-top{
@@ -306,11 +321,11 @@ ul{
         
     }
 
-     .search-bar, .filter-bar{
-        width:17vw;
-        margin: 0 auto;
-        
-     }
+    .search-bar, .filter-bar{
+    width:17vw;
+    margin: 0 auto;
+    
+    }
 
     .right-section-forms{
         display: grid;
@@ -318,24 +333,27 @@ ul{
 
     }
 
-    
-
 }
 
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
 @media(max-width: 1200px){
-    .search-result tr{
+    tr{
         display: grid;
         grid-template-columns: 1fr 1fr;
         margin-bottom: 1.5em;
     }
 
-    .search-result th, .search-result td{
+    th, td{
         padding: 0.5em;
         text-align: left;
 
     }
 
-    .search-result td{
+    td{
         font-size: 0.9em;
         border-bottom: 1px solid var(--input-border-clr);
 

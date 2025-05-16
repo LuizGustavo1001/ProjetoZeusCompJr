@@ -2,344 +2,397 @@
 include "../../dbConnection.php";
 
 if (! isset($_SESSION)) {
-    session_start(); // iniciar a sessão 
+    session_start(); // iniciar a sessão
+
 }
 
 if (! isset($_SESSION["email"])) { // tentando acessar a página do usuário sem estar logado
     header("Location: error.php");
-}
-
-function totalList($type){
-    global $mysqli;
-    $sql_code = " SELECT count(*) FROM $type";
-    $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
-
-    if ($type == "employee") { // employee
-        $totalEmpl = $sql_query->fetch_row()[0];
-        echo "<p><strong><span id=\"total-employes\">$totalEmpl</span></strong></p>";
-    } else if($type == "budget"){ // budget
-        $totalBudgets = $sql_query->fetch_row()[0];
-        echo "<p><strong><span id=\"total-budgets\">$totalBudgets</span></strong></p>";
-    }
-}
-
-function showList($type){ // mostra todos os itens cadastrados de um tabela
-    global $mysqli;
-    if($type == "employee"){
-?>
-        <h2><span class="highlight-word">Todos os Funcionários</span></h2>
-    <?php
-    }else if ($type == "budget"){ // exibe todos os orçamentos
-    ?>
-        <h2><span class="highlight-word">Todos os Orçamentos</span></h2>
-        <?php
-    }
-
-    $stmt = $mysqli->prepare("SELECT * FROM $type");
-
-    $stmt->execute() or die($mysqli->error); // executa o código sql
-
-    $sql_query = $stmt->get_result();
-
-    if ($sql_query->num_rows == 0) { // nenhum funcionário cadastrado
-        if($type == "employee"){
-        ?>
-            <p>Nenhum Funcionário Cadastrado no Momento</p>
-        <?php
-        } else if ($type == "budget"){
-        ?>
-            <p>Nenhum Orçamento Cadastrado no Momento</p>
-        <?php
-        }
-    }else{ // existem dados cadastrados
-        ?>
-        <table class="search-result">
-            <?php
-            if($type == "employee"){
-            ?>
-                <tr>
-                    <th>id</th>
-                    <th>Nome</th>
-                    <th>Nascimento</th>
-                    <th>Email</th>
-                    <th>Gênero</th>
-                    <th>Telefone</th>
-                    <th>Cargo</th>
-                    <th>Ingresso</th>
-                    <th>Área</th>
-                </tr>
-            <?php
-            } else if ($type == "budget") {
-            ?>
-                <tr>
-                    <th>id</th>
-                    <th>Número</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Custo</th>
-                    <th>Cliente</th>
-                </tr>
-                <?php
-            }
-            if ($type == "employee") {
-                while ($dados = $sql_query->fetch_assoc()) { // adiciona o funcionário ao DB na tabela Employee
-                    if ($dados["genderEmpl"] == "M") {
-                        $dados["genderEmpl"] = "Masculino";
-                    } else if ($dados["genderEmpl"] == "F") {
-                        $dados["genderEmpl"] = "Feminino";
-                    } else {
-                        $dados["genderEmpl"] = "Outro";
-                    }
-                ?>
-                    <tr class="func-tr">
-                        <td><?php echo $dados["idEmpl"] ?></td>
-                        <td><?php echo $dados["nameEmpl"] ?></td>
-                        <td><?php echo $dados["bDayEmpl"] ?></td>
-                        <td><?php echo $dados["emailEmpl"] ?></td>
-                        <td><?php echo $dados["genderEmpl"] ?></td>
-                        <td><?php echo $dados["numberEmpl"] ?></td>
-                        <td><?php echo $dados["emplPos"] ?></td>
-                        <td><?php echo $dados["entryDate"] ?></td>
-                        <td><?php echo $dados["areaEmpl"] ?></td>
-                    </tr>
-                <?php
-                }
-            }else if ($type == "budget"){
-                while ($dados = $sql_query->fetch_assoc()) { // adiciona o orçamento ao DB na Tabela Budget
-                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
-                ?>
-                    <tr class="func-tr">
-                        <td><?php echo $dados["idBudget"] ?></td>
-                        <td><?php echo $dados["numBudget"] ?></td>
-                        <td><?php echo $dados["descBudget"] ?></td>
-                        <td>
-                            <?php
-                            echo numfmt_format_currency($padrao, $dados["budgetValue"], "BRL")
-                            ?>
-                        </td>
-                        <td>
-                            <?php
-                            echo  numfmt_format_currency($padrao, $dados["budgetCost"], "BRL")
-                            ?>
-                        </td>
-                        <td><?php echo $dados["budgetClient"] ?></td>
-                    </tr>
-            <?php
-                }
-            }
-            ?>
-        </table>
-        <?php
-    }
-}
-function searchList($type, $filter){ // exibe o resultado da busca
-    global $mysqli;
-
-    if($type == "employee"){
-        $pesquisa = $_GET["searchEmpl"];
-    }else if ($type == "budget"){
-        $pesquisa = $_GET["searchBudget"];
-    }
-
-    $stmt = $mysqli->prepare("SELECT * FROM $type WHERE $filter LIKE ?"); // evita melhor SQL injection que "real_escape_string"
-    $searchTerm = '%' . $pesquisa . '%'; // permite pesquisas sem o nome completo
-
-    $stmt->bind_param("s", $searchTerm);
-    $stmt->execute();
-    $sql_query = $stmt->get_result();
-
-    if($sql_query->num_rows == 0){ // nenhum funcionario com o nome desejado foi encontrado
-        if($type == "employee"){
-        ?>
-            <p>Nenhum Funcionário Encontrado com o Nome: <strong>"<?php echo $pesquisa ?>"</strong></p>
-        <?php
-        }else if($type == "budget"){
-        ?>
-            <p>Nenhum Orçamento Encontrado com o Número: <strong> "<?php echo $pesquisa ?>"</strong></p>
-        <?php
-        }
-    }else{ // funcionario(s) encontrados(s)
-        if($type == "employee"){
-        ?>
-            <p>
-                <strong>
-                    <span class="highlight-word">
-                        Funcionário(s) Encontrado(s) com o filtro:
-                    </span>"<?php echo $pesquisa ?>"
-                </strong>
-            </p>
-
-            <table class="search-result">
-                <tr>
-                    <th>id</th>
-                    <th>Nome</th>
-                    <th>Nascimento</th>
-                    <th>Email</th>
-                    <th>Gênero</th>
-                    <th>Telefone</th>
-                    <th>Cargo</th>
-                    <th>Ingresso</th>
-                    <th>Área</th>
-                </tr>
-                <?php
-                while ($dados = $sql_query->fetch_assoc()) { // retornando os valores encontrados na query
-                    if ($dados["genderEmpl"] == "M") {
-                        $dados["genderEmpl"] = "Masculino";
-                    } else if ($dados["genderEmpl"] == "F") {
-                        $dados["genderEmpl"] = "Feminino";
-                    } else {
-                        $dados["genderEmpl"] = "Outro";
-                    }
-                ?>
-                    <tr>
-                        <td><?php echo $dados["idEmpl"] ?></td>
-                        <td><?php echo $dados["nameEmpl"] ?></td>
-                        <td><?php echo $dados["bDayEmpl"] ?></td>
-                        <td><?php echo $dados["emailEmpl"] ?></td>
-                        <td><?php echo $dados["genderEmpl"] ?></td>
-                        <td><?php echo $dados["numberEmpl"] ?></td>
-                        <td><?php echo $dados["emplPos"] ?></td>
-                        <td><?php echo $dados["entryDate"] ?></td>
-                        <td><?php echo $dados["areaEmpl"] ?></td>
-                    </tr>
-                <?php
-                }
-                ?>
-            </table>
-        <?php
-        }else if($type == "budget"){ // orçamentos(s) encontrados(s)
-        ?>
-            <p>
-                <strong>
-                    <span class="highlight-word">Orçamento(s) Encontrado(s)! com o filtro:</span> "<?php echo $pesquisa ?>"
-            </strong>
-            </p>
-            <table class="search-result">
-                <tr>
-                    <th>id</th>
-                    <th>Número</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Custo</th>
-                    <th>Cliente</th>
-                </tr>
-                <?php
-                while($dados = $sql_query->fetch_assoc()){ // retornando os valores encontrados na query
-                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
-                ?>
-                    <tr class="func-tr">
-                        <td><?php echo $dados["idBudget"]?></td>
-                        <td><?php echo $dados["numBudget"]?></td>
-                        <td><?php echo $dados["descBudget"]?></td>
-                        <td>
-                            <?php
-                            echo numfmt_format_currency($padrao, $dados["budgetValue"], "BRL")
-                            ?>
-                        </td>
-                        <td>
-                            <?php
-                            echo  numfmt_format_currency($padrao, $dados["budgetCost"], "BRL")
-                            ?>
-                        </td>
-                        <td><?php echo $dados["budgetClient"] ?></td>
-                    </tr>
-                <?php
-                }
-                ?>
-            </table>
-        <?php
-        }
-    }
-}
-
-function addToList($type)
-{
-    global $mysqli;
-
-    $stmt = $mysqli->prepare("SELECT * FROM $type WHERE ? = ?"); // evita melhor SQL injection que "real_escape_string"
-
-    if($type == "employee"){
-        $stmt->bind_param("ss",$_POST["emailEmpl"], $_POST['eEmail']);
-    }else if($type == "budget"){
-        $stmt->bind_param("si",$_POST["numBudget"], $_POST['bNum']);
-    }
     
-    $stmt->execute(); // executa o código sql
-    $sql_query = $stmt->get_result(); // retorna o resultado da query
+}
 
-    if($sql_query->num_rows != 0){ // já existe um item com o dado inserido
-        if($type == "employee"){
-            global $funcionarioExiste;
-            $funcionarioExiste = true;
+function totalList($type){ // mostra a *quantidade* de itens cadastrados em uma tabela
+    global $mysqli;
 
-        }else if($type == "budget"){
-            global $orcamentoExiste;
-            $orcamentoExiste = true;
+    $allowedTables = ["employee", "budget"];
+
+    if(in_array($type, $allowedTables)){
+        $sql_code = " SELECT count(*) FROM $type";
+        $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+        $result = $sql_query->fetch_row()[0];
+
+        switch($type){
+            case "employee": {
+                echo "<p><strong><span id=\"total-employes\">$result</span></strong></p>";
+                break;
+            }
+            case "budget": {
+                echo "<p><strong><span id=\"total-budgets\">$result</span></strong></p>";
+                break;
+            }
+            default :{
+                echo "\nERRO: nenhuma tabela válida selecionada\n";
+                break;
+            }
+        }
+    }else{
+        echo "ERRO";
+    }   
+}
+
+function showlist($type){
+    global $mysqli;
+    $allowedTables = ["employee", "budget"];
+
+    if(in_array($type, $allowedTables)){
+        $sql_code = "SELECT * FROM $type";
+        $sql_query = $mysqli->query($sql_code);
+
+        $amount = $sql_query->num_rows;
+
+        if($amount <= 0){ // não há nenhum dado cadastrado na tabela selecionada
+            switch($type){
+                case "employee": {
+                    echo "<p>Nenhum Funcionário Cadastrado no Momento</p>";
+                    break;
+                }
+                case "budget": {
+                    echo " <h2><span class=\"highlight-word\">Todos os Orçamentos</span></h2>";
+                    break;
+                }
+                default :{
+                    echo "\nERRO: nenhuma tabela válida selecionada\n";
+                    break;
+                }
+            }
+        }else{ // existem dados cadastrados na tabela selecionada -> enviar para página web
+            echo "<table>";
+
+            switch($type){
+                case "employee": {
+                    echo "
+                        <tr>
+                            <th>Id</th>
+                            <th>Nome</th>
+                            <th>Nascimento</th>
+                            <th>Email</th>
+                            <th>Gênero</th>
+                            <th>Telefone</th>
+                            <th>Cargo</th>
+                            <th>Ingresso</th>
+                            <th>Área</th>
+                        </tr>
+                    ";
+                    while($dados = $sql_query->fetch_assoc()){ // adiciona os dados da tabela e manda para a página web
+                        $dados["genderEmpl"] = match($dados["genderEmpl"]) {
+                            "M" => "Masculino",
+                            "F" => "Feminino",
+                            "O" => "Outro",
+                            default => $dados["genderEmpl"]
+                        };
+                        echo "
+                            <tr>
+                                <td>{$dados["idEmpl"]}</td>
+                                <td>{$dados["nameEmpl"]}</td>
+                                <td>{$dados["bDayEmpl"]}</td>
+                                <td>{$dados["emailEmpl"]}</td>
+                                <td>{$dados["genderEmpl"]}</td>
+                                <td>{$dados["numberEmpl"]}</td>
+                                <td>{$dados["emplPos"]}</td>
+                                <td>{$dados["entryDate"]}</td>
+                                <td>{$dados["areaEmpl"]}</td>
+                            </tr>
+                        ";
+                    }
+                    echo "</table>";
+                    break;
+                }
+                case "budget": {
+                    echo "
+                        <tr>
+                            <th>Id</th>
+                            <th>Número</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Custo</th>
+                            <th>Cliente</th>
+                        </tr>
+                    ";
+                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+
+                    
+
+                    while($dados = $sql_query->fetch_assoc()){ // adiciona os dados da tabela e manda para a página web
+                        $realValue = numfmt_format_currency($padrao, $dados["budgetValue"], "BRL");
+                        $realCost = numfmt_format_currency($padrao, $dados["budgetCost"], "BRL");
+                        echo "
+                            <tr>
+                                <td>{$dados["idBudget"]}</td>
+                                <td>{$dados["numBudget"]}</td>
+                                <td>{$dados["descBudget"]}</td>
+                                <td>{$realValue}</td>
+                                <td>{$realCost}</td>
+                                <td>{$dados["budgetClient"]}</td>
+                            </tr>
+                        ";
+                    }
+                    echo "</table>";
+                    break;
+                }
+                default:{
+                    echo "\nERRO: tabela selecionada não faz parte das válidas\n";
+                    break;
+                }
+            }
+           // echo "</table>";
+        }
+    }
+}
+
+function searchList($type, $filter){ // exibe o resultado da busca por um filtro escrito
+    global $mysqli;
+
+    $allowedTables = ["employee", "budget"];
+
+    if(in_array($type, $allowedTables)){ // evitar SQL injection
+        switch($type){
+            case "employee":{
+                $pesquisa = $_GET["searchEmpl"];
+                break;
+            }
+            case "budget":{
+                $pesquisa = $_GET["searchBudget"];
+                break;
+            }
+            default:{
+                echo "\nERRO: tabela selecionada não está no intervalo de validade\n";
+                break;
+            }
 
         }
 
-    }else{ // não existe um item com o dado inserido -> inserindo no banco de dados
-        if($type == "employee"){
-            $dataHoje = date("Y-m-d");
-            $minBirthDate = date("Y-m-d", strtotime("-16 years"));
+        $stmt = $mysqli->prepare("
+            SELECT * FROM $type 
+            WHERE $filter LIKE ?
+        ");
 
-            if($_POST["eBDay"] >= $minBirthDate){ // Data de nascimento inválida
-                global $nascimentoInvalido;
-                $nascimentoInvalido = true;
+        $searchTerm = "%{$pesquisa}%"; // permite pesquisas sem o nome completo -> interpolação de strings
 
-            }else if ($_POST["joinDate"] > $dataHoje){ // Data de ingresso inválida
-                global $ingressoInvalido;
-                $ingressoInvalido = true;
-                
-            }else{ // nada anormal
-                $stmt = $mysqli->prepare("
-                        INSERT INTO $type (nameEmpl, bDayEmpl, emailEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?)
-                    ");
+        $stmt->bind_param("s",$searchTerm);
+        $stmt->execute();
 
-                $stmt->bind_param(
-                    "ssssssss",
-                    $_POST["eName"],
-                    $_POST["eBDay"],
-                    $_POST["eEmail"],
-                    $_POST["eGender"],
-                    $_POST["eNum"],
-                    $_POST["position"],
-                    $_POST["joinDate"],
-                    $_POST["eArea"],
-                );
+        $sql_query = $stmt->get_result();
 
-                global $inserido;
+        $amount = $sql_query->num_rows;
 
-                if ($stmt->execute()) { // funcionário inserido no Banco de Dados
-                    $inserido = true;
-                    header("location: user.php");
-
-                } else { // funcionário não inserido no Banco de Dados
-                    echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
+        switch($amount){
+            case 0: { // nenhum item com o filtro digitado foi encontrado
+                switch($type){
+                    case "employee": {
+                        echo " <p>Nenhum Funcionário Encontrado com o Nome: <strong>\"$pesquisa\"</strong></p>";
+                        break;
+                    }
+                    case "budget":{
+                        echo "<p>Nenhum Orçamento Encontrado com o Número: <strong> \"$pesquisa\"</strong></p>";
+                        break;
+                    }
                 }
+                break;
             }
-        }else if($type == "budget"){
-            $stmt = $mysqli->prepare("
-                    INSERT INTO $type (numBudget, descBudget, budgetValue, budgetCost, budgetClient) VALUES
-                    (?, ?, ?, ?, ?)
-            ");
+            default: { // encontrou-se itens com o filtro digitado
+                switch($type){
+                    case "employee": {
+                        echo "
+                            <p>
+                                <strong>
+                                    <span class=\"highlight-word\">
+                                        Funcionário(s) Encontrado(s) com o filtro:
+                                    </span>\"$pesquisa\"
+                                </strong>
+                            </p>
+                            <table>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Nome</th>
+                                    <th>Nascimento</th>
+                                    <th>Email</th>
+                                    <th>Gênero</th>
+                                    <th>Telefone</th>
+                                    <th>Cargo</th>
+                                    <th>Ingresso</th>
+                                    <th>Área</th>
+                                </tr>
+                        ";
+                        while ($dados = $sql_query->fetch_assoc()) { // retornando os valores encontrados 
+                            $dados["genderEmpl"] = match($dados["genderEmpl"]) {
+                                "M" => "Masculino",
+                                "F" => "Feminino",
+                                "O" => "Outro",
+                                default => $dados["genderEmpl"]
+                            }; 
+                            echo "
+                                <tr>
+                                    <td>{$dados["idEmpl"]}</td>
+                                    <td>{$dados["nameEmpl"]}</td>
+                                    <td>{$dados["bDayEmpl"]}</td>
+                                    <td>{$dados["emailEmpl"]}</td>
+                                    <td>{$dados["genderEmpl"]}</td>
+                                    <td>{$dados["numberEmpl"]}</td>
+                                    <td>{$dados["emplPos"]}</td>
+                                    <td>{$dados["entryDate"]}</td>
+                                    <td>{$dados["areaEmpl"]}</td>
+                                </tr>
+                            ";
+                        }
+                        echo "</table>";
+                        $stmt->close(); 
+                        break;
+                    }
+                    case "budget":{
+                        echo "
+                            <p>
+                                <strong>
+                                    <span class=\"highlight-word\">
+                                        Orçamento(s) Encontrado(s) com o filtro:
+                                    </span>\"$pesquisa\"
+                                </strong>
+                            </p>
+                            <table>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Número</th>
+                                    <th>Descrição</th>
+                                    <th>Valor</th>
+                                    <th>Custo</th>
+                                    <th>Cliente</th>
+                                </tr>
+                        ";
+                        $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
 
-            $stmt->bind_param(
-                "isdds",
-                $_POST["bNum"],
-                $_POST["bDesc"],
-                $_POST["bValue"],
-                $_POST["bCost"],
-                $_POST["bClient"]
-            );
+                        while($dados = $sql_query->fetch_assoc()){ // adiciona os dados da tabela e manda para a página web
+                            $realValue = numfmt_format_currency($padrao, $dados["budgetValue"], "BRL");
+                            $realCost = numfmt_format_currency($padrao, $dados["budgetCost"], "BRL");
+                            echo "
+                                <tr>
+                                    <td>{$dados["idBudget"]}</td>
+                                    <td>{$dados["numBudget"]}</td>
+                                    <td>{$dados["descBudget"]}</td>
+                                    <td>{$realValue}</td>
+                                    <td>{$realCost}</td>
+                                    <td>{$dados["budgetClient"]}</td>
+                                </tr>
+                            ";
+                        }
+                        echo "</table>";
+                        $stmt->close();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
 
-            if($stmt->execute()){ // orçamento inserido no Banco de Dados
-                $inserido = true;
-                header("location: user.php");
+function addToList($type){ // adiciona um novo item a lista
+    global $mysqli;
 
-            }else{ // orçameto não inserido no Banco de Dados
-                 echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
+    $allowedTables = ["employee", "budget"];
+    
+    if(in_array($type, $allowedTables)){ // tipo válido
+        $stmt = $mysqli->prepare("SELECT * FROM $type WHERE ? = ?"); // evitar SQL injection
+
+        switch($type){
+            case "employee":{
+                $stmt->bind_param("ss",$_POST["emailEmpl"], $_POST['eEmail']);
+                break;
+            }
+            case "budget": {
+                 $stmt->bind_param("si",$_POST["numBudget"], $_POST['bNum']);
+                break;
+            }
+        }
+        $stmt->execute();
+        $sql_query = $stmt->get_result();
+
+        $amount = $sql_query->num_rows;
+
+        switch($amount){
+            case 0: { // adicionar novo funcionário
+                switch($type){
+                    case "employee":{
+                        $currentDate = date("Y-m-d");
+                        $minBDate = date("Y-m-d", strtotime("-16 years"));
+
+                        $bd = $_POST["eBDay"];
+                        $entry = $_POST["joinDate"];
+
+                        if($bd >= $minBDate){ // Data de nascimento inválida
+                            global $nascimentoInvalido;
+                            $nascimentoInvalido = true;
+                        }else if($entry > $currentDate){ // Data de ingresso inválida
+                            global $ingressoInvalido;
+                            $ingressoInvalido = true;
+                        }else{ // nada de anormal
+                            $stmt = $mysqli->prepare("
+                                INSERT INTO $type (nameEmpl, bDayEmpl, emailEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                            ");
+
+                            $stmt->bind_param(
+                                "ssssssss",
+                                $_POST["eName"],
+                                $_POST["eBDay"],
+                                $_POST["eEmail"],
+                                $_POST["eGender"],
+                                $_POST["eNum"],
+                                $_POST["position"],
+                                $_POST["joinDate"],
+                                $_POST["eArea"],
+                            );
+
+                            global $insert;
+                            if($stmt->execute()){ // funcionário inserido no Banco de Dados
+                                $insert = true;
+                                header("location: user.php");
+                                $stmt->close();
+                            }else { // funcionário não inserido no Banco de Dados
+                                echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
+                            }
+                        }    
+                        break;
+                    }
+                    case "budget":{
+                        $stmt = $mysqli->prepare("
+                            INSERT INTO $type (numBudget, descBudget, budgetValue, budgetCost, budgetClient) 
+                            VALUES (?, ?, ?, ?, ?)
+                        ");
+                        $stmt->bind_param(
+                            "isdds",
+                            $_POST["bNum"],
+                            $_POST["bDesc"],
+                            $_POST["bValue"],
+                            $_POST["bCost"],
+                            $_POST["bClient"]
+                        );
+
+                        global $insert;
+                        if($stmt->execute()){ // funcionário inserido no Banco de Dados
+                            $insert = true;
+                            header("location: user.php");
+                            $stmt->close();
+                        }else { // funcionário não inserido no Banco de Dados
+                            echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+            default: { // já existe um item com os dados inseridos
+                global $exist;
+                $exist = true;
+                break;
             }
         }
     }
@@ -356,104 +409,126 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // verifica se o formulário do tipo
 
 function filterList($type){ // filtra a lista de dados com base no filtro selecionado
     global $mysqli;
-    if ($type == "employee") {
-        $filter = $mysqli->real_escape_string($_GET["selectFilterEmpl"]);
-    } else if ($type == "budget") {
-        $filter = $mysqli->real_escape_string($_GET["selectFilterBudget"]);
-    }
 
-    $sql_code =
-        "
-        SELECT * FROM $type
-        ORDER BY $filter asc
-        ";
+    $allowedTables = ["employee", "budget"];
 
-    $sql_query = $mysqli->query($sql_code) or die($mysqli->error); // executa o código sql
+    if(in_array($type, $allowedTables)){ // tipo válido 
+        switch($type){
+            case "employee": {
+                $allowedFilters = ["idEmpl", "nameEmpl", "areaEmpl", "emplPos", "bDayEmpl"];
+                $filter = $mysqli->real_escape_string($_GET["selectFilterEmpl"]);
+                if(in_array($filter, $allowedFilters)){ // evitar sql injection
+                    $sql_code = $mysqli->prepare("
+                        SELECT * FROM $type 
+                        ORDER BY $filter ASC
+                    ");
 
-    if ($type == "employee") {
-        ?>
-        <p class="highlight-word"><strong>Funcionários Filtrados por <?php echo $filter ?></strong></p>
-        <table class="search-result">
-            <tr>
-                <th>id</th>
-                <th>Nome</th>
-                <th>Nascimento</th>
-                <th>Email</th>
-                <th>Gênero</th>
-                <th>Telefone</th>
-                <th>Cargo</th>
-                <th>Ingresso</th>
-                <th>Área</th>
-            </tr>
-            <?php
-            while ($dados = $sql_query->fetch_assoc()) {
-                if($dados["genderEmpl"] == "M") {
-                    $dados["genderEmpl"] = "Masculino";
-                }else if($dados["genderEmpl"] == "F"){
-                    $dados["genderEmpl"] = "Feminino";
-                }else{
-                    $dados["genderEmpl"] = "Outro";
+                    $sql_code->execute();
+                    $sql_query = $sql_code->get_result();
+
+                    match($filter){
+                        "idEmpl"   => $filter = "Id",
+                        "nameEmpl" => $filter ="Nome",
+                        "areaEmpl" => $filter ="Área de Atuação",
+                        "emplPos"  => $filter ="Cargo",
+                        "bDayEmpl" => $filter ="Idade"
+                    };
+                    echo "
+                        <p><strong><span class=\"highlight-word\">Funcionários Filtrados por </span>\"$filter</strong>\"</p>
+                        <table>
+                            <tr>
+                                <th>id</th>
+                                <th>Nome</th>
+                                <th>Nascimento</th>
+                                <th>Email</th>
+                                <th>Gênero</th>
+                                <th>Telefone</th>
+                                <th>Cargo</th>
+                                <th>Ingresso</th>
+                                <th>Área</th>
+                            </tr>
+                    ";
+                    while ($dados = $sql_query->fetch_assoc()) {
+                        $dados["genderEmpl"] = match($dados["genderEmpl"]) {
+                            "M" => "Masculino",
+                            "F" => "Feminino",
+                            "O" => "Outro",
+                            default => $dados["genderEmpl"]
+                        }; 
+                        echo "
+                            <tr>
+                                <td>{$dados["idEmpl"]}</td>
+                                <td>{$dados["nameEmpl"]}</td>
+                                <td>{$dados["bDayEmpl"]}</td>
+                                <td>{$dados["emailEmpl"]} </td>
+                                <td>{$dados["genderEmpl"]}</td>
+                                <td>{$dados["numberEmpl"]}</td>
+                                <td>{$dados["emplPos"]} </td>
+                                <td>{$dados["entryDate"]} </td>
+                                <td>{$dados["areaEmpl"]} </td>
+                            </tr>";
+                    }
+                    echo "</table>";
+                    $sql_code->close();
                 }
-            ?>
-                <tr class="func-tr">
-                    <td><?php echo $dados["idEmpl"] ?></td>
-                    <td><?php echo $dados["nameEmpl"] ?></td>
-                    <td><?php echo $dados["bDayEmpl"] ?></td>
-                    <td><?php echo $dados["emailEmpl"] ?></td>
-                    <td><?php echo $dados["genderEmpl"] ?></td>
-                    <td><?php echo $dados["numberEmpl"] ?></td>
-                    <td><?php echo $dados["emplPos"] ?></td>
-                    <td><?php echo $dados["entryDate"] ?></td>
-                    <td><?php echo $dados["areaEmpl"] ?></td>
-                </tr>
-            <?php
+                break;
             }
-            ?>
-        </table>
-    <?php
-    } else if ($type == "budget") {
-    ?>
-        <p class="highlight-word"><strong>Orçamento(s) Filtrados por <?php echo $filter?> </strong></p>
-        <table class="search-result">
-            <tr>
-                <th>id</th>
-                <th>Número</th>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Custo</th>
-                <th>Cliente</th>
-            </tr>
-            <?php
-            while ($dados = $sql_query->fetch_assoc()) {
-                $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
-            ?>
+            case "budget": {
+                $filter = $mysqli->real_escape_string($_GET["selectFilterBudget"]);
+                $allowedFilters = ["numBudget", "budgetValue", "budgetCost", "budgetClient"];
+                if(in_array($filter, $allowedFilters)){ // evitar sql injection
+                    $sql_code = $mysqli->prepare("
+                        SELECT * FROM $type 
+                        ORDER BY $filter ASC
+                    ");
 
-                <tr class="func-tr">
-                    <td><?php echo $dados["idBudget"]?></td>
-                    <td><?php echo $dados["numBudget"]?></td>
-                    <td><?php echo $dados["descBudget"]?></td>
-                    <td>
-                        <?php
-                        echo numfmt_format_currency($padrao, $dados["budgetValue"], "BRL")
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                        echo  numfmt_format_currency($padrao, $dados["budgetCost"], "BRL")
-                        ?>
-                    </td>
-                    <td><?php echo $dados["budgetClient"] ?></td>
-                </tr>
+                    $sql_code->execute();
+                    $sql_query = $sql_code->get_result();
 
-            <?php
+                     match($filter){
+                        "numBudget"   => $filter = "Número",
+                        "budgetValue" => $filter ="Valor",
+                        "budgetCost" => $filter ="Custo",
+                        "budgetClient"  => $filter ="Cliente",
+                    };
+
+                    echo "
+                       <p><strong><span class=\"highlight-word\">Orçamentos Filtrados por </span>\"$filter</strong>\"</p>
+                        <table>
+                            <tr>
+                                <th>id</th>
+                                <th>Número</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Custo</th>
+                                <th>Cliente</th>
+                            </tr>   
+                    ";
+                    $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
+                    while ($dados = $sql_query->fetch_assoc()) {
+                        $realValue = numfmt_format_currency($padrao, $dados["budgetValue"], "BRL");
+                        $realCost = numfmt_format_currency($padrao, $dados["budgetCost"], "BRL");
+                        echo "
+                            <tr>
+                                <td>{$dados["idBudget"]}</td>
+                                <td>{$dados["numBudget"]}</td>
+                                <td>{$dados["descBudget"]}</td>
+                                <td>{$realValue}</td>
+                                <td>{$realCost}</td>
+                                <td>{$dados["budgetClient"]}</td>
+                            </tr>
+                        ";
+                    }
+                    echo "</table>";
+                    $sql_code->close();
+                }
+                break;
             }
-            ?>
-        </table>
-<?php
+        }
     }
 }
-?>
 
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -584,7 +659,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                         <p>Total de Funcionários</p>
                     </div>
 
-                    <form action="" method="get">
+                    <form method="get">
                         <div class="search-bar">
                             <label for="isearch">Pesquisar Funcionário pelo Nome</label>
                             <input type="search" name="searchEmpl" id="isearch" class="input-control" placeholder="Pressione Enter para Pesquisar">
@@ -593,7 +668,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
 
 
                     <div class="filter-bar">
-                        <form action="" method="get">
+                        <form method="get">
                             <label for="iselect">Filtrar Funcionários</label>
                             <select name="selectFilterEmpl" id="iselect" class="input-control">
                                 <optgroup label="Crescente">
@@ -601,6 +676,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                     <option value="nameEmpl">Nome</option>
                                     <option value="areaEmpl">Área de Atuação</option>
                                     <option value="emplPos">Cargo</option>
+                                    <option value="bDayEmpl">Idade</option>
                                 </optgroup>
 
                             </select>
@@ -616,24 +692,26 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                 </div>
 
                 <div class="section-bottom">
+                    
                     <?php
-                    if (isset($_GET["selectFilterEmpl"])) { // exibe todos os Funcionários filtrados
-                        filterList(type: "employee"); 
-                    }
-
-                    if (isset($_GET["searchEmpl"])){ // // exibe todos os Funcionários com o nome digitado
-                        searchList(type: "employee", filter: "nameEmpl");
-                    }
-
-                    showList(type: "employee"); // exibe todos os Funcionários
+                        if (isset($_GET["searchEmpl"])){ // // exibe todos os Funcionários com o nome digitado
+                            searchList(type: "employee", filter: "nameEmpl");
+                        }
+                        echo "<h2><span class=\"highlight-word\">Todos os Funcionários</span></h2>";
+                        if (isset($_GET["selectFilterEmpl"])) { // exibe todos os Funcionários filtrados
+                            filterList(type: "employee"); 
+                        }else{
+                            showList(type: "employee"); // exibe todos os Funcionários
+                        }
                     ?>
+
                 </div>
 
             </section>
             <!--Funcionários-->
 
             <!--Funcionários Adicionar-->
-            <section class="right-section addEmployee hidden-div">
+            <section class="right-section addEmployee hidden-div" >
                 <nav class="section-header">
                     <div>
                         <h1>
@@ -668,7 +746,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     <p>Voltar</p>
                 </div>
 
-                <form action="" method="post" autocomplete="on" class="section-bottom">
+                <form method="post" autocomplete="on" class="section-bottom">
                     <header>
                         <p>Preencha o formulário abaixo para adicionar um <span class="highlight-word">Novo Funcionário</span></p>
                     </header>
@@ -730,12 +808,17 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                             </select>
                         </div>
 
+                        <div class="forms-item">
+                            <label for="ipassword">Senha</label>
+                            <input type="password" name="password" id="ipassword" class="input-control"  placeholder="• • • • • • •" maxlength="30" required>
+                        </div>
+
                     </div>
 
                     <?php 
-                        if(isset($inserido)){
+                        if(isset($insert)){
                             echo "<span class=\"sucess-text\"><p>Funcionário com email <strong>\"{$_POST["eEmail"]}\"</strong> inserido no Banco de Dados com sucesso</p></span>";
-                            $inserido = null; // reseta a variável para não exibir mais de uma vez
+                            $insert = null; // reseta a variável para não exibir mais de uma vez
                         }
                     ?>
 
@@ -765,7 +848,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                 ";
                             $ingressoInvalido = null; // reseta a variável para não exibir mais de uma vez
                         }
-                        if (isset($nascimetoInvalido)) {
+                        if (isset($nascimentoInvalido)) {
                             echo "
                                     <span class=\"error-text\">
                                         <p>
@@ -774,7 +857,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                         <p>Funcionário não inserido</p>
                                     </span>
                                 ";
-                            $nascimetoInvalido = null; // reseta a variável para não exibir mais de uma vez
+                            $nascimentoInvalido = null; // reseta a variável para não exibir mais de uma vez
                         }
                     }
                     ?>
@@ -819,7 +902,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                         <p>Total de Orçamentos</p>
                     </div>
 
-                    <form action="" method="get">
+                    <form method="get">
                         <div class="search-bar">
                             <label for="isearch">Pesquisa rápida de um Orçamento</label>
                             <input type="search" name="searchBudget" id="isearch" class="input-control" placeholder="Número do Orçamento">
@@ -827,12 +910,14 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </form>
 
                     <div class="filter-bar">
-                        <form action="" method="get">
-                            <label for="iselect">Filtrar Orçamentos</label>
-                            <select name="select" id="iselect" class="input-control">
+                        <form method="get">
+                            <label for="iselectFilterBudget">Filtrar Orçamentos</label>
+                            <select name="selectFilterBudget" id="iselectFilterBudget" class="input-control">
                                 <option value="idBudget">Id</option>
+                                <option value="numBudget">Número</option>
                                 <option value="budgetValue">Valor(Crescente)</option>
                                 <option value="budgetCost">Custo(Crescente)</option>
+                                <option value="budgetClient">Cliente(A-Z)</option>
                             </select>
                             <div class="button-submit" style="margin-top: 1em;">
                                 <button class="filter-button ">Filtrar</button>
@@ -848,18 +933,19 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                 </div>
 
                 <div class="section-bottom">
-                    <?php
-                    if (isset($_GET["selectFilterBudget"])) { // filtra os Orçamentos
-                        filterList(type: "budget");
-                    }
-
-                    if (isset($_GET["searchBudget"])) { // exibe os Orçamentos com o número digitado no input
-                        searchList(type: "budget", filter: "numBudget");
-                    }
-
-                    showList(type: "budget"); // exibe todos os Orçamentos se nada for escrito
-
-                    ?>
+                    
+                        <?php
+                        if (isset($_GET["searchBudget"])) { // exibe os Orçamentos com o número digitado no input
+                            searchList(type: "budget", filter: "numBudget");
+                        }
+                        echo "<h2><span class=\"highlight-word\">Todos os Orçamentos</span></h2>";
+                        if (isset($_GET["selectFilterBudget"])) { // filtra os Orçamentos
+                            filterList(type: "budget");
+                        }else{
+                            showList(type: "budget"); // exibe todos os Orçamentos se nada for escrito
+                        }
+                        ?>
+                    
                 </div>
             </section>
             <!--Orçamentos-->
@@ -900,7 +986,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     <p>Voltar</p>
                 </div>
 
-                <form action="" method="post" autocomplete="on" class="section-bottom">
+                <form method="post" autocomplete="on" class="section-bottom">
                     <header>
                         <p>Preencha o formulário abaixo para adicionar um <span class="highlight-word">Novo Orçamento</span></p>
                     </header>
@@ -933,9 +1019,9 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
 
                     </div>
                     <?php 
-                        if(isset($inserido)){
+                        if(isset($insert)){
                             echo "<span class=\"sucess-text\"><p>Orçamento de número <strong>\" {$_POST["bNum"]}\"</strong> inserido no Banco de Dados com sucesso</p></span>";
-                            $inserido = null; // reseta a variável para não exibir mais de uma vez
+                            $insert = null; // reseta a variável para não exibir mais de uma vez
                         }
                     ?>
                     <div class="button-submit">
