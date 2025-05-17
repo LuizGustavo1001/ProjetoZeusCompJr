@@ -341,10 +341,16 @@ td{
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 @media(max-width: 1200px){
+
+    tr, th, td{
+        font-size: 1em;
+
+    }
     tr{
         display: grid;
         grid-template-columns: 1fr 1fr;
         margin-bottom: 1.5em;
+
     }
 
     th, td{
@@ -358,5 +364,7 @@ td{
         border-bottom: 1px solid var(--input-border-clr);
 
     }
+
+    
 
 }
