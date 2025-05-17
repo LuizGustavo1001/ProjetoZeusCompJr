@@ -65,7 +65,7 @@
     <link rel="stylesheet" href="../styles/general.css">
     <link rel="stylesheet" href="../styles/dark-mode.css">
 
-    <script src="../dark-mode.js" defer></script>
+    <script src="../scripts/dark-mode.js" defer></script>
 
     <link rel="shortcut icon" href="../icon/favicon.ico" type="image/x-icon">
 

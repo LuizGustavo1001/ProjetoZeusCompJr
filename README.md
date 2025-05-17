@@ -6,6 +6,8 @@
  <p>- Teste de Sistema backend de Banco de Dados para <strong>Gerenciar Funcionários e orçamentos</strong> de uma <strong>Empresa</strong></p>
  <p>- <strong>FrontEnd</strong>: <strong>HTML5</strong> com as <strong>CSS</strong> + <strong>JavaScript</strong></p>
  
+ <hr>
+ 
  <h3>📟 API </h3>
  <p>
     - Inicialmente, projetada utilizando a linguagem <strong>PHP</strong> para conectar um <strong>Banco de Dados</strong>(BackEnd) com uma <strong>Página Web</strong>(FrontEnd)
@@ -56,26 +58,27 @@
      <li>📝 <strong>Estoques</strong>(Em Desenvolvimento) </li>
  </ol>
 
+ <hr>
  <p>🌑 Possui suporte para <strong>Modo Escuro</strong> </p>
  <p>🗺️ Navegação entre as sessões (user-page) utilizando <strong>JavaScript</strong> </p>
  <p>📱  Possui suporte à responsividade em dispositivos portáteis</p>
+ <hr>
 
  <h3>📂 Esquema de Pastas</h3>
     <pre>
         |
         |-- public (Interface Visual)
-        |   |-- general-images (imagens utilizadas em todas as páginas)
-        |   |-- icon (ícone/favicon das páginas)
-        |   |-- login-page (página de login)
-        |   |-- sign-up-page (página de cadastro)
-        |   |-- users-page (página do usuário já logado)
-        |   |-- dark-mode.css (estilos do Modo Escuro)
-        |   |-- dark-mode.js (scripts do Modo Escuro)
-        |   |-- general-style.js (estilos utilizados em todas as páginas)
+        |   |-- general-images                  (imagens utilizadas em todas as páginas)
+        |   |-- icon                            (ícone/favicon das páginas)
+        |   |-- login-page                      (página de login)
+        |   |-- scripts                         (JavaScript utilizado nas páginas)
+        |   |-- sign-up-page                    (página de cadastro)
+        |   |-- styles                          (Folhas de Estilo utilizadas nas páginas)
+        |   |-- users-page                      (página do usuário já logado)
         |
-        |-- dbConnection.php (Conectar o Banco de Dados com o FrontEnd)
+        |-- dbConnection.php                    (Conectar o Banco de Dados com o FrontEnd)
         |
-        |--DumpEmpresaPZ.sql (Clone do Banco de Dados)
+        |--DumpEmpresaPZ.sql                    (Clone do Banco de Dados)
     </pre>
 <hr>
 
