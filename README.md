@@ -15,7 +15,7 @@
  <p>- Gerenciar Funcionários, Orçamentos e Estoques, adicionando e pesquisando</p>
  <p>🔐 Senhas protegidas com <strong>Sistema Hash</strong> imbutido no banco de dados: senhas são armazenadas em chaves</p>
  <p>- Validação de filtros escolhidos por meio de vetores indicando quais os possíveis valores válidos (evitar SQL injection)</p>
- <p>- Uso de<strong>$stmt</strong> e seus derivados para evitar SQL injection</p>
+ <p>- Uso de<strong> $stmt</strong> e seus derivados para evitar SQL injection</p>
  <p>- Possui soluções para usuários que tentarem acessar a páginas bloqueadas</p>
  <img src="preview-images/preview3.png" alt=""></img>
  <ol>
