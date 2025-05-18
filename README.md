@@ -1,6 +1,6 @@
 # ProjetoZeusCompJr
  <h2>Projeto de um site conectado a um Banco de Dados em MySQL utilizando PHP</h2>
- <h3>Preview do Site ⬇️</h3>
+ <h3>⬇️ Preview do Site</h3>
  <a href="preview.jpg"><img src="preview2.png" alt=""></img></a>
  
  <p>- Teste de Sistema backend de Banco de Dados para <strong>Gerenciar Funcionários e orçamentos</strong> de uma <strong>Empresa</strong></p>
@@ -17,6 +17,7 @@
  <p>- Validação de filtros escolhidos por meio de vetores indicando quais os possíveis valores válidos (evitar SQL injection)</p>
  <p>- Uso de<strong>$stmt</strong> e seus derivados para evitar SQL injection</p>
  <p>- Possui soluções para usuários que tentarem acessar a páginas bloqueadas</p>
+ <img src="preview3.png" alt=""></img>
  <ol>
     <li>👤 <strong>Funcionários</strong></li>
     <p>- Mostrar na tela 

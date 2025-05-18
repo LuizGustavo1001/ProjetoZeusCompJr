@@ -63,10 +63,10 @@ CREATE TABLE `employee` (
   `emplPos` varchar(30) NOT NULL,
   `entryDate` date NOT NULL,
   `areaEmpl` varchar(30) NOT NULL,
-  `emplPassword` varchar(30) NOT NULL,
+  `emplPassword` varchar(100) NOT NULL,
   PRIMARY KEY (`idEmpl`),
   UNIQUE KEY `emailEmpl` (`emailEmpl`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'Farofilson Bananilson','2001-06-10','bananilson@gmail.com','M','(31) 9 7505 425','Recursos Humanos','2018-01-11','Gerencia','$2y$10$tN7xnsaHApLYL/z39DCxCu3'),(2,'Luiz Lopes','2004-01-18','guatavw1001@gmail.com','M','(31) 9 7403 314','Projetos','2020-05-13','Gerencia','$2y$10$a.K8tY2R1ogvgPuuLw.nzOZ'),(3,'Daniel Drumond','2001-10-22','gonzaguinha@gmail.com','M','(31) 9 5424 865','Operacoes','2023-10-23','SAC','$2y$10$ih7wQQYlclxPUhd11jmigem'),(4,'Ademilson Tupilson','1990-10-11','ademilson@gmail.com','M','(35) 9 4533 903','Operacoes','2020-02-18','Projetos','$2y$10$GbC2W4LvaWHy4Vgd4TlgCem'),(5,'Ana Banana','2006-05-15','anaBnn@gmail.com','F','(31) 9 8779 425','Gerencia','2024-10-24','Projetos','$2y$10$G3VZQp36uQkUnsfEphAGeuX'),(6,'Joelma Fenizza','1979-11-01','fenilson10@gmail.com','F','(33) 9 4319 483','Gerente Projetos','2009-03-09','Projetos','$2y$10$nKYuEj1V0kks8RLGcwGq5uI');
+INSERT INTO `employee` VALUES (1,'Farofilson Bananilson','2001-06-10','bananilson@gmail.com','M','(31) 9 7505 425','Recursos Humanos','2018-01-11','Gerencia','$2y$10$40jqOXWnjVJOgf0cgARSEOFfp3OAhgAF.xsvFE8Nq2wNd135pJ98O'),(2,'Clara Fenizza','1979-11-18','fenilson10@gmail.com','F','(33) 9 4319 987','Gerencia','2009-03-19','Projetos','$2y$10$9QDBZOjGnnKIf7vAQUKWtOymnBAMsHFlNdEiVuZARPXem/8uPlroi'),(3,'Ademilson Tupilson','1990-10-11','ademilson@gmail.com','M','(35) 9 4533 903','Operacoes','2020-02-18','Projetos','$2y$10$s5K8c8hDQ1sZGx3K1JQZWes7qaDk71vNfQQ0G1HMGHtuPSlv8dTMG'),(4,'Ana Banana','2006-05-15','anaBnn@gmail.com','F','Operacoes','(31) 9 8779 4255','2024-10-24','Projetos','$2y$10$zFDotE8yLBYWTDNhSKcHZelN6te9H7NDN5o3iWeC7OY56Wx59/v6e');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,4 +92,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-16 16:46:05
+-- Dump completed on 2025-05-18 11:42:31

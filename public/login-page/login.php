@@ -2,35 +2,49 @@
 include "../../dbConnection.php";
 
 if (isset($_POST['userEmail'], $_POST['userPassword'])) {
-    $stmt = $mysqli->prepare('SELECT idEmpl, nameEmpl, emailEmpl, emplPos, areaEmpl, emplPassword FROM employee WHERE emailEmpl = ?');
-    $stmt->bind_param('s', $_POST['userEmail']);
+    $email = $_POST['userEmail'];
+    $password = $_POST['userPassword'];
+
+    $stmt = $mysqli->prepare('SELECT * FROM employee WHERE emailEmpl = ?');
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $storedPassword = $row['emplPassword'];
+    $amount = $result->num_rows;
 
-        if ($_POST['userPassword'] === $storedPassword) {
-            session_start();
-            // Login com senha em texto puro -> migrar para hash
-            $newHash = password_hash($_POST['userPassword'], PASSWORD_DEFAULT);
-            $updateStmt = $mysqli->prepare('UPDATE employee SET emplPassword = ? WHERE emailEmpl = ?');
-            $updateStmt->bind_param('ss', $newHash, $_POST['userEmail']);
-            $updateStmt->execute();
-            $updateStmt->close();
-        }else{
-            session_start();
-            $_SESSION['username'] = $row['nameEmpl'];
-            $_SESSION['email']    = $row['emailEmpl'];
-            $_SESSION['cargo']    = $row['emplPos'];
-            $_SESSION['id']       = $row['idEmpl'];
-            $_SESSION['area']     = $row['areaEmpl'];
-
-            header("Location: ../users-page/user.php");
+    switch($amount){
+        case 0:{ // nenhum funcionário cadastrados com as credenciais digitadas
+             $erroLogin = true;
+             break;
         }
-    } else {
-        $erroLogin = true;
+        default:{ // existe algum funcionário com as credencias digitadas
+            $data = $result->fetch_assoc(); // pegando os dados do resultado do sql_query e armazenando em um vetor 
+            $storedPassword = $data['emplPassword']; // senha no banco de dados
+
+            if($storedPassword == $password){ // Login com senha em texto puro no Banco de Dados -> migrar para hash
+                $newHash = password_hash($password, PASSWORD_DEFAULT);
+                $updateStmt = $mysqli->prepare("UPDATE employee SET emplPassword = ? WHERE emailEmpl = ?");
+                $updateStmt->bind_param("ss", $newHash, $email);
+                $updateStmt->execute();
+                $updateStmt->close();
+                $storedPassword = $newHash; // atualizar o valor da senha armazenada no Banco de Dados
+            }
+
+            if(password_verify($password, $storedPassword)){ // verificar se a senha hasheada é a mesma digitada pelo usuário
+                session_start();
+                $_SESSION['username'] = $data['nameEmpl'];
+                $_SESSION['email']    = $data['emailEmpl'];
+                $_SESSION['cargo']    = $data['emplPos'];
+                $_SESSION['id']       = $data['idEmpl'];
+                $_SESSION['area']     = $data['areaEmpl'];
+
+                header("Location: ../users-page/user.php");
+                exit();
+            }else{
+                $erroLogin = true; // possui uma função abaixo que utiliza essa variavel
+            }
+            break;
+        }
     }
     $stmt->close(); // Fecha a declaração
 }
