@@ -121,12 +121,12 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
 
                     <form action="" method="post" autocomplete="on">
                         <div class="forms-item">
-                            <label for="iemail">Email</label>
+                            <label for="iUserEmail">Email</label>
                             <input type="email" name="userEmail" id="iUserEmail" class="input-control" required
                                 placeholder="Seu Email Institucional" maxlength="40">
                         </div>
                         <div class="forms-item">
-                            <label for="isenha">Senha</label>
+                            <label for="iUserPassword">Senha</label>
                             <input type="password" name="userPassword" id="iUserPassword" class="input-control" required
                                 placeholder="• • • • • • •" maxlength="30">
                         </div>

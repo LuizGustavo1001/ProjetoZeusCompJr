@@ -1,3 +1,34 @@
+<?php 
+    include "../../dbConnection.php";
+
+    if(isset($_POST["email"])){
+        $email = $_POST["email"];
+
+        $stmt = $mysqli->prepare("
+            SELECT emailEmpl FROM employee
+            WHERE emailEmpl = ?
+        ");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $amount = $stmt->get_result()->num_rows;
+
+        switch($amount){
+            case 0:{ // nenhum usuário cadastrado com o email inserido
+                $email404 = true;
+                break;
+            }
+            case 1:{ // usuário com o email digitado foi encontrado
+                session_start();
+                $_SESSION["emailReciever"] = $email;
+                header("location: passwordToken.php");
+                exit();
+            }
+        }
+        $stmt->close();
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -11,7 +42,7 @@
     <link rel="stylesheet" href="../styles/general.css">
     <link rel="stylesheet" href="../styles/dark-mode.css">
 
-    <script src="../dark-mode.js" defer></script>
+    <script src="../scripts/dark-mode.js" defer></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,8 +65,8 @@
 
 <body>
     <main>
-     <!--Logo and Dark/light mode Switch-->
         <div class="content">
+    <!--Logo and Dark/light mode Switch-->
             <div class="content-header">
                 <a href="login.php">
                     <img src="../general-images/church-symbol.png" alt="church-symbol" id="church-symbol">
@@ -71,11 +102,10 @@
 
             </div>
             <div class="content-bottom-forms">
-                <form action="cadastro.php" method="post" autocomplete="on">
+                <form method="post" autocomplete="on">
                     <div class="forms-item">
                         <label for="iemail">Endereço de Email</label>
-                        <input type="email" name="email" id="iemail" class="input-control"
-                            placeholder="Digite aqui o email de recuperação">
+                        <input type="email" name="email" id="iemail" class="input-control" placeholder="Digite aqui o email de recuperação" required>
                     </div>
 
                     <div class="button-submit">
@@ -85,6 +115,17 @@
                           </svg>
                           Enviar Código
                         </button>
+                        <?php 
+                        if(isset($email404)){
+                            echo "
+                                <span class=\"error-text\">
+                                    <p>Erro: Email Inserido <strong>não está cadastrado</strong></p>
+                                    <p>Tente Novamente com outro endereço de email ou</p>
+                                    <p><a href=\"../sign-up-page/sign-up.php\">Cadastre-se Aqui</a></p>
+                                </span>
+                                ";
+                        }
+                        ?>
                     </div>
 
                 </form>
