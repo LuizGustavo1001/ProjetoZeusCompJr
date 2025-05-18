@@ -59,14 +59,14 @@ CREATE TABLE `employee` (
   `bDayEmpl` date NOT NULL,
   `emailEmpl` varchar(40) NOT NULL,
   `genderEmpl` enum('M','F','O') NOT NULL,
-  `numberEmpl` varchar(15) DEFAULT NULL,
+  `numberEmpl` varchar(16) DEFAULT NULL,
   `emplPos` varchar(30) NOT NULL,
   `entryDate` date NOT NULL,
   `areaEmpl` varchar(30) NOT NULL,
   `emplPassword` varchar(100) NOT NULL,
   PRIMARY KEY (`idEmpl`),
   UNIQUE KEY `emailEmpl` (`emailEmpl`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,8 +75,35 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'Farofilson Bananilson','2001-06-10','bananilson@gmail.com','M','(31) 9 7505 425','Recursos Humanos','2018-01-11','Gerencia','$2y$10$40jqOXWnjVJOgf0cgARSEOFfp3OAhgAF.xsvFE8Nq2wNd135pJ98O'),(2,'Clara Fenizza','1979-11-18','fenilson10@gmail.com','F','(33) 9 4319 987','Gerencia','2009-03-19','Projetos','$2y$10$9QDBZOjGnnKIf7vAQUKWtOymnBAMsHFlNdEiVuZARPXem/8uPlroi'),(3,'Ademilson Tupilson','1990-10-11','ademilson@gmail.com','M','(35) 9 4533 903','Operacoes','2020-02-18','Projetos','$2y$10$s5K8c8hDQ1sZGx3K1JQZWes7qaDk71vNfQQ0G1HMGHtuPSlv8dTMG'),(4,'Ana Banana','2006-05-15','anaBnn@gmail.com','F','Operacoes','(31) 9 8779 4255','2024-10-24','Projetos','$2y$10$zFDotE8yLBYWTDNhSKcHZelN6te9H7NDN5o3iWeC7OY56Wx59/v6e');
+INSERT INTO `employee` VALUES (1,'Farofilson Bananilson','2001-06-10','bananilson@gmail.com','M','(31) 9 7505 4252','Recursos Humanos','2018-01-11','Gerencia','$2y$10$40jqOXWnjVJOgf0cgARSEOFfp3OAhgAF.xsvFE8Nq2wNd135pJ98O'),(2,'Clara Fenizza','1979-11-18','fenilson10@gmail.com','F','(33) 9 4319 9873','Gerencia','2009-03-19','Projetos','$2y$10$9QDBZOjGnnKIf7vAQUKWtOymnBAMsHFlNdEiVuZARPXem/8uPlroi'),(3,'Ademilson Tupilson','1990-10-11','ademilson@gmail.com','M','(35) 9 4533 9034','Operacoes','2020-02-18','Projetos','$2y$10$s5K8c8hDQ1sZGx3K1JQZWes7qaDk71vNfQQ0G1HMGHtuPSlv8dTMG'),(4,'Ana Banana','2006-05-15','anaBnn@gmail.com','F','(31) 9 8779 4255','Operacoes','2024-10-24','Projetos','$2y$10$zFDotE8yLBYWTDNhSKcHZelN6te9H7NDN5o3iWeC7OY56Wx59/v6e');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rescuepassword`
+--
+
+DROP TABLE IF EXISTS `rescuepassword`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rescuepassword` (
+  `idRescue` int(11) NOT NULL AUTO_INCREMENT,
+  `rescueToken` varchar(6) NOT NULL,
+  `dayLimit` varchar(2) NOT NULL,
+  `hourLimit` varchar(5) NOT NULL,
+  `emailReciever` varchar(40) NOT NULL,
+  PRIMARY KEY (`idRescue`),
+  UNIQUE KEY `rescueToken` (`rescueToken`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rescuepassword`
+--
+
+LOCK TABLES `rescuepassword` WRITE;
+/*!40000 ALTER TABLE `rescuepassword` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rescuepassword` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -92,4 +119,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-18 11:42:31
+-- Dump completed on 2025-05-18 19:38:34
