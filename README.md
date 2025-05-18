@@ -118,7 +118,7 @@
     <li>✅ Linkar página de login com página do usuário já logado</li>
     <li>✅ Linkar página de cadastrar novo usuário com o Banco de Dados</li>
     <li>✅ Melhorar CSS</li>
-    <li>Mandar código de recuperação de senha pelo email</li>
+    <li>✅ Enviar código de recuperação de senha pelo email</li>
     <li>✅ Segurança de Senhas</li>
     <li>Botão de Lembrar Usuário</li>
 </ul>
