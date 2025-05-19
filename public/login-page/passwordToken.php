@@ -26,45 +26,51 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
 
     try{
         $email->isSMTP();
-        $email->Host = "smtp.gmail.com";
-        $email->SMTPAuth = true;
-        $email->Username = "gustavw1001@gmail.com";
-        $email->Password = "wnvz eldg fbwg udzp";
+        $email->Host = "smtp.gmail.com"; 
+        $email->SMTPAuth = true; 
+        $email->Username = "testemailsluiz@gmail.com"; 
+        $email->Password = "aemd afyi ofth dauh"; 
 
         $email->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $email->Port = 587;
+        $email->Port = 587; 
 
-        $email->setFrom("gustavw1001@gmail.com"); // remetente
-        $email->addAddress($emailReciever); // destinatiario
+        $email->setFrom("testemailsluiz@gmail.com", "Equipe de Suporte"); // remetente
+        $email->addAddress($emailReciever); // destinatário
+        $email->isHTML(true); 
+        $email->CharSet = "UTF-8"; // suportar caracteres especiais 
 
-        $email->isHTML(true);
-        $email->Subject = "Token de Recuperacao de Senha";
-        $email->Body = "<h1>Empresa Projeto Zeus</h1>";
-        $email->Body .= "<p>Seu Token de Verificação de Email: <strong><h2>$token</h2></strong></p>";
+        $email->Subject = "Token de Recuperação de Senha"; 
+        $email->Body = "<h1>Empresa Projeto Zeus</h1>"; 
+        $email->Body .= "<p>Seu Token de Verificação de Email para Redefinir de Senha: <strong><h2>$token</h2></strong></p>";
         $email->Body .= "<p>Insira o Token acima na área destinada no site abaixo</p>";
+        $email->Body .= "
+            <p>O Token é válido por apenas <strong>1 Hora</strong>, após esse tempo é necessário solicitar outro</p>
+        ";
+        $email->Body .= "<p>Atenciosamente, <strong>Equipe Projeto Zeus</strong></p>";
+        $email->Body .= "<p>Este é um email automático, não responda.</p>";
         $email->AltBody = "Empresa Projeto Zeus\n Seu Token de Verificação de Email: $token";
 
         if($email->send()){ // email enviado com sucesso
-            global $mysqli;
-
-            date_default_timezone_set('America/Sao_Paulo'); // definir fuso horário local
+            global $mysqli; 
+            date_default_timezone_set('America/Sao_Paulo'); // definir fuso horário local 
             
-            $stmt = $mysqli->prepare("
+            $stmt = $mysqli->prepare(" 
                 INSERT INTO rescuepassword (rescueToken, dayLimit, hourLimit, emailReciever) 
-                VALUES (?,?,?,?)
+                VALUES (?,?,?,?) 
             ");
 
             $limitTime = date("H:i", strtotime("+1 hours"));
-            $limitDay = date("Y-m-d");
+            $limitDay = date("Y-m-d"); 
 
             $stmt->bind_param("ssss", $token, $limitDay, $limitTime, $emailReciever);
 
             $stmt->execute();
             $stmt->close();
-            $_SESSION["email"] = $emailReciever;
-            $_SESSION["token"] = $token;
 
-            header("location: rescuePassword.php");
+            $_SESSION["email"] = $emailReciever; 
+            $_SESSION["token"] = $token; 
+
+            header("location: rescuePassword.php"); 
 
         }else {
             echo "Email não enviado";
@@ -77,7 +83,7 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
     $currentTime = date("H:i");
     $currentDate = date("Y-m-d");
     $stmt = $mysqli->prepare("
-        SELECT rescueToken FROM rescuepassword 
+        SELECT rescueToken FROM rescuepassword
         WHERE dayLimit < ? AND hourLimit < ?
     ");
 
