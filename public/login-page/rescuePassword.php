@@ -28,7 +28,6 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
                 break;
             }
             default:{ // token consta no Banco de Dados
-                
                 // remover o token do banco de dados 
                 $stmtDelete = $mysqli->prepare("
                     DELETE FROM rescuepassword 
@@ -43,10 +42,8 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
             }
         }
         $stmt->close();
-
+    }
 }
-}
-
 
 ?>
 
@@ -72,7 +69,8 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
         @media(min-width: 1024px){
             .right-content-img{
                 display: block;
-                background: url(images/rescue-password.png) center center;
+                background: url(images/rescuePassword.png) no-repeat center center;
+                background-size: cover;
             }
         }
     </style>

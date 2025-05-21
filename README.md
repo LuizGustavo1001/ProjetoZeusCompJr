@@ -69,13 +69,14 @@
     <pre>
         |
         |-- public                              (Interface Visual)
-        |   |-- general-images                  (imagens utilizadas em todas as páginas)
-        |   |-- icon                            (ícone/favicon das páginas)
-        |   |-- login-page                      (página de login)
+        |   |-- general-images                  (Imagens utilizadas em todas as páginas)
+        |   |-- icon                            (Ícone/favicon das páginas)
+        |   |-- login-page                      (Página de login)
+        |   |-- mailLibrary                     (Biblioteca PHP utilizada para enviar email)
         |   |-- scripts                         (JavaScript utilizado nas páginas)
-        |   |-- sign-up-page                    (página de cadastro)
+        |   |-- sign-up-page                    (Página de cadastro)
         |   |-- styles                          (Folhas de Estilo utilizadas nas páginas)
-        |   |-- users-page                      (página do usuário já logado)
+        |   |-- users-page                      (Página do usuário já logado)
         |
         |-- dbConnection.php                    (Conectar o Banco de Dados com o FrontEnd)
         |
