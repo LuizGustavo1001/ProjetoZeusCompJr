@@ -1,14 +1,8 @@
 <?php
 include "../../dbConnection.php";
 
-if (! isset($_SESSION)) {
-    session_start(); // iniciar a sessão
-
-}
-
-if (! isset($_SESSION["email"])) { // tentando acessar a página do usuário sem estar logado
+if (! isset($_COOKIE["email"])) { // tentando acessar a página do usuário sem estar logado
     header("Location: error.php");
-    
 }
 
 function totalList($type){ // mostra a *quantidade* de itens cadastrados em uma tabela
@@ -20,21 +14,13 @@ function totalList($type){ // mostra a *quantidade* de itens cadastrados em uma 
         $sql_code = " SELECT count(*) FROM $type";
         $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
         $result = $sql_query->fetch_row()[0];
+        match($type){
+            "employee" => $text = "<p><strong><span id=\"total-employes\">$result</span></strong></p>",
+            "budget"   => $text = "<p><strong><span id=\"total-budgets\">$result</span></strong></p>",
+            default    => $text = "\nERRO: nenhuma tabela válida selecionada\n",
+        };
 
-        switch($type){
-            case "employee": {
-                echo "<p><strong><span id=\"total-employes\">$result</span></strong></p>";
-                break;
-            }
-            case "budget": {
-                echo "<p><strong><span id=\"total-budgets\">$result</span></strong></p>";
-                break;
-            }
-            default :{
-                echo "\nERRO: nenhuma tabela válida selecionada\n";
-                break;
-            }
-        }
+        echo $text;
     }else{
         echo "ERRO";
     }   
@@ -51,25 +37,18 @@ function showlist($type){
         $amount = $sql_query->num_rows;
 
         if($amount <= 0){ // não há nenhum dado cadastrado na tabela selecionada
-            switch($type){
-                case "employee": {
-                    echo "<p>Nenhum Funcionário Cadastrado no Momento</p>";
-                    break;
-                }
-                case "budget": {
-                    echo " <h2><span class=\"highlight-word\">Todos os Orçamentos</span></h2>";
-                    break;
-                }
-                default :{
-                    echo "\nERRO: nenhuma tabela válida selecionada\n";
-                    break;
-                }
-            }
+            match($type){
+                "employee" => $text = "<p>Nenhum Funcionário Cadastrado no Momento</p>",
+                "budget"   => $text = " <p>Nenhum Orçamento Cadastrado no Momento</p>",
+                default    => $text = "\nERRO: nenhuma tabela válida selecionada\n"
+            };
+
+            echo $text;
+
         }else{ // existem dados cadastrados na tabela selecionada -> enviar para página web
             echo "<table>";
-
             switch($type){
-                case "employee": {
+                case "employee":{
                     echo "
                         <tr>
                             <th>Id</th>
@@ -107,7 +86,7 @@ function showlist($type){
                     echo "</table>";
                     break;
                 }
-                case "budget": {
+                case "budget":{
                     echo "
                         <tr>
                             <th>Id</th>
@@ -119,8 +98,6 @@ function showlist($type){
                         </tr>
                     ";
                     $padrao = numfmt_create("pt-BR", style: NumberFormatter::CURRENCY);
-
-                    
 
                     while($dados = $sql_query->fetch_assoc()){ // adiciona os dados da tabela e manda para a página web
                         $realValue = numfmt_format_currency($padrao, $dados["budgetValue"], "BRL");
@@ -144,7 +121,6 @@ function showlist($type){
                     break;
                 }
             }
-           // echo "</table>";
         }
     }
 }
@@ -155,21 +131,11 @@ function searchList($type, $filter){ // exibe o resultado da busca por um filtro
     $allowedTables = ["employee", "budget"];
 
     if(in_array($type, $allowedTables)){ // evitar SQL injection
-        switch($type){
-            case "employee":{
-                $pesquisa = $_GET["searchEmpl"];
-                break;
-            }
-            case "budget":{
-                $pesquisa = $_GET["searchBudget"];
-                break;
-            }
-            default:{
-                echo "\nERRO: tabela selecionada não está no intervalo de validade\n";
-                break;
-            }
-
-        }
+        match($type){
+            "employee" => $pesquisa = $_GET["searchEmpl"],
+            "budget"   => $pesquisa = $_GET["searchBudget"],
+            default    => $pesquisa = "\nERRO: tabela selecionada não está no intervalo de validade\n"
+        };
 
         $stmt = $mysqli->prepare("
             SELECT * FROM $type 
@@ -177,7 +143,6 @@ function searchList($type, $filter){ // exibe o resultado da busca por um filtro
         ");
 
         $searchTerm = "%{$pesquisa}%"; // permite pesquisas sem o nome completo -> interpolação de strings
-
         $stmt->bind_param("s",$searchTerm);
         $stmt->execute();
 
@@ -187,21 +152,19 @@ function searchList($type, $filter){ // exibe o resultado da busca por um filtro
 
         switch($amount){
             case 0: { // nenhum item com o filtro digitado foi encontrado
-                switch($type){
-                    case "employee": {
-                        echo " <p>Nenhum Funcionário Encontrado com o Nome: <strong>\"$pesquisa\"</strong></p>";
-                        break;
-                    }
-                    case "budget":{
-                        echo "<p>Nenhum Orçamento Encontrado com o Número: <strong> \"$pesquisa\"</strong></p>";
-                        break;
-                    }
-                }
+                match($type){
+                    "employee" => $text = " <p>Nenhum Funcionário Encontrado com o Nome: <strong>\"$pesquisa\"</strong></p>",
+                    "budget"   => $text = " <p>Nenhum Orçamento Encontrado com o Número: <strong> \"$pesquisa\"</strong></p>",
+                    default    => $text = " <p>Erro</p>"
+                };
+
+                echo $text;
+
                 break;
             }
             default: { // encontrou-se itens com o filtro digitado
                 switch($type){
-                    case "employee": {
+                    case "employee":{
                         echo "
                             <p>
                                 <strong>
@@ -294,24 +257,18 @@ function searchList($type, $filter){ // exibe o resultado da busca por um filtro
     }
 }
 
-function addToList($type){ // adiciona um novo item a lista
+function addToList($type){ // adiciona um novo item a lista selecionada
     global $mysqli;
 
     $allowedTables = ["employee", "budget"];
     
     if(in_array($type, $allowedTables)){ // tipo válido
         $stmt = $mysqli->prepare("SELECT * FROM $type WHERE ? = ?"); // evitar SQL injection
+        match($type){
+            "employee" => $stmt->bind_param("ss",$_POST["emailEmpl"], $_POST['eEmail']),
+            "budget"   => $stmt->bind_param("si",$_POST["numBudget"], $_POST['bNum']),
+        };
 
-        switch($type){
-            case "employee":{
-                $stmt->bind_param("ss",$_POST["emailEmpl"], $_POST['eEmail']);
-                break;
-            }
-            case "budget": {
-                 $stmt->bind_param("si",$_POST["numBudget"], $_POST['bNum']);
-                break;
-            }
-        }
         $stmt->execute();
         $sql_query = $stmt->get_result();
 
@@ -356,7 +313,7 @@ function addToList($type){ // adiciona um novo item a lista
                                 $insert = true;
                                 header("location: user.php");
                                 $stmt->close();
-                            }else { // funcionário não inserido no Banco de Dados
+                            }else{ // funcionário não inserido no Banco de Dados
                                 echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
                             }
                         }    
@@ -486,9 +443,9 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     $sql_query = $sql_code->get_result();
 
                      match($filter){
-                        "numBudget"   => $filter = "Número",
-                        "budgetValue" => $filter ="Valor",
-                        "budgetCost" => $filter ="Custo",
+                        "numBudget"     => $filter = "Número",
+                        "budgetValue"   => $filter ="Valor",
+                        "budgetCost"    => $filter ="Custo",
                         "budgetClient"  => $filter ="Cliente",
                     };
 
@@ -640,11 +597,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
+                        <img src="<?= htmlspecialchars($_COOKIE['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
-                            <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                            <p id="username-display"><?php echo $_COOKIE["username"]?></p>
                             <strong>
-                                <p><?php echo $_SESSION["area"]?></p>
+                                <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
                     </div>
@@ -727,11 +684,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
+                        <img src="<?= htmlspecialchars($_COOKIE['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
-                            <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                            <p id="username-display"><?php echo $_COOKIE["username"]?></p>
                             <strong>
-                                <p><?php echo $_SESSION["area"]?></p>
+                                <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
                     </div>
@@ -882,11 +839,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
+                        <img src="<?= htmlspecialchars($_COOKIE['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
-                            <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                            <p id="username-display"><?php echo $_COOKIE["username"]?></p>
                             <strong>
-                                <p><?php echo $_SESSION["area"]?></p>
+                                <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
                     </div>
@@ -966,11 +923,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
+                        <img src="<?= htmlspecialchars($_COOKIE['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
-                            <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                            <p id="username-display"><?php echo $_COOKIE["username"]?></p>
                             <strong>
-                                <p><?php echo $_SESSION["area"]?></p>
+                                <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
                     </div>
@@ -1054,11 +1011,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
+                        <img src="<?= htmlspecialchars($_COOKIE['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
-                            <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                            <p id="username-display"><?php echo $_COOKIE["username"]?></p>
                             <strong>
-                                <p><?php echo $_SESSION["area"]?></p>
+                                <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
                     </div>
@@ -1095,11 +1052,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
+                        <img src="<?= htmlspecialchars($_COOKIE['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
-                            <p id="username-display"><?php echo $_SESSION["username"]?></p>
+                            <p id="username-display"><?php echo $_COOKIE["username"]?></p>
                             <strong>
-                                <p><?php echo $_SESSION["area"]?></p>
+                                <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
                     </div>

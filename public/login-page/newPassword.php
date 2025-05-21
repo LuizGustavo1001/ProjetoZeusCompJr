@@ -1,15 +1,15 @@
 <?php 
 include "../../dbConnection.php";
 
-if(! isset($_SESSION)){
-    session_start();
-}
+//if(! isset($_SESSION)){
+  //  session_start();
+//}
 
-if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um token
+if(! isset($_COOKIE["emailReciever"])){ // entrando na página sem solicitar um token
     header("location: password.php");
-}else{
+} else {
     if(isset($_POST["password"])){
-        $email = $_SESSION["email"];
+        $email = $_COOKIE["email"];
         $stmt = $mysqli->prepare("
             SELECT emailEmpl FROM employee 
             WHERE emailEmpl = ?
@@ -21,15 +21,12 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
 
         $stmt->close();
 
-        session_destroy();
+        //session_destroy();
 
         header("location: login.php");
-        echo "Senha redefinida com sucesso";
 
     }
 }
-
-
 
 ?>
 

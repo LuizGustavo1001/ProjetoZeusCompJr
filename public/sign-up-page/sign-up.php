@@ -62,8 +62,8 @@
                 $stmt2->bind_param('ssssssssss', $username, $email, $bday, $gender, $number, $position, $entryDate, $area, $passwordHash, $imagePath);
 
                 if($stmt2->execute()){
-                    session_start();
-                    $_SESSION['registrado'] = true;
+                    //session_start();
+                    setcookie('registrado', 'true', time() + 3600, '/');
                     header("location:../login-page/login.php");
                     exit();
                 }
