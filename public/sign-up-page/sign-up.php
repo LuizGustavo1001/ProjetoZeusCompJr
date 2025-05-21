@@ -107,6 +107,13 @@
                 background: url(images/signUpBg.png) no-repeat center center;
                 background-size: cover;
                 height: 127vh;
+                transition: all var(--transition-time);
+
+            }
+
+            .dark-mode .right-content-img{
+                background:url(images/dm-signUpBg.png) no-repeat center center;
+                background-size: cover;
 
             }
 
@@ -115,6 +122,7 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 1.8em;
                 align-items: end;
+
             }
         }
     </style>

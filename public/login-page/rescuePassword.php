@@ -71,6 +71,13 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
                 display: block;
                 background: url(images/rescuePassword.png) no-repeat center center;
                 background-size: cover;
+                transition: all var(--transition-time);
+
+            }
+            .dark-mode .right-content-img{
+                background:url(images/dm-rescuePassword.png) no-repeat center center;
+                background-size: cover;
+                
             }
         }
     </style>
