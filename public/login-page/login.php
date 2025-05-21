@@ -1,10 +1,7 @@
 <?php 
 include "../../dbConnection.php";
 
-if(! isset($_SESSION)){
-    session_start();
-
-}
+// Não é necessário iniciar a sessão, pois vamos usar apenas cookies
 
 if (isset($_POST['userEmail'], $_POST['userPassword'])) {
     $email = $_POST['userEmail'];
@@ -36,14 +33,17 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
             }
 
             if(password_verify($password, $storedPassword)){ // verificar se a senha hasheada é a mesma digitada pelo usuário
-                session_start();
-                $_SESSION['username'] = $data['nameEmpl'];
-                $_SESSION['email']    = $data['emailEmpl'];
-                $_SESSION['cargo']    = $data['emplPos'];
-                $_SESSION['id']       = $data['idEmpl'];
-                $_SESSION['area']     = $data['areaEmpl'];
-                $_SESSION['picture']  = $data['profilePicPath'];
- 
+                // login dura por 1 hora
+                setcookie('username', $data['nameEmpl'],       time() + 3600, "/");
+                setcookie('email',    $data['emailEmpl'],      time() + 3600, "/");
+                setcookie('cargo',    $data['emplPos'],        time() + 3600, "/");
+                setcookie('id',       $data['idEmpl'],         time() + 3600, "/");
+                setcookie('area',     $data['areaEmpl'],       time() + 3600, "/");
+                setcookie('picture',  $data['profilePicPath'], time() + 3600, "/");
+                setcookie('bday',     $data['bDayEmpl'],       time() + 3600, "/");
+                setcookie('gender',   $data['genderEmpl'],     time() + 3600, "/");
+                setcookie('number',   $data['numberEmpl'],     time() + 3600, "/");
+
                 header("Location: ../users-page/user.php");
                 exit();
             }else{
@@ -124,13 +124,13 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                     <p>Bem vindo de volta!</p>
                     <h1>Faça seu <span class="highlight-word">login</span> novamente</h1>
                     <?php 
-                        if(isset($_SESSION['registrado'])){
+                        if(isset($_COOKIE['registrado'])){
                             echo "
                                 <span class=\"sucess-text\" style= \"text-align: left;\">
                                     <p>Usuário Registrado com sucesso, digite suas credenciais para entrar na conta</p>
                                 </span>
                             ";
-                            $_SESSION['registrado'] = null; // resetar o valor 
+                            $_COOKIE['registrado'] = null; // resetar o valor 
                         }
                     ?>
                 </div>
