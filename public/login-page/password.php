@@ -54,6 +54,13 @@
                 display: block;
                 background: url(images/forgotPassword.png) no-repeat center center;
                 background-size: cover;
+                transition: all var(--transition-time);
+
+            }
+            .dark-mode .right-content-img{
+                background:url(images/dm-forgotPassword.png) no-repeat center center;
+                background-size: cover;
+                
             }
         }
 

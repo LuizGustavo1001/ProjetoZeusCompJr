@@ -37,6 +37,15 @@
         .right-content-img{
             background:url(images/errorBg.png) no-repeat center center;
             background-size: cover;
+
+            transition: all var(--transition-time);
+            
+        }
+        
+        .dark-mode .right-content-img{
+            background:url(images/dm-errorBg.png) no-repeat center center;
+            background-size: cover;
+
         }
 
         svg{

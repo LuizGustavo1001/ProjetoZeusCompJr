@@ -82,7 +82,12 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                 display: block;
                 background: url(images/loginBg.png) no-repeat center center;
                 background-size: cover;
+                transition: all var(--transition-time);
 
+            }
+            .dark-mode .right-content-img{
+                background:url(images/dm-loginBg.png)no-repeat center center;
+                background-size: cover;
             }
         }
         

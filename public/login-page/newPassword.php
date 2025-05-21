@@ -52,8 +52,15 @@ if(! isset($_COOKIE["emailReciever"])){ // entrando na página sem solicitar um 
         @media(min-width: 1024px){
             .right-content-img{
                 display: block;
-                background: url(images/b5.png) no-repeat center center;
+                background: url(images/newPassword.png) no-repeat center center;
                 background-size: cover;
+                transition: all var(--transition-time);
+
+            }
+            .dark-mode .right-content-img{
+                background:url(images/dm-newPassword.png) no-repeat center center;
+                background-size: cover;
+                
             }
         }
     </style>
