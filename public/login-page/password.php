@@ -52,8 +52,8 @@
         @media(min-width: 1024px){
             .right-content-img{
                 display: block;
-                background: url(images/forgot-password-bg.png) center center;
-
+                background: url(images/forgotPassword.png) no-repeat center center;
+                background-size: cover;
             }
         }
 

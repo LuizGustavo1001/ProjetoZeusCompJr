@@ -640,7 +640,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user.png" alt="User Profile Picture">
+                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
                             <p id="username-display"><?php echo $_SESSION["username"]?></p>
                             <strong>
@@ -727,7 +727,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user.png" alt="User Profile Picture">
+                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
                             <p id="username-display"><?php echo $_SESSION["username"]?></p>
                             <strong>
@@ -882,7 +882,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user.png" alt="User Profile Picture">
+                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
                             <p id="username-display"><?php echo $_SESSION["username"]?></p>
                             <strong>
@@ -933,7 +933,6 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                 </div>
 
                 <div class="section-bottom">
-                    
                         <?php
                         if (isset($_GET["searchBudget"])) { // exibe os Orçamentos com o número digitado no input
                             searchList(type: "budget", filter: "numBudget");
@@ -945,7 +944,6 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                             showList(type: "budget"); // exibe todos os Orçamentos se nada for escrito
                         }
                         ?>
-                    
                 </div>
             </section>
             <!--Orçamentos-->
@@ -968,7 +966,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user.png" alt="User Profile Picture">
+                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
                             <p id="username-display"><?php echo $_SESSION["username"]?></p>
                             <strong>
@@ -1056,7 +1054,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user.png" alt="User Profile Picture">
+                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
                             <p id="username-display"><?php echo $_SESSION["username"]?></p>
                             <strong>
@@ -1097,7 +1095,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <div class="user-data">
-                        <img src="../general-images/user.png" alt="User Profile Picture">
+                        <img src="<?= htmlspecialchars($_SESSION['picture']) ?>" alt="Foto de perfil">
                         <div class="user-data-text">
                             <p id="username-display"><?php echo $_SESSION["username"]?></p>
                             <strong>

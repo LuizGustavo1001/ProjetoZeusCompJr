@@ -1,6 +1,11 @@
 <?php 
 include "../../dbConnection.php";
 
+if(! isset($_SESSION)){
+    session_start();
+
+}
+
 if (isset($_POST['userEmail'], $_POST['userPassword'])) {
     $email = $_POST['userEmail'];
     $password = $_POST['userPassword'];
@@ -37,7 +42,8 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                 $_SESSION['cargo']    = $data['emplPos'];
                 $_SESSION['id']       = $data['idEmpl'];
                 $_SESSION['area']     = $data['areaEmpl'];
-
+                $_SESSION['picture']  = $data['profilePicPath'];
+ 
                 header("Location: ../users-page/user.php");
                 exit();
             }else{
@@ -74,7 +80,8 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
         @media(min-width: 1024px){
             .right-content-img{
                 display: block;
-                background: url(images/login-bg.png) center center;
+                background: url(images/loginBg.png) no-repeat center center;
+                background-size: cover;
 
             }
         }
@@ -116,6 +123,16 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                 <div class="content-bottom-text">
                     <p>Bem vindo de volta!</p>
                     <h1>Faça seu <span class="highlight-word">login</span> novamente</h1>
+                    <?php 
+                        if(isset($_SESSION['registrado'])){
+                            echo "
+                                <span class=\"sucess-text\" style= \"text-align: left;\">
+                                    <p>Usuário Registrado com sucesso, digite suas credenciais para entrar na conta</p>
+                                </span>
+                            ";
+                            $_SESSION['registrado'] = null; // resetar o valor 
+                        }
+                    ?>
                 </div>
                 <div class="content-bottom-forms">
 
@@ -136,7 +153,7 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                                 <input type="checkbox" name="lembrar" id="ilembrar" style="transform: scale(1.3);">
                                 <label for="ilembrar">Lembrar Usuário</label>
                             </div>
-                            <a href="password.html">Esqueci minha Senha</a>
+                            <a href="password.php">Esqueci minha Senha</a>
                         </div>
 
                         <div class="button-submit">
@@ -148,31 +165,31 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                                 </svg>
                                 Entrar
                             </button>
-<?php 
-                            if(isset($erroLogin)){
-                                echo "
-                                <span class=\"error-text\">
-                                    <p>Erro: Credencias Inseridas <strong>não estão cadastradas</strong></p>
-                                    <p>Clique no Botão Abaixo para<strong> Cadastrar-se</strong></p>
-                                    <p>ou Tente Novamente</p>
-                                </span>
+                            <?php 
+                                if(isset($erroLogin)){
+                                    echo "
+                                    <span class=\"error-text\">
+                                        <p>Erro: Credencias Inseridas <strong>não estão cadastradas</strong></p>
+                                        <p>Clique no Botão Abaixo para<strong> Cadastrar-se</strong></p>
+                                        <p>ou Tente Novamente</p>
+                                    </span>
+                                    ";
+                                    $erroLogin = null; // limpa a mensagem de erro
+                                }
+                                if(isset($cadastrado)){
+                                    echo "
+                                    <span class=\"sucess-text\">
+                                        <p>Usuário cadastrado com sucesso</p>
+                                        <p>Insira novamente seus dados acima para Entrar na Área do Usuário</p>
+                                    </span>
                                 ";
-                                $erroLogin = null; // limpa a mensagem de erro
-                            }
-                            if(isset($cadastrado)){
-                                echo "
-                                <span class=\"sucess-text\">
-                                    <p>Usuário cadastrado com sucesso</p>
-                                    <p>Insira novamente seus dados acima para Entrar na Área do Usuário</p>
-                                </span>
-                               ";
-                                $cadastrado = null; // limpa a mensagem de erro
-                            }
-?>  
+                                    $cadastrado = null; // limpa a mensagem de erro
+                                }
+                            ?>
                         </div>
                     </form>
                     <div id="create-account" style="padding-top: 2em; text-align: center;"  >
-                            <a href="../sign-up-page/sign-up.php">Não está cadastrado ainda? Cadastre-se Aqui!</a>
+                        <a href="../sign-up-page/sign-up.php">Não está cadastrado ainda? Cadastre-se Aqui!</a>
                     </div>
                 </div>
             </div>

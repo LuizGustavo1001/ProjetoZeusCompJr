@@ -35,7 +35,8 @@
 
     <style>
         .right-content-img{
-            background:url(images/error-bg.jpg) bottom left;
+            background:url(images/errorBg.png) no-repeat center center;
+            background-size: cover;
         }
 
         svg{

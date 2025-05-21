@@ -79,33 +79,15 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
         echo "Erro ao enviar o email: {$email->ErrorInfo}";
     }
 
-    //verificação dos tokens que já estão invalidos inseridos no Banco de Dados
+    //verificação dos tokens que já estão inválidos inseridos no Banco de Dados
     $currentTime = date("H:i");
     $currentDate = date("Y-m-d");
-    $stmt = $mysqli->prepare("
-        SELECT rescueToken FROM rescuepassword
-        WHERE dayLimit < ? AND hourLimit < ?
-    ");
 
-    $stmt->bind_param("ss", $currentDate, $currentTime);
+    $stmt = $mysqli->prepare("DELETE FROM rescuepassword WHERE dayLimit < ? OR (dayLimit = ? AND hourLimit > ?)");
 
+    $stmt->bind_param("sss", $currentDate, $currentDate, $currentTime);
     $stmt->execute();
-    $result = $stmt->get_result();
-
-    while ($row = $result->fetch_assoc()) {
-        $tokenToDelete = $row['rescueToken'];
-        $stmtDelete = $mysqli->prepare("
-            DELETE FROM rescuepassword 
-            WHERE rescueToken = ?
-        ");
-        $stmtDelete->bind_param("s", $tokenToDelete);
-        $stmtDelete->execute();
-
-        $stmtDelete->close();
-    }
-
     $stmt->close();
-
     //verificação dos tokens que já estão invalidos inseridos no Banco de Dados
 
 }

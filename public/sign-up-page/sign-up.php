@@ -13,33 +13,53 @@
         if($result and $result->num_rows > 0){ // existe um usuário com o email digitado anteriormente
             $emailExistente = true;
         }else{ // cadastrar novo usuário
-            $username     =     $mysqli->real_escape_string($_POST["eName"]);
-            $bday         =     $mysqli->real_escape_string($_POST["eBDay"]);
-            $gender       =     $mysqli->real_escape_string($_POST["eGender"]);
-            $number       =     $mysqli->real_escape_string($_POST["eNum"]);
-            $position     =     $mysqli->real_escape_string($_POST["position"]);
-            $entryDate    =     $mysqli->real_escape_string($_POST["joinDate"]);
-            $area         =     $mysqli->real_escape_string($_POST["eArea"]);
+            $username     = $mysqli->real_escape_string($_POST["eName"]);
+            $bday         = $mysqli->real_escape_string($_POST["eBDay"]);
+            $gender       = $mysqli->real_escape_string($_POST["eGender"]);
+            $number       = $mysqli->real_escape_string($_POST["eNum"]);
+            $position     = $mysqli->real_escape_string($_POST["position"]);
+            $entryDate    = $mysqli->real_escape_string($_POST["joinDate"]);
+            $area         = $mysqli->real_escape_string($_POST["eArea"]);
             // criar um hash para a senha ser armazenada no BD
-            $passwordHash =     password_hash($_POST['senha'], PASSWORD_DEFAULT);
+            $passwordHash =  password_hash($_POST['senha'], PASSWORD_DEFAULT);
+            $imagePath    =  null; // valor padrão caso não envie imagem
+
+            if(isset($_FILES["picture"])){
+                $uploadDirect = "../users-page/user-images";
+
+                if(! is_dir($uploadDirect)){ // verifica se o diretório existe
+                    mkdir($uploadDirect, 0755, true); // permissão de modificar e adicionar
+                }
+
+                $fileTemp = $_FILES["picture"] ["tmp_name"]; // salva o caminho até a imagem no servidor temporariamente
+                $fileName = basename($_FILES["picture"]["name"]); // pegar o nome do arquivo enviado pelo usuário
+                $fileExt  = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); // tipo do arquivo(png, por exemplo)
+                $allowedTypes = ["jpg", "png", "jpeg", "webp"]; // tipos válidos de fotos de perfil
+
+                if(in_array($fileExt, $allowedTypes)){ // imagem está em um formato permitido
+                    if($_FILES["picture"]["size"] <= 2* 1024 * 1024){ // imagem menor que 2MB -> adiciona a pasta local
+                        $uniqueName = uniqid("img_") . "." . $fileExt;
+                        $imagePath = $uploadDirect . '/' . $uniqueName;
+                        move_uploaded_file($fileTemp, $imagePath);
+                    }
+                }
+            }
 
             $currentDate = date("Y-m-d");
             $minBDate = date("Y-m-d", strtotime("-16 years"));
 
             if($bday >= $minBDate){ // data de nascimento invalida (precisa ser maior de 16 anos)
-                global $invalidBDay;
                 $invalidBDay = true;
-            }else if($joinDate > $currentDate){ //  data de entrada na empresa invalida
-                global $invalidJoinD;
+            }else if($entryDate > $currentDate){ //  data de entrada na empresa invalida
                 $invalidJoinD = true;
             }else{ // nada de anormal com as datas
-                $stmt2 = $mysqli->prepare('
+                 $stmt2 = $mysqli->prepare('
                     INSERT INTO employee 
-                    (nameEmpl, emailEmpl, bDayEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl, emplPassword) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+                    (nameEmpl, emailEmpl, bDayEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl, emplPassword, profilePicPath) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
                 );
 
-                $stmt2->bind_param('sssssssss', $username, $email, $bday, $gender, $number, $position, $entryDate, $area, $passwordHash);
+                $stmt2->bind_param('ssssssssss', $username, $email, $bday, $gender, $number, $position, $entryDate, $area, $passwordHash, $imagePath);
 
                 if($stmt2->execute()){
                     session_start();
@@ -84,8 +104,9 @@
         @media(min-width: 1024px){
             .right-content-img{
                 display: block;
-                background: url(images/sign-up-bg.png) center center;
-                height: 115vh;
+                background: url(images/signUpBg.png) no-repeat center center;
+                background-size: cover;
+                height: 127vh;
 
             }
 
@@ -134,29 +155,29 @@
                 </div>
                 
                 <div class="content-bottom-forms">
-                    <form action="" method="post" autocomplete="on">
+                    <form action="" method="post" enctype="multipart/form-data" autocomplete="on">
                         <div class="forms-item">
-                            <label for="iEName">Nome</label>
+                            <label for="iEName">Nome:</label>
                             <input type="text" name="eName" id="iEName" class="input-control" required placeholder="Primeiro e Último Nome" maxlength="30">
                         </div>
 
                         <div class="forms-item">
-                            <label for="iEBday">Data de Nascimento</label>
+                            <label for="iEBday">Data de Nascimento:</label>
                             <input type="date" name="eBDay" id="iEBday" class="input-control" required>
                         </div>
 
                         <div class="forms-item">
-                            <label for="ieEmail">Email</label>
+                            <label for="ieEmail">Email:</label>
                             <input type="email" name="eEmail" id="ieEmail" class="input-control" required placeholder="exemplo@gmail.com">
                         </div>
 
                         <div class="forms-item">
-                            <label for="inum">Número de Telefone</label>
+                            <label for="inum">Número de Telefone:</label>
                             <input type="text" name="eNum" id="iENum" class="input-control" required placeholder="(XX) X XXXX-XXXX">
                         </div>
 
                         <div class="forms-item">
-                            <label for="iEGender">Gênero</label>
+                            <label for="iEGender">Gênero:</label>
                             <select name="eGender" id="iEGender" class="input-control">
                                 <option value="M">Masculino</option>
                                 <option value="F">Feminino</option>
@@ -165,12 +186,12 @@
                         </div>
 
                         <div class="forms-item">
-                            <label for="iJoinDate">Data de Ingresso</label>
+                            <label for="iJoinDate">Data de Ingresso:</label>
                             <input type="date" name="joinDate" id="iJoinDate" class="input-control">
                         </div>
 
                         <div class="forms-item">
-                            <label for="iPos">Cargo</label>
+                            <label for="iPos">Cargo:</label>
                             <select name="position" id="iPos" class="input-control">
                                 <option value="RH">Recursos Humanos</option>
                                 <option value="Operações">Operações</option>
@@ -182,7 +203,7 @@
                         </div>
 
                         <div class="forms-item">
-                            <label for="iarea">Área</label>
+                            <label for="iarea">Área:</label>
                             <select name="eArea" id="iarea" class="input-control">
                                 <option value="Gerencia">Gerencia</option>
                                 <option value="Projetos">Projetos </option>
@@ -198,6 +219,11 @@
                             <input type="password" name="senha" id="isenha" class="input-control"  placeholder="• • • • • • •" maxlength="30" required >
                         </div>
 
+                        <div class="forms-item">
+                            <label for="ipicture">Foto de Perfil: <small style="font-weight: lighter;">Tamanho máximo: 2MB</small></label>
+                            <input type="file" name="picture" id="ipicture" accept="image/*" max-file-size="2097152">
+                        </div>
+
                         <div class="button-submit">
                             <button type="submit">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -207,30 +233,30 @@
                             </button>
                         </div>
                         <?php 
-                        if(isset($emailExistente)){
-                            echo "
-                                <span class=\"error-text\">
-                                    <p>Erro: Email Inserido <strong>já está cadastrado</strong></p>
-                                </span>
-                            ";
-                            $emailExistente = false; // resetar a variável para não mostrar a mensagem de erro novamente
-                        }else if(isset($invalidBDay)){
-                            echo "
-                                <span class=\"error-text\">
-                                    <p>Erro: Data de Nascimento Inserida <strong>Invalida</strong></p>
-                                    <p>Usuário precisa ser maior de 16 anos</>
-                                </span>
-                            ";
-                            $nascimentoInvalido = false; // resetar a variável para não mostrar a mensagem de erro novamente
-                        }else if(isset($invalidJoinD)){
-                            echo "
-                                <span class=\"error-text\">
-                                    <p>Erro: Data de Entrada na Empresa Inserida <strong>Invalida</strong></p>
-                                    <p>Usuário precisa ter entrado em um dia anterior a hoje</>
-                                </span>
-                            ";
-                            $entradaInvalida = false; // resetar a variável para não mostrar a mensagem de erro novamente
-                        }
+                            if(isset($emailExistente)){
+                                echo "
+                                    <span class=\"error-text\">
+                                        <p>Erro: Email Inserido <strong>já está cadastrado</strong></p>
+                                    </span>
+                                ";
+                                $emailExistente = false; // resetar a variável para não mostrar a mensagem de erro novamente
+                            }else if(isset($invalidBDay)){
+                                echo "
+                                    <span class=\"error-text\">
+                                        <p>Erro: Data de Nascimento Inserida <strong>Invalida</strong></p>
+                                        <p>Usuário precisa ser maior de 16 anos</>
+                                    </span>
+                                ";
+                                $nascimentoInvalido = false; // resetar a variável para não mostrar a mensagem de erro novamente
+                            }else if(isset($invalidJoinD)){
+                                echo "
+                                    <span class=\"error-text\">
+                                        <p>Erro: Data de Entrada na Empresa Inserida <strong>Invalida</strong></p>
+                                        <p>Usuário precisa ter entrado em um dia anterior a hoje</>
+                                    </span>
+                                ";
+                                $entradaInvalida = false; // resetar a variável para não mostrar a mensagem de erro novamente
+                            }
                         ?>
                     </form>
                 </div>

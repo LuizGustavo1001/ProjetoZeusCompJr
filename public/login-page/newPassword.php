@@ -8,7 +8,6 @@ if(! isset($_SESSION)){
 if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um token
     header("location: password.php");
 }else{
-    echo $_SESSION["emailReciever"];
     if(isset($_POST["password"])){
         $email = $_SESSION["email"];
         $stmt = $mysqli->prepare("
@@ -56,7 +55,8 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
         @media(min-width: 1024px){
             .right-content-img{
                 display: block;
-                background: url(images/new-password.png) center center;
+                background: url(images/b5.png) no-repeat center center;
+                background-size: cover;
             }
         }
     </style>
