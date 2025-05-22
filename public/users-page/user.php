@@ -614,9 +614,9 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                         ?>
 
                         <p>Total de Funcionários</p>
-                    </div>
-
-                    <form method="get">
+                    </div>  
+    
+                    <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get">
                         <div class="search-bar">
                             <label for="isearch">Pesquisar Funcionário pelo Nome</label>
                             <input type="search" name="searchEmpl" id="isearch" class="input-control" placeholder="Pressione Enter para Pesquisar">
@@ -625,7 +625,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
 
 
                     <div class="filter-bar">
-                        <form method="get">
+                        <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get">
                             <label for="iselect">Filtrar Funcionários</label>
                             <select name="selectFilterEmpl" id="iselect" class="input-control">
                                 <optgroup label="Crescente">
@@ -703,7 +703,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     <p>Voltar</p>
                 </div>
 
-                <form method="post" autocomplete="on" class="section-bottom">
+                <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="post" autocomplete="on" class="section-bottom">
                     <header>
                         <p>Preencha o formulário abaixo para adicionar um <span class="highlight-word">Novo Funcionário</span></p>
                     </header>
@@ -859,7 +859,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                         <p>Total de Orçamentos</p>
                     </div>
 
-                    <form method="get">
+                    <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get">
                         <div class="search-bar">
                             <label for="isearch">Pesquisa rápida de um Orçamento</label>
                             <input type="search" name="searchBudget" id="isearch" class="input-control" placeholder="Número do Orçamento">
@@ -867,7 +867,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </form>
 
                     <div class="filter-bar">
-                        <form method="get">
+                        <form action ="<?php echo $_SERVER["PHP_SELF"]?>"  method="get">
                             <label for="iselectFilterBudget">Filtrar Orçamentos</label>
                             <select name="selectFilterBudget" id="iselectFilterBudget" class="input-control">
                                 <option value="idBudget">Id</option>
@@ -941,7 +941,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     <p>Voltar</p>
                 </div>
 
-                <form method="post" autocomplete="on" class="section-bottom">
+                <form action ="<?php echo $_SERVER["PHP_SELF"]?>"  method="post" autocomplete="on" class="section-bottom">
                     <header>
                         <p>Preencha o formulário abaixo para adicionar um <span class="highlight-word">Novo Orçamento</span></p>
                     </header>

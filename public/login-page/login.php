@@ -7,6 +7,8 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
     $email = $_POST['userEmail'];
     $password = $_POST['userPassword'];
 
+    $rememberUser = isset($_POST["remember"]);
+
     $stmt = $mysqli->prepare('SELECT * FROM employee WHERE emailEmpl = ?');
     $stmt->bind_param('s', $email);
     $stmt->execute();
@@ -33,18 +35,25 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
             }
 
             if(password_verify($password, $storedPassword)){ // verificar se a senha hasheada é a mesma digitada pelo usuário
-                // login dura por 1 hora
-                setcookie('username', $data['nameEmpl'],       time() + 3600, "/");
-                setcookie('email',    $data['emailEmpl'],      time() + 3600, "/");
-                setcookie('cargo',    $data['emplPos'],        time() + 3600, "/");
-                setcookie('id',       $data['idEmpl'],         time() + 3600, "/");
-                setcookie('area',     $data['areaEmpl'],       time() + 3600, "/");
-                setcookie('picture',  $data['profilePicPath'], time() + 3600, "/");
-                setcookie('bday',     $data['bDayEmpl'],       time() + 3600, "/");
-                setcookie('gender',   $data['genderEmpl'],     time() + 3600, "/");
-                setcookie('number',   $data['numberEmpl'],     time() + 3600, "/");
+                if($rememberUser){ // ficar logado por mais de 1 dia
+                    $time = time() + 2629800;
+
+                }else{ // fica logado por 1 hora
+                    $time = time() + 3600; 
+                }
+
+                setcookie('username', $data['nameEmpl'],       $time, "/");
+                setcookie('email',    $data['emailEmpl'],      $time, "/");
+                setcookie('cargo',    $data['emplPos'],        $time, "/");
+                setcookie('id',       $data['idEmpl'],         $time, "/");
+                setcookie('area',     $data['areaEmpl'],       $time, "/");
+                setcookie('picture',  $data['profilePicPath'], $time, "/");
+                setcookie('bday',     $data['bDayEmpl'],       $time, "/");
+                setcookie('gender',   $data['genderEmpl'],     $time, "/");
+                setcookie('number',   $data['numberEmpl'],     $time, "/");
 
                 header("Location: ../users-page/user.php");
+               
                 exit();
             }else{
                 $erroLogin = true; // possui uma função abaixo que utiliza essa variavel
@@ -140,8 +149,8 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                     ?>
                 </div>
                 <div class="content-bottom-forms">
-
-                    <form action="" method="post" autocomplete="on">
+                        
+                    <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="post" autocomplete="on">
                         <div class="forms-item">
                             <label for="iUserEmail">Email</label>
                             <input type="email" name="userEmail" id="iUserEmail" class="input-control" required
@@ -155,8 +164,8 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
 
                         <div id="forms-bottom">
                             <div class="forms-checkbox">
-                                <input type="checkbox" name="lembrar" id="ilembrar" style="transform: scale(1.3);">
-                                <label for="ilembrar">Lembrar Usuário</label>
+                                <input type="checkbox" name="remember" id="iremember" style="transform: scale(1.3);">
+                                <label for="iremember">Lembrar Usuário</label>
                             </div>
                             <a href="password.php">Esqueci minha Senha</a>
                         </div>

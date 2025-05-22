@@ -163,7 +163,7 @@
                 </div>
                 
                 <div class="content-bottom-forms">
-                    <form action="" method="post" enctype="multipart/form-data" autocomplete="on">
+                    <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="post" enctype="multipart/form-data" autocomplete="on">
                         <div class="forms-item">
                             <label for="iEName">Nome:</label>
                             <input type="text" name="eName" id="iEName" class="input-control" required placeholder="Primeiro e Último Nome" maxlength="30">

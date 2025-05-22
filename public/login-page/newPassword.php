@@ -94,7 +94,7 @@ if(! isset($_COOKIE["emailReciever"])){ // entrando na página sem solicitar um 
                         <h1>Insira sua <span class="highlight-word">Nova Senha</span></h1>
                     </div>
                     <div class="content-bottom-forms">
-                        <form method="post">
+                        <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="post">
                             <div class="forms-item">
                                 <label for="ipassword">Nova Senha</label>
                                 <input type="password" name="password" id="ipassword" class="input-control" maxlength="30" placeholder="Digite Sua nova Senha Aqui" required>

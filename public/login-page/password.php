@@ -109,7 +109,7 @@
 
             </div>
             <div class="content-bottom-forms">
-                <form method="post" autocomplete="on">
+                <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="post" autocomplete="on">
                     <div class="forms-item">
                         <label for="iemail">Endereço de Email</label>
                         <input type="email" name="email" id="iemail" class="input-control" placeholder="Digite aqui o email de recuperação" required>
