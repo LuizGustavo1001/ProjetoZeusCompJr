@@ -114,7 +114,7 @@ if(! isset($_SESSION["emailReciever"])){ // entrando na página sem solicitar um
                         </p>
                     </div>
                     <div class="content-bottom-forms">
-                        <form method="get" autocomplete="on">
+                        <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get" autocomplete="on">
                             <div class="forms-item">
                                 <label for="itoken">Token de Recuperação</label>
                                 <input type="text" name="token" id="itoken" class="input-control" maxlength="6" minlength="6" placeholder="Digite o Token de Recuperação Aqui" required>
