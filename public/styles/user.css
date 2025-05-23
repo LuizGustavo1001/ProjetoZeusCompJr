@@ -112,8 +112,10 @@ ul{
     display: flex;
     gap: 1em;
     align-items: center;
+    justify-content: space-between;
 
 }
+
 
 .user-data img{
     border-radius: 50px;
@@ -143,7 +145,10 @@ table{
 
 }   
     
-th, td, tr{
+th, 
+td, 
+tr
+{
     font-size: 1vw;
     padding: 1vw;
     text-align: left;
@@ -160,7 +165,9 @@ td{
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-.section-top, .section-bottom{
+.section-top, 
+.section-bottom
+{
     background: var(--div-light-bg);
     padding: 1em;
     border-radius: var(--border-radius);
@@ -174,14 +181,18 @@ td{
 
 }
 
-.section-top input, .section-top select{
+.section-top input, 
+.section-top select
+{
     padding: 1.5em;
     width: 100%;
     box-sizing: border-box;
 
 }
 
-#total-employes, #total-budgets{
+#total-employes, 
+#total-budgets
+{
     font-size: 2em;
     font-weight: bold;
 
@@ -198,19 +209,9 @@ td{
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-.right-section-back-button{
-    display: flex;
-    align-items: center;
-    color: var(--primary-clr);
-    
-}
 
-.right-section-back-button svg, .right-section-back-button p{
-    cursor: pointer;
 
-}
-
-.section-bottom {
+.section-bottom{
     display: flex;
     flex-direction: column;
     gap: 3em;
@@ -236,12 +237,16 @@ td{
 
 }
 
-.right-section-forms .forms-item input, .right-section-forms .forms-item select{
+.right-section-forms .forms-item input, 
+.right-section-forms .forms-item select
+{
     padding: 1.5em;
 
 }
 
-.right-section-forms input , .right-section-forms select{
+.right-section-forms input, 
+.right-section-forms select
+{
     width: 100%;
     box-sizing: border-box;
 
@@ -256,7 +261,6 @@ td{
     display: none;
 
 }
-
 
 .selected{
     background: var(--body-light-bg);
@@ -309,7 +313,9 @@ td{
 
     }
 
-    .section-header, .section-top, .section-bottom{
+    .section-header, 
+    .section-top, 
+    .section-bottom{
         width: 68vw;
         height: auto;
 
@@ -322,14 +328,18 @@ td{
 
     }
 
-    .section-top .button-submit .add-employee-button, .section-top .button-submit .add-budget-button{
+    .section-top .button-submit .add-employee-button, 
+    .section-top .button-submit .add-budget-button
+    {
         width: 90%;
         
     }
 
-    .search-bar, .filter-bar{
-    width:17vw;
-    margin: 0 auto;
+    .search-bar, 
+    .filter-bar
+    {
+        width:17vw;
+        margin: 0 auto;
     
     }
 
@@ -348,10 +358,14 @@ td{
 
 @media(max-width: 1200px){
 
-    tr, th, td{
+    tr,
+    th, 
+    td
+    {
         font-size: 1em;
 
     }
+
     tr{
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -359,7 +373,9 @@ td{
 
     }
 
-    th, td{
+    th, 
+    td
+    {
         padding: 0.5em;
         text-align: left;
 

@@ -285,11 +285,9 @@ function addToList($type){ // adiciona um novo item a lista selecionada
                         $entry = $_POST["joinDate"];
 
                         if($bd >= $minBDate){ // Data de nascimento inválida
-                            global $nascimentoInvalido;
-                            $nascimentoInvalido = true;
+                            return "invalidBDate";
                         }else if($entry > $currentDate){ // Data de ingresso inválida
-                            global $ingressoInvalido;
-                            $ingressoInvalido = true;
+                            return "invalidEntryDate";
                         }else{ // nada de anormal
                             $stmt = $mysqli->prepare("
                                 INSERT INTO $type (nameEmpl, bDayEmpl, emailEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl) 
@@ -308,10 +306,8 @@ function addToList($type){ // adiciona um novo item a lista selecionada
                                 $_POST["eArea"],
                             );
 
-                            global $insert;
                             if($stmt->execute()){ // funcionário inserido no Banco de Dados
-                                $insert = true;
-                                header("location: user.php");
+                                header("location: user.php?status=insert");
                                 $stmt->close();
                             }else{ // funcionário não inserido no Banco de Dados
                                 echo "<p>Erro ao Adicionar: " . $mysqli->error . "</p>";
@@ -347,9 +343,7 @@ function addToList($type){ // adiciona um novo item a lista selecionada
                 break;
             }
             default: { // já existe um item com os dados inseridos
-                global $exist;
-                $exist = true;
-                break;
+                return "alredyExist";
             }
         }
     }
@@ -604,15 +598,17 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                 <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
+                        <a href="settings.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
                 </nav>
 
                 <div class="section-top">
                     <div class="total">
-                        <?php
-                        totalList("employee"); // exibe o total de funcionários
-                        ?>
-
+                        <?php totalList("employee"); // exibe o total de funcionários?>
                         <p>Total de Funcionários</p>
                     </div>  
     
@@ -649,8 +645,44 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                 </div>
 
                 <div class="section-bottom">
-                    
+
                     <?php
+                        if(isset($_POST["eName"])){ //  se algo estiver digitado no input "eName"
+                            $result = addToList("employee");
+
+                            switch($result){
+                                case "alredyExist":{
+                                    echo "
+                                        <span class=\"error-text\">
+                                            <p>Erro: <strong>Endereço de Email já Existente</strong></p>
+                                            <p>Funcionário não inserido</p>
+                                        </span>
+                                    ";
+                                    break;
+                                }
+                                case "invalidBDate":{
+                                    echo "
+                                        <span class=\"error-text\">
+                                            <p>
+                                                Erro:  <strong>Data de Nascimento</strong>. Precisa ser menor que a data atual e maior de 16 anos
+                                            </p>
+                                            <p>Funcionário não inserido</p>
+                                        </span>
+                                    ";
+                                    break;
+                                }
+                                case "invalidEntryDate":{
+                                    echo "
+                                        <span class=\"error-text\">
+                                            <p>Erro: <strong>Data de Ingresso</strong>. Precisa ser menor que a data atual</p>
+                                            <p>Funcionário não inserido</p>
+                                        </span>
+                                    ";
+                                    break;
+                                }
+                            }
+                        }
+
                         if (isset($_GET["searchEmpl"])){ // // exibe todos os Funcionários com o nome digitado
                             searchList(type: "employee", filter: "nameEmpl");
                         }
@@ -691,6 +723,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                 <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
+                        <a href="settings.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
 
 
@@ -773,51 +810,15 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <?php 
-                        if(isset($insert)){
+                        $status = $_GET["status"] ?? null;
+                        if($status === "insert"){
                             echo "<span class=\"sucess-text\"><p>Funcionário com email <strong>\"{$_POST["eEmail"]}\"</strong> inserido no Banco de Dados com sucesso</p></span>";
-                            $insert = null; // reseta a variável para não exibir mais de uma vez
                         }
                     ?>
 
                     <div class="button-submit">
                         <button>Enviar</button>
                     </div>
-
-                    <?php
-                    if(isset($_POST["eName"])){ //  se algo estiver digitado no input "eName"
-                        addToList("employee");
-
-                        if(isset($funcionarioExiste)){
-                            echo "
-                                <span class=\"error-text\">
-                                    <p>Erro: <strong>Endereço de Email já Existente</strong></p>
-                                    <p>Funcionário não inserido</p>
-                                </span>
-                            ";
-                            $funcionarioExiste = null; // reseta a variável para não exibir mais de uma vez
-                        }
-                        if (isset($ingressoInvalido)) {
-                            echo "
-                                    <span class=\"error-text\">
-                                        <p>Erro: <strong>Data de Ingresso</strong>. Precisa ser menor que a data atual</p>
-                                        <p>Funcionário não inserido</p>
-                                    </span>
-                                ";
-                            $ingressoInvalido = null; // reseta a variável para não exibir mais de uma vez
-                        }
-                        if (isset($nascimentoInvalido)) {
-                            echo "
-                                    <span class=\"error-text\">
-                                        <p>
-                                            Erro: <strong>Data de Nascimento</strong>. Precisa ser menor que a data atual e maior de 16 anos
-                                        </p>
-                                        <p>Funcionário não inserido</p>
-                                    </span>
-                                ";
-                            $nascimentoInvalido = null; // reseta a variável para não exibir mais de uma vez
-                        }
-                    }
-                    ?>
                 </form>
             </section>
             <!--Funcionários Adicionar-->
@@ -846,16 +847,18 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                 <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
+                        <a href="settings.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
 
                 </nav>
 
                 <div class="section-top">
                     <div class="total">
-                        <?php
-                        totalList(type: "budget");
-                        ?>
-                        
+                        <?php totalList(type: "budget");?>
                         <p>Total de Orçamentos</p>
                     </div>
 
@@ -891,15 +894,17 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
 
                 <div class="section-bottom">
                         <?php
-                        if (isset($_GET["searchBudget"])) { // exibe os Orçamentos com o número digitado no input
-                            searchList(type: "budget", filter: "numBudget");
-                        }
-                        echo "<h2><span class=\"highlight-word\">Todos os Orçamentos</span></h2>";
-                        if (isset($_GET["selectFilterBudget"])) { // filtra os Orçamentos
-                            filterList(type: "budget");
-                        }else{
-                            showList(type: "budget"); // exibe todos os Orçamentos se nada for escrito
-                        }
+                            if (isset($_GET["searchBudget"])) { // exibe os Orçamentos com o número digitado no input
+                                searchList(type: "budget", filter: "numBudget");
+                            }
+
+                            echo "<h2><span class=\"highlight-word\">Todos os Orçamentos</span></h2>";
+
+                            if (isset($_GET["selectFilterBudget"])) { // filtra os Orçamentos
+                                filterList(type: "budget");
+                            }else{
+                                showList(type: "budget"); // exibe todos os Orçamentos se nada for escrito
+                            }
                         ?>
                 </div>
             </section>
@@ -930,6 +935,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                 <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
+                        <a href="settings.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
 
                 </nav>
@@ -974,9 +984,18 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
 
                     </div>
                     <?php 
-                        if(isset($insert)){
-                            echo "<span class=\"sucess-text\"><p>Orçamento de número <strong>\" {$_POST["bNum"]}\"</strong> inserido no Banco de Dados com sucesso</p></span>";
-                            $insert = null; // reseta a variável para não exibir mais de uma vez
+                        $status = $_GET["status"];
+
+                        if($status === "insert"){
+                            echo "
+                                <span class=\"sucess-text\">
+                                    <p>
+                                        Orçamento de número 
+                                        <strong>\" {$_POST["bNum"]}\"</strong> 
+                                        inserido no Banco de Dados com sucesso
+                                    </p>
+                                </span>
+                            ";
                         }
                     ?>
                     <div class="button-submit">
@@ -984,9 +1003,9 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                     </div>
 
                     <?php
-                    if (isset($_POST["bNum"])) {
-                        addToList("budget");
-                    }
+                        if (isset($_POST["bNum"])) {
+                            addToList("budget");
+                        }
                     ?>
 
                 </form>
@@ -1018,6 +1037,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                 <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
+                        <a href="settings.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
 
                 </nav>
@@ -1059,6 +1083,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                                 <p><?php echo $_COOKIE["area"]?></p>
                             </strong>
                         </div>
+                        <a href="settings.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
 
                 </nav>

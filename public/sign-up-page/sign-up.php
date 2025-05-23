@@ -1,77 +1,83 @@
 
 <?php 
+    ob_start();
     include '../../dbConnection.php';
+    function insertIntoDB(){
+        global $mysqli;
+        if(isset($_POST["eName"])){ // verificar se algo está escrito no input de nome
+            $email = $mysqli->real_escape_string($_POST["eEmail"]);
 
-    if(isset($_POST["eName"])){ // verificar se algo está escrito no input de nome
-        $email = $mysqli->real_escape_string($_POST["eEmail"]);
+            $stmt = $mysqli->prepare('SELECT * FROM employee WHERE emailEmpl = ?');
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        $stmt = $mysqli->prepare('SELECT * FROM employee WHERE emailEmpl = ?');
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            if($result and $result->num_rows > 0){ // existe um usuário com o email digitado anteriormente
+                return "emailAlreadyExist";
 
-        if($result and $result->num_rows > 0){ // existe um usuário com o email digitado anteriormente
-            $emailExistente = true;
-        }else{ // cadastrar novo usuário
-            $username     = $mysqli->real_escape_string($_POST["eName"]);
-            $bday         = $mysqli->real_escape_string($_POST["eBDay"]);
-            $gender       = $mysqli->real_escape_string($_POST["eGender"]);
-            $number       = $mysqli->real_escape_string($_POST["eNum"]);
-            $position     = $mysqli->real_escape_string($_POST["position"]);
-            $entryDate    = $mysqli->real_escape_string($_POST["joinDate"]);
-            $area         = $mysqli->real_escape_string($_POST["eArea"]);
-            // criar um hash para a senha ser armazenada no BD
-            $passwordHash =  password_hash($_POST['senha'], PASSWORD_DEFAULT);
-            $imagePath    =  null; // valor padrão caso não envie imagem
+            }else{ // cadastrar novo usuário
+                $username     = $mysqli->real_escape_string($_POST["eName"]);
+                $bday         = $mysqli->real_escape_string($_POST["eBDay"]);
+                $gender       = $mysqli->real_escape_string($_POST["eGender"]);
+                $number       = $mysqli->real_escape_string($_POST["eNum"]);
+                $position     = $mysqli->real_escape_string($_POST["position"]);
+                $entryDate    = $mysqli->real_escape_string($_POST["joinDate"]);
+                $area         = $mysqli->real_escape_string($_POST["eArea"]);
 
-            if(isset($_FILES["picture"])){
-                $uploadDirect = "../users-page/user-images";
+                // criar um hash para a senha ser armazenada no BD
+                $passwordHash =  password_hash($_POST['senha'], PASSWORD_DEFAULT);
+                $imagePath    =  null; // valor padrão caso não envie imagem
 
-                if(! is_dir($uploadDirect)){ // verifica se o diretório existe
-                    mkdir($uploadDirect, 0755, true); // permissão de modificar e adicionar
-                }
+                if(isset($_FILES["picture"])){
+                    $uploadDirect = "../users-page/user-images";
 
-                $fileTemp = $_FILES["picture"] ["tmp_name"]; // salva o caminho até a imagem no servidor temporariamente
-                $fileName = basename($_FILES["picture"]["name"]); // pegar o nome do arquivo enviado pelo usuário
-                $fileExt  = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); // tipo do arquivo(png, por exemplo)
-                $allowedTypes = ["jpg", "png", "jpeg", "webp"]; // tipos válidos de fotos de perfil
+                    if(! is_dir($uploadDirect)){ // verifica se o diretório existe
+                        mkdir($uploadDirect, 0755, true); // permissão de modificar e adicionar
+                    }
 
-                if(in_array($fileExt, $allowedTypes)){ // imagem está em um formato permitido
-                    if($_FILES["picture"]["size"] <= 2* 1024 * 1024){ // imagem menor que 2MB -> adiciona a pasta local
-                        $uniqueName = uniqid("img_") . "." . $fileExt;
-                        $imagePath = $uploadDirect . '/' . $uniqueName;
-                        move_uploaded_file($fileTemp, $imagePath);
+                    $fileTemp = $_FILES["picture"] ["tmp_name"]; // salva o caminho até a imagem no servidor temporariamente
+                    $fileName = basename($_FILES["picture"]["name"]); // pegar o nome do arquivo enviado pelo usuário
+                    $fileExt  = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); // tipo do arquivo(png, por exemplo)
+                    $allowedTypes = ["jpg", "png", "jpeg", "webp"]; // tipos válidos de fotos de perfil
+
+                    if(in_array($fileExt, $allowedTypes)){ // imagem está em um formato permitido
+                        if($_FILES["picture"]["size"] <= 2* 1024 * 1024){ // imagem menor que 2MB -> adiciona a pasta local
+                            $uniqueName = uniqid("img_") . "." . $fileExt;
+                            $imagePath = $uploadDirect . '/' . $uniqueName;
+                            move_uploaded_file($fileTemp, $imagePath);
+                        }
                     }
                 }
-            }
 
-            $currentDate = date("Y-m-d");
-            $minBDate = date("Y-m-d", strtotime("-16 years"));
+                $currentDate = date("Y-m-d");
+                $minBDate = date("Y-m-d", strtotime("-16 years"));
 
-            if($bday >= $minBDate){ // data de nascimento invalida (precisa ser maior de 16 anos)
-                $invalidBDay = true;
-            }else if($entryDate > $currentDate){ //  data de entrada na empresa invalida
-                $invalidJoinD = true;
-            }else{ // nada de anormal com as datas
-                 $stmt2 = $mysqli->prepare('
-                    INSERT INTO employee 
-                    (nameEmpl, emailEmpl, bDayEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl, emplPassword, profilePicPath) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-                );
+                if($bday >= $minBDate){ // data de nascimento inválida (precisa ser maior de 16 anos)
+                    return "invalidBDate";
 
-                $stmt2->bind_param('ssssssssss', $username, $email, $bday, $gender, $number, $position, $entryDate, $area, $passwordHash, $imagePath);
+                }else if($entryDate > $currentDate){ //  data de entrada na empresa inválida
+                    return "invalidJoinDate";
 
-                if($stmt2->execute()){
-                    //session_start();
-                    setcookie('registrado', 'true', time() + 3600, '/');
-                    header("location:../login-page/login.php");
-                    exit();
+                }else{ // nada de anormal com as datas
+                    $stmt2 = $mysqli->prepare('
+                        INSERT INTO employee 
+                        (nameEmpl, emailEmpl, bDayEmpl, genderEmpl, numberEmpl, emplPos, entryDate, areaEmpl, emplPassword, profilePicPath) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+                    );
+
+                    $stmt2->bind_param('ssssssssss', $username, $email, $bday, $gender, $number, $position, $entryDate, $area, $passwordHash, $imagePath);
+
+                    if($stmt2->execute()){
+                        header("location:../login-page/login.php?insert=true");
+
+                    }
+                    $stmt2->close();  // Fecha a declaração
                 }
-                $stmt2->close();  // Fecha a declaração
-                }
-        }      
-        $stmt->close();  // Fecha a declaração
+            }      
+            $stmt->close();  // Fecha a declaração
+        }
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -241,29 +247,34 @@
                             </button>
                         </div>
                         <?php 
-                            if(isset($emailExistente)){
-                                echo "
-                                    <span class=\"error-text\">
-                                        <p>Erro: Email Inserido <strong>já está cadastrado</strong></p>
-                                    </span>
-                                ";
-                                $emailExistente = false; // resetar a variável para não mostrar a mensagem de erro novamente
-                            }else if(isset($invalidBDay)){
-                                echo "
-                                    <span class=\"error-text\">
-                                        <p>Erro: Data de Nascimento Inserida <strong>Invalida</strong></p>
-                                        <p>Usuário precisa ser maior de 16 anos</>
-                                    </span>
-                                ";
-                                $nascimentoInvalido = false; // resetar a variável para não mostrar a mensagem de erro novamente
-                            }else if(isset($invalidJoinD)){
-                                echo "
-                                    <span class=\"error-text\">
-                                        <p>Erro: Data de Entrada na Empresa Inserida <strong>Invalida</strong></p>
-                                        <p>Usuário precisa ter entrado em um dia anterior a hoje</>
-                                    </span>
-                                ";
-                                $entradaInvalida = false; // resetar a variável para não mostrar a mensagem de erro novamente
+                            $result = insertIntoDB();
+                            switch($result){
+                                case "emailAlreadyExist":{
+                                    echo "
+                                        <span class=\"error-text\">
+                                            <p>Erro: Email Inserido <strong>já está cadastrado</strong></p>
+                                        </span>
+                                    ";
+                                    break;
+                                }
+                                case "invalidBDate":{
+                                    echo "
+                                        <span class=\"error-text\">
+                                            <p>Erro: Data de Nascimento Inserida <strong>Invalida</strong></p>
+                                            <p>Usuário precisa ser maior de 16 anos</p>
+                                        </span>
+                                    ";
+                                    break;
+                                }
+                                case "invalidJoinDate":{
+                                    echo "
+                                        <span class=\"error-text\">
+                                            <p>Erro: Data de Entrada na Empresa Inserida <strong>Invalida</strong></p>
+                                            <p>Usuário precisa ter entrado em um dia anterior a hoje</p>
+                                        </span>
+                                    ";
+                                    break;
+                                }
                             }
                         ?>
                     </form>
@@ -275,3 +286,7 @@
     </main>
 </body>
 </html>
+
+<?php 
+    ob_end_flush(); // completar o redirecionamento da página
+?>

@@ -5,6 +5,7 @@ form{
     display: flex;
     flex-direction: column;
     gap: 1.8em;
+
 }
 
 .content{
@@ -41,7 +42,9 @@ form{
     
 }
 
-.forms-item input, .forms-item select{
+.forms-item input, 
+.forms-item select
+{
     padding: 1.5em;
     width: 100%;
     box-sizing: border-box;
@@ -72,7 +75,5 @@ form{
          width: 45vw;
 
     }
-
     
-
 }
