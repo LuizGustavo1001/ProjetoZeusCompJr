@@ -3,6 +3,9 @@
     --dm-bg-2: #414040;
     --dm-primary-clr: #ffffff;
     --dm-secondary-clr: #e0c798;
+
+    --dm-gradient-clr: linear-gradient(45deg, #aa7a1e, #aa7a1e);
+
     --dm-border-clr: #6e4802;
 }
 
@@ -33,47 +36,61 @@
 
 }
 
-.dark-mode input, .dark-mode select{
+.dark-mode input, 
+.dark-mode select 
+{
     background: rgb(88, 88, 88);
     border-color:var(--dm-bg);
 
 }
 
-.dark-mode input[type="date"] {
-   color: rgb(212, 212, 212);
-}
-
-.dark-mode input::placeholder, .dark-mode select, .dark-mode select option{
+.dark-mode input::placeholder, 
+.dark-mode select, 
+.dark-mode select option 
+.dark-mode input[type="file"] 
+.dark-mode input[type="date"] 
+{
     color: rgb(212, 212, 212);
-
 }
 
-.dark-mode .input-control:focus {
+.dark-mode 
+.input-control:focus 
+{
     outline: none;
     border: 1px solid var(--dm-secondary-clr);
     color: var(--dm-primary-clr);
 
 }
 
-.dark-mode aside, .dark-mode .section-top, .dark-mode .section-bottom{
+.dark-mode aside, 
+.dark-mode .section-top, 
+.dark-mode .section-bottom
+{
     background: var(--dm-bg-2);
 
 }
 
-.dark-mode .button-submit button, .dark-mode .button-submit a{
+.dark-mode .button-submit button, 
+.dark-mode .button-submit a{
+    background: var( --dm-gradient-clr);
     color: var(--dm-primary-clr);
     border-color: var(--dm-border-clr);
     
 }
 
-.dark-mode .button-submit button:hover,.dark-mode .filter-bar button:hover, .dark-mode .button-submit a:hover{
+.dark-mode .button-submit button:hover,
+.dark-mode .filter-bar button:hover, 
+.dark-mode .button-submit a:hover
+{
     color: var(--dm-secondary-clr);
     border-color: var(--dm-secondary-clr);
     background: transparent;
 
 }
 
-.dark-mode .selected, .dark-mode #options-list li:hover{
+.dark-mode .selected, 
+.dark-mode #options-list li:hover
+{
     color: var(--dm-secondary-clr);
     background: var(--dm-bg);
     border-color: var(--dm-secondary-clr);
@@ -96,4 +113,16 @@
 
 .dark-mode #left-content{
     background: var(--dm-bg-2);
+
+}
+
+.dark-mode .user-data svg{
+    transition: all var(--transition-time);
+
+}
+
+.dark-mode .user-data svg:hover{
+    color: var(--dm-primary-clr);
+    cursor: pointer;
+
 }

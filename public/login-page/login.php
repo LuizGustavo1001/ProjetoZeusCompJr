@@ -1,68 +1,68 @@
 <?php 
-include "../../dbConnection.php";
+    ob_start();
+    include "../../dbConnection.php";
+    function login(){
+        global $mysqli;
+        if (isset($_POST['userEmail'], $_POST['userPassword'])) {
+            $email = $_POST['userEmail'];
+            $password = $_POST['userPassword'];
 
-// Não é necessário iniciar a sessão, pois vamos usar apenas cookies
+            $stmt = $mysqli->prepare('SELECT * FROM employee WHERE emailEmpl = ?');
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
 
-if (isset($_POST['userEmail'], $_POST['userPassword'])) {
-    $email = $_POST['userEmail'];
-    $password = $_POST['userPassword'];
+            $result = $stmt->get_result();
+            $amount = $result->num_rows;
 
-    $rememberUser = isset($_POST["remember"]);
+            $stmt->close(); // Fecha a declaração
 
-    $stmt = $mysqli->prepare('SELECT * FROM employee WHERE emailEmpl = ?');
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+            switch($amount){
+                case 0:{ // nenhum funcionário cadastrados com as credenciais digitadas
+                    return "errorLogin";
 
-    $amount = $result->num_rows;
-
-    switch($amount){
-        case 0:{ // nenhum funcionário cadastrados com as credenciais digitadas
-             $erroLogin = true;
-             break;
-        }
-        default:{ // existe algum funcionário com as credencias digitadas
-            $data = $result->fetch_assoc(); // pegando os dados do resultado do sql_query e armazenando em um vetor 
-            $storedPassword = $data['emplPassword']; // senha no banco de dados
-
-            if($storedPassword == $password){ // Login com senha em texto puro no Banco de Dados -> migrar para hash
-                $newHash = password_hash($password, PASSWORD_DEFAULT);
-                $updateStmt = $mysqli->prepare("UPDATE employee SET emplPassword = ? WHERE emailEmpl = ?");
-                $updateStmt->bind_param("ss", $newHash, $email);
-                $updateStmt->execute();
-                $updateStmt->close();
-                $storedPassword = $newHash; // atualizar o valor da senha armazenada no Banco de Dados
-            }
-
-            if(password_verify($password, $storedPassword)){ // verificar se a senha hasheada é a mesma digitada pelo usuário
-                if($rememberUser){ // ficar logado por mais de 1 dia
-                    $time = time() + 2629800;
-
-                }else{ // fica logado por 1 hora
-                    $time = time() + 3600; 
                 }
+                default:{ // existe algum funcionário com as credencias digitadas
+                    $data = $result->fetch_assoc(); // pegando os dados do resultado do sql_query e armazenando em um vetor 
+                    $storedPassword = $data['emplPassword']; // senha no banco de dados
 
-                setcookie('username', $data['nameEmpl'],       $time, "/");
-                setcookie('email',    $data['emailEmpl'],      $time, "/");
-                setcookie('cargo',    $data['emplPos'],        $time, "/");
-                setcookie('id',       $data['idEmpl'],         $time, "/");
-                setcookie('area',     $data['areaEmpl'],       $time, "/");
-                setcookie('picture',  $data['profilePicPath'], $time, "/");
-                setcookie('bday',     $data['bDayEmpl'],       $time, "/");
-                setcookie('gender',   $data['genderEmpl'],     $time, "/");
-                setcookie('number',   $data['numberEmpl'],     $time, "/");
+                    if($storedPassword == $password){ // Login com senha em texto puro no Banco de Dados -> migrar para hash
+                        $newHash = password_hash($password, PASSWORD_DEFAULT);
+                        $updateStmt = $mysqli->prepare("UPDATE employee SET emplPassword = ? WHERE emailEmpl = ?");
+                        $updateStmt->bind_param("ss", $newHash, $email);
+                        $updateStmt->execute();
+                        $updateStmt->close();
+                        $storedPassword = $newHash; // atualizar o valor da senha armazenada no Banco de Dados
+                    }
 
-                header("Location: ../users-page/user.php");
-               
-                exit();
-            }else{
-                $erroLogin = true; // possui uma função abaixo que utiliza essa variavel
+                    if(password_verify($password, $storedPassword)){ // verificar se a senha hasheada é a mesma digitada pelo usuário
+                        $rememberUser = isset($_POST["remember"]);
+                        if($rememberUser){ // logado por 1 mês
+                            $time = 2629800;
+                        }else{ // logado por 1 hora
+                            $time = 3600;
+                        }
+
+                        setcookie('username',   $data['nameEmpl'],       time() + $time, "/");
+                        setcookie('email',      $data['emailEmpl'],      time() + $time, "/");
+                        setcookie('position',      $data['emplPos'],        time() + $time, "/");
+                        setcookie('id',         $data['idEmpl'],         time() + $time, "/");
+                        setcookie('area',       $data['areaEmpl'],       time() + $time, "/");
+                        setcookie('picture',    $data['profilePicPath'], time() + $time, "/");
+                        setcookie('bday',       $data['bDayEmpl'],       time() + $time, "/");
+                        setcookie('gender',     $data['genderEmpl'],     time() + $time, "/");
+                        setcookie('number',     $data['numberEmpl'],     time() + $time, "/");
+                        setcookie('entrydate',  $data['entryDate'],      time() + $time, "/");
+
+                        header("Location: ../users-page/user.php");
+                    
+                        exit();
+                    }else{
+                        return "errorLogin"; 
+                    }
+                }
             }
-            break;
         }
     }
-    $stmt->close(); // Fecha a declaração
-}
 ?>
 
 <!DOCTYPE html>
@@ -180,29 +180,33 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
                                 Entrar
                             </button>
                             <?php 
-                                if(isset($erroLogin)){
+                                $result = login();
+
+                                if($result === "errorLogin"){
                                     echo "
-                                    <span class=\"error-text\">
-                                        <p>Erro: Credencias Inseridas <strong>não estão cadastradas</strong></p>
-                                        <p>Clique no Botão Abaixo para<strong> Cadastrar-se</strong></p>
-                                        <p>ou Tente Novamente</p>
-                                    </span>
+                                        <span class=\"error-text\">
+                                            <p>Erro: Credencias Inseridas <strong>não estão cadastradas</strong></p>
+                                            <p>Clique no Botão Abaixo para<strong> Cadastrar-se</strong></p>
+                                            <p>ou Tente Novamente</p>
+                                        </span>
                                     ";
-                                    $erroLogin = null; // limpa a mensagem de erro
                                 }
-                                if(isset($cadastrado)){
-                                    echo "
-                                    <span class=\"sucess-text\">
-                                        <p>Usuário cadastrado com sucesso</p>
-                                        <p>Insira novamente seus dados acima para Entrar na Área do Usuário</p>
-                                    </span>
-                                ";
-                                    $cadastrado = null; // limpa a mensagem de erro
-                                }
+
+                                if(isset($_GET["insert"])){
+                                    $status = $_GET["insert"];
+                                    if($status === "true"){
+                                        echo "
+                                            <span class=\"sucess-text\">
+                                                <p><strong>Usuário cadastrado com sucesso</strong></p>
+                                                <p>Insira novamente seus dados acima para <strong>Entrar na Área do Usuário</strong></p>
+                                            </span>
+                                        ";
+                                    }
+                                }   
                             ?>
                         </div>
                     </form>
-                    <div id="create-account" style="padding-top: 2em; text-align: center;"  >
+                    <div id="create-account" style="padding-top: 1em; text-align: center;"  >
                         <a href="../sign-up-page/sign-up.php">Não está cadastrado ainda? Cadastre-se Aqui!</a>
                     </div>
                 </div>
@@ -213,8 +217,9 @@ if (isset($_POST['userEmail'], $_POST['userPassword'])) {
         <div class="right-content-img"></div>
 
     </main>
-
-
 </body>
-
 </html>
+
+<?php 
+    ob_end_flush(); // completar o redirecionamento da página
+?>

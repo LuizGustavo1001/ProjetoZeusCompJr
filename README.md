@@ -122,4 +122,5 @@
     <li>✅ Enviar código de recuperação de senha pelo email</li>
     <li>✅ Segurança de Senhas</li>
     <li>✅ Botão de Lembrar Usuário</li>
+    <li>✅ Página de Configurações do Usuário</li>
 </ul>

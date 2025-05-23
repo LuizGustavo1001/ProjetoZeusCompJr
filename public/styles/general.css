@@ -5,7 +5,7 @@
     --primary-clr: #a56b00;
     --secondary-clr: #744e07;
 
-    --submit-button-gradient: linear-gradient(45deg, #a56b00 60%, #dab36c);
+    --submit-button-gradient: linear-gradient(45deg, #a56b00, #a56b00);
 
     --transition-time: 0.3s;
 
@@ -23,6 +23,7 @@
 *{
     margin: 0;
     padding: 0;
+
 }
 
 body{
@@ -33,10 +34,12 @@ body{
 a{
     color: var(--primary-clr);
     text-decoration: none;
+
 }
 
 a:hover{
     color: var(--secondary-clr);
+
 }
 
 button{
@@ -44,7 +47,9 @@ button{
 
 }
 
-input, select{
+input, 
+select
+{
     border-radius: var(--border-radius);
     border: 1px solid var(--input-border-clr);
     color: rgb(95, 95, 95);
@@ -53,6 +58,7 @@ input, select{
 
 input[type="date"] {
     appearance: none; /* ou -webkit-appearance: none para WebKit */
+
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -66,11 +72,15 @@ input[type="date"] {
 
 }
 
-#church-symbol:hover, .theme-switch-button:hover{
+#church-symbol:hover, 
+.theme-switch-button:hover
+{
     transition: all var(--transition-time);
 }
 
-#church-symbol:hover, .theme-switch-button:hover{
+#church-symbol:hover,
+.theme-switch-button:hover
+{
     transform: scale(1.05);
 }
 
@@ -79,7 +89,9 @@ input[type="date"] {
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-.button-submit button, .button-submit a{
+.button-submit button, 
+.button-submit a
+{
     font-size: 1.3em;
     width: 100%;
 
@@ -106,7 +118,9 @@ input[type="date"] {
   
 }
 
-.button-submit button:hover, .button-submit a:hover{
+.button-submit button:hover, 
+.button-submit a:hover
+{
     background: transparent;
     color: var(--primary-clr);
 
@@ -137,10 +151,11 @@ input[type="date"] {
         accent-color: var(--primary-clr);
         
     }
-
 }
 
-.error-text, .sucess-text{
+.error-text, 
+.sucess-text
+{
     text-align: center;
 }
 
@@ -153,16 +168,40 @@ input[type="date"] {
     color: green;
 }
 
-input, select{
+input,
+select
+{
     transition: all var(--transition-time);
 
 }
 
-input:focus, select:focus, input:hover, select:hover{
+input:focus, 
+select:focus, 
+input:hover, 
+select:hover
+{
     outline: none;
     border: 1px solid var(--primary-clr);
     box-shadow: 1px 5px 10px rgba(73, 42, 7, 0.219);
 
+}
+
+.right-section-back-button, 
+.right-section-back-button a
+{
+    display: flex;
+    align-items: center;
+    color: var(--primary-clr);
+   
+    
+}
+
+.right-section-back-button svg, 
+.right-section-back-button p
+{
+    cursor: pointer;
+    width: 50px;
+    margin-bottom: 1em;
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -175,7 +214,6 @@ input:focus, select:focus, input:hover, select:hover{
         display: block;
         width: 45%;
         height: 100vh;
-
 
     }
 
