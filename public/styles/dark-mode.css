@@ -1,10 +1,10 @@
 :root{
-    --dm-bg: #2e2e2e;
-    --dm-bg-2: #414040;
+    --dm-bg: #161515;
+    --dm-bg-2: #2e2e2e;
     --dm-primary-clr: #ffffff;
     --dm-secondary-clr: #e0c798;
 
-    --dm-gradient-clr: linear-gradient(45deg, #aa7a1e, #aa7a1e);
+    --dm-gradient-clr: linear-gradient(45deg, #7c5915, #7c5915);
 
     --dm-border-clr: #6e4802;
 }
@@ -46,9 +46,9 @@
 
 .dark-mode input::placeholder, 
 .dark-mode select, 
-.dark-mode select option 
-.dark-mode input[type="file"] 
-.dark-mode input[type="date"] 
+.dark-mode select option,
+.dark-mode input[type="file"],
+.dark-mode input[type="date"]
 {
     color: rgb(212, 212, 212);
 }
