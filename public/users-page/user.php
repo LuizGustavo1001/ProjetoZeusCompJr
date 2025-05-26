@@ -561,14 +561,10 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                         </svg>
                         Notificações
                     </li>
-                    <li>
-                        <a href="../login-page/logout.php" class="button-submit" style="margin: 0 auto;">
-                            <button style="width: 150px; margin: 0 auto;">
-                                Sair
-                            </button>
-                        </a>
-                    </li>
                 </ul>
+                <a href="../login-page/logout.php" class="button-submit">
+                    <button style="width: 150px; margin: 0 auto;margin-top: 1em;">Sair</button>
+                </a>
             </div>
 
         </aside>
