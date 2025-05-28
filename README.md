@@ -62,7 +62,7 @@
  <hr>
  <p>🌑 Possui suporte para <strong>Modo Escuro</strong> </p>
  <p>🗺️ Navegação entre as sessões (user-page) utilizando <strong>JavaScript</strong> </p>
- <p>📱  Possui suporte à responsividade em dispositivos portáteis</p>
+ <p>📱  Responsividade em dispositivos portáteis</p>
  <hr>
 
  <h3>📂 Esquema de Pastas</h3>
