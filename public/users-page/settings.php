@@ -21,6 +21,7 @@
 
         if(in_array($fileExt, $allowedExtensions)){ // imagem está em um formato permitido
              // Buscar caminho da imagem antiga ANTES de atualizar
+            $oldPicPath = null;
             $stmt = $mysqli->prepare("SELECT $field FROM employee WHERE emailEmpl = ? LIMIT 1");
             $stmt->bind_param("s", $_COOKIE["email"]);
             $stmt->execute();
@@ -30,7 +31,7 @@
 
             // adicionar a nova imagem de perfil
             $newFileName = uniqid("img_") . "." . $fileExt; // nome único para a imagem
-            $filePath = $uploadDirect . "/" . $newFileName; // caminho completo da imagem
+            $filePath = "{$uploadDirect}/{$newFileName}"; // caminho completo da imagem
 
             $stmt = $mysqli->prepare("UPDATE employee SET $field = ? WHERE emailEmpl = ? LIMIT 1");
             $stmt->bind_param("ss", $filePath, $_COOKIE["email"]);
@@ -234,7 +235,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["number"])) {
                 </div>
                 <div class="content-bottom-text">
                     <h1>Alterar suas <span class="highlight-word">Credenciais</span></h1>
-                    <p>Após alterar um campo clique no botão de enviar para atualizar</p>
+                    <p>Após alterar um campo <span class="highlight-word">clique no botão de enviar</span> para atualizar</p>
+                    <p>É possível modificar apenas <span class="highlight-word">um campo por vez</span> </p>
                 </div>
                 <div class="content-bottom-forms">
                     <div class="left-content">
@@ -517,9 +519,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["number"])) {
                                                     "
                                                     <span class=\"error-text\">
                                                         <p>
-                                                            <p>Erro: Cargo Selecionado <strong>é o mesmo 
+                                                            Erro: Cargo Selecionado <strong>é o mesmo 
                                                             <br>
-                                                            cadastrado anteriormente</strong></p>
+                                                            cadastrado anteriormente</strong>
                                                         </p>
                                                     </span>
                                                     ",
@@ -578,11 +580,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["number"])) {
                                                     "
                                                     <span class=\"error-text\">
                                                         <p>
-                                                            <p>
-                                                                Erro: Área Selecionada <strong>é a mesma 
-                                                                <br>
-                                                                cadastrada anteriormente</strong>
-                                                            </p>
+                                                            Erro: Área Selecionada <strong>é a mesma 
+                                                            <br>
+                                                            cadastrada anteriormente</strong>
                                                         </p>
                                                     </span>
                                                     ",

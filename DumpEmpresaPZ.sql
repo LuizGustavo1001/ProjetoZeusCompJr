@@ -76,7 +76,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'Farofilson Bananilson','2001-06-05','bananilson4324@gmail.com','M','(31) 9 7450 5802','Infraestrutura','2018-01-11','Projetos','$2y$10$40jqOXWnjVJOgf0cgARSEOFfp3OAhgAF.xsvFE8Nq2wNd135pJ98O','../users-page/user-images/img_6830da8f0764d.jpg'),(2,'Clara Fenizza','1979-11-18','fenilson10@gmail.com','F','(33) 9 4319 9873','Gerencia','2009-03-19','Projetos','$2y$10$9QDBZOjGnnKIf7vAQUKWtOymnBAMsHFlNdEiVuZARPXem/8uPlroi','../users-page/user-images/img_682bab5f60d5b.jpg'),(3,'Ademilson Tupilson','1990-10-11','ademilson9656@gmail.com','M','(35) 9 4533 9034','Operacoes','2020-02-18','Projetos','$2y$10$s5K8c8hDQ1sZGx3K1JQZWes7qaDk71vNfQQ0G1HMGHtuPSlv8dTMG','../users-page/user-images/img_682bab5f60d5c.jpg'),(4,'Ana Banana','2006-05-15','anaBnn8756@gmail.com ','F','(31) 9 8779 4255','Operacoes','2024-10-24','Projetos','$2y$10$zFDotE8yLBYWTDNhSKcHZelN6te9H7NDN5o3iWeC7OY56Wx59/v6e','../users-page/user-images/img_682bab5f60d5d.png');
+INSERT INTO `employee` VALUES (1,'Fagner Abreu','2001-06-05','fagbreu88@gmail.com','M','(31) 9 7X5I 5O0Z','Infraestrutura','2018-01-11','Projetos','$2y$10$40jqOXWnjVJOgf0cgARSEOFfp3OAhgAF.xsvFE8Nq2wNd135pJ98O','../users-page/user-images/img_6830da8f0764d.jpg'),(2,'Clara Fenizza','1979-11-18','fenizza10@gmail.com','F','(33) 9 4B1U 9X7I','Segurança','2009-03-19','RH','$2y$10$9QDBZOjGnnKIf7vAQUKWtOymnBAMsHFlNdEiVuZARPXem/8uPlroi','../users-page/user-images/img_682bab5f60d5b.jpg'),(3,'Ademir Silva','1990-10-11','ademir944@gmail.com','M','(35) 9 7Y8O 91AB','SAC','2020-02-18','Comercial','$2y$10$s5K8c8hDQ1sZGx3K1JQZWes7qaDk71vNfQQ0G1HMGHtuPSlv8dTMG','../users-page/user-images/img_682bab5f60d5c.jpg'),(4,'Ana Alice','2006-05-15','analice81@gmail.com ','F','(31) 9 3X6A 8A6C','Gerente Projetos','2024-10-24','Gerencia','$2y$10$zFDotE8yLBYWTDNhSKcHZelN6te9H7NDN5o3iWeC7OY56Wx59/v6e','../users-page/user-images/img_682bab5f60d5d.png');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,10 +107,6 @@ LOCK TABLES `rescuepassword` WRITE;
 INSERT INTO `rescuepassword` VALUES (47,'029d44','2025-05-22','00:15','anaBnn@gmail.com');
 /*!40000 ALTER TABLE `rescuepassword` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping routines for database 'empresapz'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -121,4 +117,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-26 15:25:07
+-- Dump completed on 2025-05-27 22:24:47
