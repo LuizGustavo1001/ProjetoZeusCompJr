@@ -7,6 +7,7 @@ function toggleSections(hideEl, showEl){
 
 }
 
+//trocar a aba selecionada no site
 document.querySelectorAll("#options-list li").forEach((li) => {
     li.addEventListener("click", () => {
         document.querySelectorAll(".right-section").forEach((section) => {
@@ -21,6 +22,7 @@ document.querySelectorAll("#options-list li").forEach((li) => {
         li.classList.add("selected");
     });
 });
+//trocar a aba selecionada no site
 
 /* Entrar na aba de adicionar funcionários*/
 var emplLocal = document.querySelector('.employee');
@@ -70,3 +72,6 @@ backBudget.addEventListener("click", () => {
 
 })
 /*Botão para voltar para a aba de orçamentos*/
+
+
+

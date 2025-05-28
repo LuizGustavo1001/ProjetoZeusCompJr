@@ -91,10 +91,19 @@
             exit;
         }
     }
-// Chamar changeItem antes de qualquer output
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["number"])) {
-    changeItem("number", "numberEmpl");
-}
+
+    // output da opção que corresponde ao funcionário selecionado
+    function optionSelected($type, $option){
+        if(isset($_COOKIE["$type"]) && $_COOKIE["$type"] == "$option"){
+            echo "selected";
+        }
+
+    }
+
+    // Chamar changeItem antes de qualquer output
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["number"])) {
+        changeItem("number", "numberEmpl");
+    }
   
 ?>
 
@@ -482,32 +491,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["number"])) {
                                 <label for="iPos">Cargo: </label>
                                 <div class="forms-item-input">
                                     <select name="position" id="iPos" class="input-control">
-                                        <option value="RH" <?php if(isset($_COOKIE["position"]) && $_COOKIE["position"] == "RH") echo "selected"; ?>>
+                                        <option value="RH" <?php optionSelected("position", "RH")?>>
                                             Recursos Humanos
                                         </option>
 
-                                        <option value="Operações" <?php if(isset($_COOKIE["position"]) && $_COOKIE["position"] == "Operações") echo "selected"; ?>>
+                                        <option value="Operações" <?php optionSelected("position", "Operações")?>>
                                             Operações
                                         </option>
 
-                                        <option value="Gerente Projetos" <?php if(isset($_COOKIE["position"]) && $_COOKIE["position"] == "Gerente Projetos") echo "selected"; ?>>
+                                        <option value="Gerente Projetos" <?php optionSelected("position", "Gerente Projetos")?>>
                                             Gerente de Projetos
                                         </option>
 
-                                        <option value="SAC" <?php if(isset($_COOKIE["position"]) && $_COOKIE["position"] == "SAC") echo "selected"; ?>>
+                                        <option value="SAC" <?php optionSelected("position", "SAC")?>>
                                             SAC
                                         </option>
 
-                                        <option value="Infraestrutura" <?php if(isset($_COOKIE["position"]) && $_COOKIE["position"] == "Infraestrutura") echo "selected"; ?>>
+                                        <option value="Infraestrutura" <?php optionSelected("position", "Infraestrutura")?>>
                                             Infraestrutura 
                                         </option>
 
-                                        <option value="Segurança" <?php if(isset($_COOKIE["position"]) && $_COOKIE["position"] == "Segurança") echo "selected"; ?>>
+                                        <option value="Segurança" <?php optionSelected("position", "Segurança")?>>
                                             Segurança 
                                         </option>
                                     </select>
+
                                     <div class="button-submit">
                                         <button type="submit">Alterar Cargo</button>
+
                                         <?php
                                             $result = null;
                                             if(isset($_POST["position"])){
@@ -549,19 +560,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["number"])) {
                                 <div class="forms-item-input">
                                     <select name="area" id="iarea" class="input-control">
 
-                                        <option value="Gerencia" <?php if(isset($_COOKIE["area"]) && $_COOKIE["area"] == "Gerencia" ) echo "selected"; ?>>
+                                        <option value="Gerencia" <?php optionSelected("area", "Gerencia")?>>
                                             Gerencia
                                         </option>
 
-                                        <option value="Projetos"<?php if(isset($_COOKIE["area"]) && $_COOKIE["area"] == "Projetos" ) echo "selected"; ?>>
+                                        <option value="Projetos" <?php optionSelected("area", "Projetos")?>>
                                             Projetos
                                         </option>
 
-                                        <option value="RH" <?php if(isset($_COOKIE["area"]) && $_COOKIE["area"] == "RH" ) echo "selected"; ?>>
+                                        <option value="RH" <?php optionSelected("area", "RH")?>>
                                             RH
                                         </option>
 
-                                        <option value="Comercial" <?php if(isset($_COOKIE["area"]) && $_COOKIE["area"] == "Comercial" ) echo "selected"; ?>>
+                                        <option value="Comercial" <?php optionSelected("area", "Comercial")?>>
                                             Comercial
                                         </option>
 

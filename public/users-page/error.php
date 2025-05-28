@@ -87,8 +87,8 @@
                         <p>
                             Infelizmente Você Foi Bloqueado
                         </p>
-                        <h1 style="margin: 0 auto;">Faça seu <span class="highlight-word">login</span> primeiro</h1>
-                        <h1> para acessar a página do Usuário</h1>
+                        <h1 style="margin: 0 auto;">Faça <span class="highlight-word">login</span> primeiro</h1>
+                        <h1> para acessar a Página do Usuário</h1>
                         <a href="../login-page/login.php" class="button-submit">
                             <button  style="margin-top: 2em;">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">

@@ -123,7 +123,4 @@
     <li>✅ Segurança de Senhas</li>
     <li>✅ Botão de Lembrar Usuário</li>
     <li>✅ Página de Configurações do Usuário</li>
-    <li>
-        Problema ao utilizar formulários fora da página principal do usuário(página dos funcionários) > Volta a página inicial, porém, com os resultados na página em que houve a solicitação
-    </li>
 </ul>
