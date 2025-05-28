@@ -115,12 +115,4 @@
 <ul>
     <li>Página de Estoques</li>
     <li>Página de Notificações</li>
-    <li>✅ Permitir acesso completo ao site apenas para usuários logados </li>
-    <li>✅ Linkar página de login com página do usuário já logado</li>
-    <li>✅ Linkar página de cadastrar novo usuário com o Banco de Dados</li>
-    <li>✅ Melhorar CSS</li>
-    <li>✅ Enviar código de recuperação de senha pelo email</li>
-    <li>✅ Segurança de Senhas</li>
-    <li>✅ Botão de Lembrar Usuário</li>
-    <li>✅ Página de Configurações do Usuário</li>
 </ul>
