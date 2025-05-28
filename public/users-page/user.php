@@ -208,7 +208,10 @@ function searchList($type, $filter){ // exibe o resultado da busca por um filtro
                             ";
                         }
                         echo "</table>";
-                        $stmt->close(); 
+                        $stmt->close();
+
+                       
+
                         break;
                     }
                     case "budget":{
@@ -251,6 +254,12 @@ function searchList($type, $filter){ // exibe o resultado da busca por um filtro
                         break;
                     }
                 }
+                // Removed header redirects to avoid "headers already sent" error.
+                // To know which tab the user was on before submitting the form,
+                // you can use a hidden input in your form to store the current tab/section.
+                // Example: <input type="hidden" name="currentTab" value="employee">
+                // Then, access it here with $_POST['currentTab'] or $_GET['currentTab'].
+                // You can use this value to control which section to show after processing.
                 break;
             }
         }
@@ -479,7 +488,66 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
     }
 }
 
+function verifyTab(){ // verificar qual aba o usuário está acessando
+    if (isset($_GET["currentTab"])){ // verifica se a aba atual foi enviada
+        $currentTab = $_GET["currentTab"];
+        switch ($currentTab) {
+            case "employee":
+                return "employee";
+            case "budget":
+                return "budget";
+            default:
+                return "employee"; // padrão para evitar erros
+        }
+        
+    }else{
+        return "employee"; // padrão para evitar erros
+    }
+}
+
 ?>
+
+<script>
+    //script para controlar a exibição das abas ao enviar um formulário
+    document.addEventListener("DOMContentLoaded", function() {
+        let currentTab = "<?php echo verifyTab(); ?>";
+
+        // esconde todas as sessões e remove a classe "selected" de todas as abas
+        document.querySelectorAll(".right-section").forEach((section) => {
+            section.classList.remove("show-div");
+            section.classList.add("hidden-div");
+        });
+        document.querySelectorAll("#options-list li").forEach((el) => el.classList.remove("selected"));
+
+        // mostra a sessão e adiciona a classe "selected" à aba correspondente
+        let currentSection = document.querySelector(`.right-section.${currentTab}`);
+        let currentTabLi = document.querySelector(`#options-list li#${currentTab}`);
+        if (currentSection) {
+            currentSection.classList.remove("hidden-div");
+            currentSection.classList.add("show-div");
+        }
+        if (currentTabLi) {
+            currentTabLi.classList.add("selected");
+        }
+
+        // adiciona o evento de clique a cada aba
+        document.querySelectorAll("#options-list li").forEach((li) => {
+            li.addEventListener("click", () => {
+                document.querySelectorAll(".right-section").forEach((section) => {
+                    section.classList.remove("show-div");
+                    section.classList.add("hidden-div");
+                });
+
+                document.querySelector(`.right-section.${li.id}`).classList.remove("hidden-div");
+                document.querySelector(`.right-section.${li.id}`).classList.add("show-div");
+
+                document.querySelectorAll("#options-list li").forEach((el) => el.classList.remove("selected"));
+                li.classList.add("selected");
+            });
+        });
+    });
+    //script para controlar a exibição das abas ao enviar um formulário
+</script>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -610,11 +678,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
     
                     <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get">
                         <div class="search-bar">
-                            <label for="isearch">Pesquisar Funcionário pelo Nome</label>
-                            <input type="search" name="searchEmpl" id="isearch" class="input-control" placeholder="Pressione Enter para Pesquisar">
+                            <label for="isearch-budget">Pesquisar Funcionário pelo Nome</label>
+                            <input type="search" name="searchEmpl" id="isearch-employee" class="input-control" placeholder="Pressione Enter para Pesquisar">
                         </div>
+                        <input type="hidden" name="currentTab" value="employee">
                     </form>
-
 
                     <div class="filter-bar">
                         <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get">
@@ -632,6 +700,7 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                             <div class="button-submit" style="margin-top: 1em;">
                                 <button class="filter-button ">Filtrar</button>
                             </div>
+                            <input type="hidden" name="currentTab" value="employee">
                         </form>
                     </div>
 
@@ -725,8 +794,6 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                             </svg>
                         </a>
                     </div>
-
-
                 </nav>
 
                 <div class="right-section-back-button back-employee">
@@ -860,13 +927,16 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
 
                     <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get">
                         <div class="search-bar">
-                            <label for="isearch">Pesquisa rápida de um Orçamento</label>
-                            <input type="search" name="searchBudget" id="isearch" class="input-control" placeholder="Número do Orçamento">
+                            <label for="isearch-budget">Pesquisa rápida de um Orçamento</label>
+                            <input type="search" name="searchBudget" id="isearch-budget" class="input-control" placeholder="Número do Orçamento">
                         </div>
+
+                        <input type="hidden" name="currentTab" value="budget">
+                        
                     </form>
 
                     <div class="filter-bar">
-                        <form action ="<?php echo $_SERVER["PHP_SELF"]?>"  method="get">
+                        <form action ="<?php echo $_SERVER["PHP_SELF"]?>" method="get">
                             <label for="iselectFilterBudget">Filtrar Orçamentos</label>
                             <select name="selectFilterBudget" id="iselectFilterBudget" class="input-control">
                                 <option value="idBudget">Id</option>
@@ -878,7 +948,11 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
                             <div class="button-submit" style="margin-top: 1em;">
                                 <button class="filter-button ">Filtrar</button>
                             </div>
+                            
+                            <input type="hidden" name="currentTab" value="budget">
+                            
                         </form>
+                        
                     </div>
 
                     <div>
@@ -1103,7 +1177,5 @@ function filterList($type){ // filtra a lista de dados com base no filtro seleci
         </section>
     </main>
 
-
 </body>
-
 </html>
