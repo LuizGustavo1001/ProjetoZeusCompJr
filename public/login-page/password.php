@@ -125,10 +125,10 @@
                         <?php 
                         if(isset($email404)){
                             echo "
-                                <span class=\"error-text\">
-                                    <p>Erro: Email Inserido <strong>não está cadastrado</strong></p>
+                                <span class=\"error-text\" >
+                                    <p style=\"margin-top: 1em;\">Erro: Email Inserido <strong>não está cadastrado</strong></p>
                                     <p>Tente Novamente com outro endereço de email ou</p>
-                                    <p><a href=\"../sign-up-page/sign-up.php\">Cadastre-se Aqui</a></p>
+                                    <p style=\"margin-top: 1em;\"><a href=\"../sign-up-page/sign-up.php\">Cadastre-se Aqui</a></p>
                                 </span>
                                 ";
                         }
